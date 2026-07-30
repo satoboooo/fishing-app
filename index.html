@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -163,12 +164,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #1a73e8;background:white;color:#1a73e8;cursor:pointer}
 .csv-btn:hover{background:#1a73e8;color:white}
 
-/* 修正入力 */
-.edit-input{width:100%;padding:7px 10px;border:1.5px solid #f57c00;border-radius:7px;font-size:13px;margin-top:5px}
-.edit-input:focus{outline:none;border-color:#e65100}
-
 /* セクションタイトル */
 .section-title{font-size:13px;font-weight:600;color:#666;margin-bottom:10px}
+
+/* リセットボタン */
+.reset-area{text-align:center;padding:20px;margin-top:20px}
+.reset-btn{padding:8px 16px;border:1.5px solid #d32f2f;background:white;color:#d32f2f;border-radius:9px;font-size:11px;cursor:pointer}
+.reset-btn:hover{background:#d32f2f;color:white}
 
 /* レスポンシブ */
 @media(max-width:360px){
@@ -347,6 +349,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <button class="btn btn-primary btn-full" onclick="saveSettings()">設定を保存</button>
       </div>
+      <!-- データリセット -->
+      <div class="reset-area">
+        <button class="reset-btn" onclick="resetAllData()">🗑 データをリセット（初期化）</button>
+        <div class="hint" style="margin-top:5px">全てのデータを初期状態に戻します</div>
+      </div>
     </div>
   </div>
 </div>
@@ -424,9 +431,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 // ===== データ管理 =====
 var DATA_KEY = 'fishingApp';
 
-function loadData(){
-  var d = localStorage.getItem(DATA_KEY);
-  if(d) return JSON.parse(d);
+function getDefaultData(){
   return {
     adminPassword: '[PASSWORD]',
     catches: [
@@ -452,8 +457,30 @@ function loadData(){
   };
 }
 
+function loadData(){
+  var d = localStorage.getItem(DATA_KEY);
+  if(d){
+    var parsed = JSON.parse(d);
+    // 古いデータにパスワードが無い場合は追加
+    if(!parsed.adminPassword) parsed.adminPassword = '[PASSWORD]';
+    return parsed;
+  }
+  return getDefaultData();
+}
+
 function saveData(data){
   localStorage.setItem(DATA_KEY, JSON.stringify(data));
+}
+
+// ===== データリセット =====
+function resetAllData(){
+  if(confirm('⚠️ 全てのデータを初期状態に戻しますか？\nこの操作は取り消せません。')){
+    localStorage.removeItem(DATA_KEY);
+    appData = getDefaultData();
+    saveData(appData);
+    showToast('🔄 データをリセットしました');
+    setTimeout(function(){ location.reload(); }, 1000);
+  }
 }
 
 var appData = loadData();
