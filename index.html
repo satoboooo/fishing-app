@@ -71,7 +71,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:all 0.3s;z-index:400;pointer-events:none}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .st{font-size:13px;font-weight:600;color:#666;margin-bottom:10px}
-.csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #1a73e8;background:#fff;color:#1a73e8;cursor:pointer}
+.csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #2e7d32;background:#fff;color:#2e7d32;cursor:pointer}
 .reset-area{text-align:center;padding:20px;margin-top:20px}
 .reset-btn{padding:8px 16px;border:1.5px solid #d32f2f;background:#fff;color:#d32f2f;border-radius:9px;font-size:11px;cursor:pointer}
 .login-box{max-width:360px;margin:60px auto;padding:20px;text-align:center}
@@ -90,7 +90,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 <body>
 <div class="role-sw"><button class="rb on-p" id="rP">参加者</button><button class="rb" id="rA">管理者</button></div>
 
-<!-- 参加者ログイン画面 -->
+<!-- 参加者ログイン -->
 <div id="loginPage">
 <div class="header hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="hbadge">参加者</span></div></div>
 <div class="login-box"><div class="card">
@@ -106,7 +106,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 </div></div>
 </div>
 
-<!-- 参加者登録画面 -->
+<!-- 参加者登録 -->
 <div id="regPage" class="hide">
 <div class="header hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="hbadge">新規登録</span></div></div>
 <div class="login-box"><div class="card">
@@ -120,11 +120,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 </div></div>
 </div>
 
-<!-- 参加者メイン画面 -->
+<!-- 参加者メイン -->
 <div id="pPage" class="hide">
 <div class="header hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="hbadge">参加者</span></div><div class="sub" id="pEvName">大会を選択してください</div></div>
 <div class="user-bar"><span>👤 <strong id="uName"></strong> さん</span><button class="logout-btn" id="bLogout">ログアウト</button></div>
-<div class="tabs"><button class="tab on" id="tSub">📝 申請</button><button class="tab" id="tMy">📋 My記録</button><button class="tab" id="tRk">🏆 ランキング</button></div>
+<div class="tabs"><button class="tab on" id="tSub">📝 申請</button><button class="tab" id="tMy">📋 My記録</button></div>
 <div class="tc on" id="tcSub"><div class="container">
 <div class="es"><select id="selEv"><option value="">大会を選択してください</option></select></div>
 <div class="closed-msg hide" id="clMsg">🔒 この大会は登録が締め切られています</div>
@@ -143,21 +143,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 <div class="es"><select id="selMyEv"><option value="">全ての大会</option></select></div>
 <p class="st">📋 自分の申請一覧</p><div id="myList"></div>
 </div></div>
-<div class="tc" id="tcRk"><div class="container">
-<div class="es"><select id="selRkEv"><option value="">全ての大会</option></select></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p class="st" style="margin:0">🏆 ランキング</p><button class="csv-btn" id="bCSV">📥 CSV</button></div>
-<div id="podArea"></div><div class="rl" id="rkList"></div>
-</div></div>
 </div>
 
 <!-- 管理者ページ -->
 <div id="aPage" class="hide">
 <div class="header hd-a"><div class="hd-top"><h1>🎣 管理パネル</h1><span class="hbadge">管理者</span></div></div>
-<div class="tabs"><button class="tab on-a" id="tAp">✅ 承認<span class="tab-badge" id="pBdg">0</span></button><button class="tab" id="tMm">👥 参加者</button><button class="tab" id="tEv">📅 大会</button><button class="tab" id="tSt">⚙️ 設定</button></div>
+<div class="tabs"><button class="tab on-a" id="tAp">✅ 承認<span class="tab-badge" id="pBdg">0</span></button><button class="tab" id="tRk">🏆 ランキング</button><button class="tab" id="tMm">👥 参加者</button><button class="tab" id="tEv">📅 大会</button><button class="tab" id="tSt">⚙️ 設定</button></div>
 <div class="tc on" id="tcAp"><div class="container">
 <div class="es"><select id="selAEv"><option value="">全ての大会</option></select></div>
 <div class="sg"><div class="sc"><div class="sn sn-g" id="sOk">0</div><div class="sl">承認済</div></div><div class="sc"><div class="sn sn-o" id="sPn">0</div><div class="sl">未承認</div></div><div class="sc"><div class="sn sn-b" id="sAl">0</div><div class="sl">合計</div></div></div>
 <div id="apList"></div>
+</div></div>
+<div class="tc" id="tcRk"><div class="container">
+<div class="es"><select id="selRkEv"><option value="">全ての大会</option></select></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p class="st" style="margin:0">🏆 ランキング</p><button class="csv-btn" id="bCSV">📥 CSV</button></div>
+<div id="podArea"></div><div class="rl" id="rkList"></div>
 </div></div>
 <div class="tc" id="tcMm"><div class="container">
 <div class="es"><select id="selMEv"><option value="">全ての大会</option></select></div>
@@ -195,7 +195,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 <div class="fg"><label>場所</label><input type="text" id="nePl" placeholder="例: 琵琶湖"></div>
 <button class="btn btn-g btn-f" id="bNeOk">作成</button></div></div>
 
-<!-- モーダル: パスワードリセット確認 -->
+<!-- モーダル: パスワードリセット -->
 <div class="mo" id="moRsPw"><div class="mo-b" style="text-align:center"><h3>🔑 パスワードリセット</h3><p style="font-size:13px;color:#666;margin:12px 0" id="rsPwMsg"></p><div class="fg"><label>新しいパスワード</label><input type="text" id="rsPwNew" placeholder="新しいパスワード"></div><input type="hidden" id="rsPwName"><div class="btn-row"><button class="btn btn-s" id="bRsPwNo">キャンセル</button><button class="btn btn-g" id="bRsPwOk">リセット</button></div></div></div>
 
 <div class="toast" id="toast"></div>
@@ -203,13 +203,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 <script>
 (function(){
 "use strict";
-var KEY="[PASSWORD]";
+var KEY="fishApp3";
 function $(id){return document.getElementById(id)}
 function toast(m){var t=$("toast");t.textContent=m;t.className="toast";void t.offsetWidth;t.className="toast on";setTimeout(function(){t.className="toast"},2500)}
-function show(id){$(id).classList.remove("hide")}
-function hide(id){$(id).classList.add("hide")}
 
-// データ
 function defs(){return{adminPw:"[PASSWORD]",users:[],catches:[
 {id:1,name:"鈴木 一郎",fish:"ブラックバス",size:52,memo:"スピナーベイト",status:"approved",time:"09:15",dt:"2026-08-15T09:15",ev:"第5回 バス釣り大会"},
 {id:2,name:"鈴木 一郎",fish:"ブラックバス",size:38,memo:"",status:"approved",time:"10:30",dt:"2026-08-15T10:30",ev:"第5回 バス釣り大会"},
@@ -225,17 +222,16 @@ function defs(){return{adminPw:"[PASSWORD]",users:[],catches:[
 function load(){try{var s=localStorage.getItem(KEY);return s?JSON.parse(s):defs()}catch(e){return defs()}}
 function save(){localStorage.setItem(KEY,JSON.stringify(D))}
 var D=load();
-var currentUser=localStorage.getItem("fishUser")||"";
+var currentUser=localStorage.getItem("fishUser3")||"";
 
 // EXIF
-function exif(file,cb){
-var r=new FileReader();r.onload=function(e){try{var v=new DataView(e.target.result);if(v.getUint16(0,false)!==0xFFD8){cb(null);return}var o=2,l=v.byteLength;while(o<l){if(o+4>l)break;if(v.getUint16(o,false)===0xFFE1){var eo=o+4;if(eo+6>l||v.getUint32(eo,false)!==0x45786966){cb(null);return}var to=eo+6;if(to+8>l){cb(null);return}var be=v.getUint16(to,false)===0x4D4D,io=v.getUint32(to+4,!be),is=to+io;if(is+2>l){cb(null);return}var tg=v.getUint16(is,!be),ep=null;for(var i=0;i<tg;i++){var en=is+2+i*12;if(en+12>l)break;var t2=v.getUint16(en,!be);if(t2===0x0132){var vo=v.getUint32(en+8,!be)+to,s="";for(var j=0;j<19&&vo+j<l;j++)s+=String.fromCharCode(v.getUint8(vo+j));var p=s.split(" ");if(p.length===2){cb(p[0].replace(/:/g,"-")+"T"+p[1].substring(0,5));return}}if(t2===0x8769)ep=v.getUint32(en+8,!be)}if(ep!==null){var es2=to+ep;if(es2+2<=l){var et=v.getUint16(es2,!be);for(var k=0;k<et;k++){var ee=es2+2+k*12;if(ee+12>l)break;var et2=v.getUint16(ee,!be);if(et2===0x9003||et2===0x9004){var vv=v.getUint32(ee+8,!be)+to,ss="";for(var j=0;j<19&&vv+j<l;j++)ss+=String.fromCharCode(v.getUint8(vv+j));var pp=ss.split(" ");if(pp.length===2){cb(pp[0].replace(/:/g,"-")+"T"+pp[1].substring(0,5));return}}}}}cb(null);return}if(o+2>=l)break;o+=2+v.getUint16(o+2,false)}cb(null)}catch(x){cb(null)}};r.onerror=function(){cb(null)};r.readAsArrayBuffer(file.slice(0,131072))}
+function exif(file,cb){var r=new FileReader();r.onload=function(e){try{var v=new DataView(e.target.result);if(v.getUint16(0,false)!==0xFFD8){cb(null);return}var o=2,l=v.byteLength;while(o<l){if(o+4>l)break;if(v.getUint16(o,false)===0xFFE1){var eo=o+4;if(eo+6>l||v.getUint32(eo,false)!==0x45786966){cb(null);return}var to=eo+6;if(to+8>l){cb(null);return}var be=v.getUint16(to,false)===0x4D4D,io=v.getUint32(to+4,!be),is=to+io;if(is+2>l){cb(null);return}var tg=v.getUint16(is,!be),ep=null;for(var i=0;i<tg;i++){var en=is+2+i*12;if(en+12>l)break;var t2=v.getUint16(en,!be);if(t2===0x0132){var vo=v.getUint32(en+8,!be)+to,s="";for(var j=0;j<19&&vo+j<l;j++)s+=String.fromCharCode(v.getUint8(vo+j));var p=s.split(" ");if(p.length===2){cb(p[0].replace(/:/g,"-")+"T"+p[1].substring(0,5));return}}if(t2===0x8769)ep=v.getUint32(en+8,!be)}if(ep!==null){var es2=to+ep;if(es2+2<=l){var et=v.getUint16(es2,!be);for(var k=0;k<et;k++){var ee=es2+2+k*12;if(ee+12>l)break;var et2=v.getUint16(ee,!be);if(et2===0x9003||et2===0x9004){var vv=v.getUint32(ee+8,!be)+to,ss="";for(var j2=0;j2<19&&vv+j2<l;j2++)ss+=String.fromCharCode(v.getUint8(vv+j2));var pp=ss.split(" ");if(pp.length===2){cb(pp[0].replace(/:/g,"-")+"T"+pp[1].substring(0,5));return}}}}}cb(null);return}if(o+2>=l)break;o+=2+v.getUint16(o+2,false)}cb(null)}catch(x){cb(null)}};r.onerror=function(){cb(null)};r.readAsArrayBuffer(file.slice(0,131072))}
 
 // 画面制御
-function showLogin(){hide("pPage");hide("aPage");hide("regPage");show("loginPage");document.querySelector(".role-sw").style.display="flex"}
-function showReg(){hide("loginPage");hide("pPage");hide("aPage");show("regPage")}
-function showMain(){hide("loginPage");hide("regPage");hide("aPage");show("pPage");$("uName").textContent=currentUser;updSel();renderMy();document.querySelector(".role-sw").style.display="flex"}
-function showAdmin(){hide("loginPage");hide("regPage");hide("pPage");show("aPage");updSel();renderAp();document.querySelector(".role-sw").style.display="flex"}
+function showLogin(){$("loginPage").classList.remove("hide");$("regPage").classList.add("hide");$("pPage").classList.add("hide");$("aPage").classList.add("hide");$("rP").className="rb on-p";$("rA").className="rb"}
+function showReg(){$("loginPage").classList.add("hide");$("regPage").classList.remove("hide");$("pPage").classList.add("hide");$("aPage").classList.add("hide")}
+function showMain(){$("loginPage").classList.add("hide");$("regPage").classList.add("hide");$("pPage").classList.remove("hide");$("aPage").classList.add("hide");$("uName").textContent=currentUser;$("rP").className="rb on-p";$("rA").className="rb";updSel();renderMy()}
+function showAdmin(){$("loginPage").classList.add("hide");$("regPage").classList.add("hide");$("pPage").classList.add("hide");$("aPage").classList.remove("hide");$("rP").className="rb";$("rA").className="rb on-a";updSel();renderAp()}
 
 // ログイン・登録
 $("bGoReg").addEventListener("click",showReg);
@@ -246,7 +242,7 @@ $("bLogin").addEventListener("click",function(){
   var u=D.users.find(function(x){return x.name===nm});
   if(!u){toast("⚠️ ユーザーが見つかりません");return}
   if(u.pw!==pw){toast("⚠️ パスワードが違います");return}
-  currentUser=nm;localStorage.setItem("fishUser",nm);showMain();toast("✅ ログインしました")
+  currentUser=nm;localStorage.setItem("fishUser3",nm);showMain();toast("✅ ログインしました")
 });
 $("bReg").addEventListener("click",function(){
   var nm=$("rName").value.trim(),pw=$("rPass").value,pw2=$("rPass2").value;
@@ -255,24 +251,25 @@ $("bReg").addEventListener("click",function(){
   if(pw!==pw2){toast("⚠️ パスワードが一致しません");return}
   if(D.users.find(function(x){return x.name===nm})){toast("⚠️ この名前は既に登録されています");return}
   D.users.push({name:nm,pw:pw});save();
-  currentUser=nm;localStorage.setItem("fishUser",nm);showMain();toast("✅ 登録完了！")
+  currentUser=nm;localStorage.setItem("fishUser3",nm);showMain();toast("✅ 登録完了！")
 });
-$("bLogout").addEventListener("click",function(){currentUser="";localStorage.removeItem("fishUser");showLogin();toast("ログアウトしました")});
+$("bLogout").addEventListener("click",function(){currentUser="";localStorage.removeItem("fishUser3");showLogin();toast("ログアウトしました")});
 
 // ロール切替
-$("rP").addEventListener("click",function(){if(currentUser){showMain()}else{showLogin()}$("rP").className="rb on-p";$("rA").className="rb"});
+$("rP").addEventListener("click",function(){if(currentUser){showMain()}else{showLogin()}});
 $("rA").addEventListener("click",function(){$("iPwIn").value="";$("moPw").className="mo on";setTimeout(function(){$("iPwIn").focus()},300)});
 $("bPwNo").addEventListener("click",function(){$("moPw").className="mo"});
 $("bPwOk").addEventListener("click",doPw);
 $("iPwIn").addEventListener("keyup",function(e){if(e.key==="Enter")doPw()});
-function doPw(){if($("iPwIn").value===D.adminPw){$("moPw").className="mo";$("rP").className="rb";$("rA").className="rb on-a";showAdmin()}else{toast("⚠️ パスワードが違います");$("iPwIn").value="";$("iPwIn").focus()}}
+function doPw(){if($("iPwIn").value===D.adminPw){$("moPw").className="mo";showAdmin()}else{toast("⚠️ パスワードが違います");$("iPwIn").value="";$("iPwIn").focus()}}
 
-// タブ
-$("tSub").addEventListener("click",function(){setPT("Sub",this)});
-$("tMy").addEventListener("click",function(){setPT("My",this);renderMy()});
-$("tRk").addEventListener("click",function(){setPT("Rk",this);renderRk()});
-function setPT(id,b){document.querySelectorAll("#pPage .tab").forEach(function(t){t.className="tab"});b.className="tab on";document.querySelectorAll("#pPage .tc").forEach(function(t){t.className="tc"});$("tc"+id).className="tc on"}
+// 参加者タブ
+$("tSub").addEventListener("click",function(){$("tSub").className="tab on";$("tMy").className="tab";$("tcSub").className="tc on";$("tcMy").className="tc"});
+$("tMy").addEventListener("click",function(){$("tMy").className="tab on";$("tSub").className="tab";$("tcMy").className="tc on";$("tcSub").className="tc";renderMy()});
+
+// 管理者タブ
 $("tAp").addEventListener("click",function(){setAT("Ap",this);renderAp()});
+$("tRk").addEventListener("click",function(){setAT("Rk",this);renderRk()});
 $("tMm").addEventListener("click",function(){setAT("Mm",this);renderMem()});
 $("tEv").addEventListener("click",function(){setAT("Ev",this);renderEv()});
 $("tSt").addEventListener("click",function(){setAT("St",this)});
@@ -319,7 +316,7 @@ function renderMy(){
   h+='<div class="hi"><div class="th">🐟</div><div class="inf"><div class="t1">'+r.fish+" "+r.size+'cm</div><div class="t2">'+dt+" | "+r.ev+(r.memo?" | "+r.memo:"")+'</div></div><span class="badge '+sc+'">'+st+"</span></div>"});
   $("myList").innerHTML=h}
 
-// ランキング
+// ランキング（管理者側）
 function renderRk(){
   var sel=$("selRkEv").value,ap=D.catches.filter(function(c){return c.status==="approved"&&(!sel||c.ev===sel)});
   var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,cnt:0,fish:[]};pl[c.name].total+=c.size;pl[c.name].cnt++;pl[c.name].fish.push(c)});
@@ -328,7 +325,7 @@ function renderRk(){
   var lh="";rk.forEach(function(p,i){var rc=i===0?"rk-1":i===1?"rk-2":i===2?"rk-3":"";
   lh+='<div class="rr" data-i="'+i+'"><div class="rk '+rc+'">'+(i+1)+'</div><div class="rn">'+p.name+'</div><div class="rt">'+p.total.toFixed(1)+'</div><div class="rc">'+p.cnt+'匹</div></div>';
   lh+='<div class="rd" id="rd'+i+'">';p.fish.sort(function(a,b){return b.size-a.size}).forEach(function(f){lh+='<div class="rd-f"><span>'+f.fish+" "+f.size+'cm</span><span>'+f.time+"</span></div>"});lh+="</div>"});
-  $("rkList").innerHTML=lh;
+  $("rkList").innerHTML=lh||'<div style="text-align:center;padding:30px;color:#999;font-size:13px">データがありません</div>';
   document.querySelectorAll(".rr").forEach(function(r){r.addEventListener("click",function(){$("rd"+this.getAttribute("data-i")).classList.toggle("on")})})
 }
 
@@ -340,7 +337,7 @@ $("bCSV").addEventListener("click",function(){
   rk.forEach(function(p,i){d.push([i+1,p.name,p.total.toFixed(1),p.best.toFixed(1),p.cnt])});
   var csv="\uFEFF"+d.map(function(r){return r.join(",")}).join("\n"),bl=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="ranking.csv";a.click()});
 
-// 管理者: 承認
+// 承認
 function renderAp(){
   var sel=$("selAEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel});
   var pn=fil.filter(function(c){return c.status==="pending"}),ok=fil.filter(function(c){return c.status==="approved"});
@@ -354,7 +351,7 @@ function renderAp(){
   document.querySelectorAll("[data-ng]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-ng"),c=D.catches.find(function(x){return x.id===id});if(c){c.status="rejected";save();renderAp();toast("❌ 却下")}})})
 }
 
-// 管理者: 参加者管理
+// 参加者管理
 function renderMem(){
   var sel=$("selMEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel}),mem={};
   fil.forEach(function(c){if(!mem[c.name])mem[c.name]=[];mem[c.name].push(c)});
@@ -364,19 +361,18 @@ function renderMem(){
   h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px"><span>'+c.fish+" "+c.size+'cm</span><div style="display:flex;align-items:center;gap:6px"><span class="badge '+sc+'">'+st+'</span><button class="btn btn-s btn-sm" data-ed="'+c.id+'">✏️</button></div></div>'});h+="</div>"});
   $("memList").innerHTML=h||'<div style="text-align:center;padding:30px;color:#999">登録なし</div>';
   document.querySelectorAll("[data-ed]").forEach(function(b){b.addEventListener("click",function(){openEd(+this.getAttribute("data-ed"))})});
-  // パスワードリセット一覧
   var ph="";D.users.forEach(function(u){ph+='<div class="mem-item"><span>'+u.name+'</span><button class="btn btn-w btn-sm" data-rspw="'+u.name+'">リセット</button></div>'});
   $("pwResetList").innerHTML=ph||'<div style="text-align:center;padding:20px;color:#999;font-size:12px">登録ユーザーなし</div>';
-  document.querySelectorAll("[data-rspw]").forEach(function(b){b.addEventListener("click",function(){var nm=this.getAttribute("data-rspw");$("rsPwMsg").textContent="「"+nm+"」のパスワードをリセットします";$("rsPwName").value=nm;$("rsPwNew").value="";$("moRsPw").className="mo on"})})
+  document.querySelectorAll("[data-rspw]").forEach(function(b){b.addEventListener("click",function(){var nm=this.getAttribute("data-rspw");$("rsPwMsg").textContent="「"+nm+"」のパスワードをリセット";$("rsPwName").value=nm;$("rsPwNew").value="";$("moRsPw").className="mo on"})})
 }
 
 // パスワードリセット
 $("bRsPwNo").addEventListener("click",function(){$("moRsPw").className="mo"});
 $("bRsPwOk").addEventListener("click",function(){
   var nm=$("rsPwName").value,np=$("rsPwNew").value;
-  if(np.length<4){toast("⚠️ 4文字以上で入力");return}
+  if(np.length<4){toast("⚠️ 4文字以上");return}
   var u=D.users.find(function(x){return x.name===nm});
-  if(u){u.pw=np;save();$("moRsPw").className="mo";toast("✅ パスワードをリセットしました")}
+  if(u){u.pw=np;save();$("moRsPw").className="mo";toast("✅ リセット完了")}
 });
 
 // 編集
@@ -401,10 +397,10 @@ $("bNeOk").addEventListener("click",function(){var nm=$("neNm").value.trim(),dt=
 
 // 設定
 $("bSvPw").addEventListener("click",function(){var p=$("iPwCh").value.trim();if(p){D.adminPw=p;save();$("iPwCh").value="";toast("✅ パスワード変更")}else{toast("⚠️ 入力してください")}});
-$("bReset").addEventListener("click",function(){if(confirm("全データを初期化しますか？")){localStorage.removeItem(KEY);localStorage.removeItem("fishUser");D=defs();save();toast("🔄 リセット");setTimeout(function(){location.reload()},1000)}});
+$("bReset").addEventListener("click",function(){if(confirm("全データを初期化しますか？")){localStorage.removeItem(KEY);localStorage.removeItem("fishUser3");D=defs();save();toast("🔄 リセット");setTimeout(function(){location.reload()},1000)}});
 
 // 初期表示
-if(currentUser&&D.users.find(function(u){return u.name===currentUser})){showMain()}else{currentUser="";localStorage.removeItem("fishUser");showLogin()}
+if(currentUser&&D.users.find(function(u){return u.name===currentUser})){showMain()}else{currentUser="";localStorage.removeItem("fishUser3");showLogin()}
 })();
 </script>
 </body>
