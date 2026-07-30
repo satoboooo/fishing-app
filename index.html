@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -341,6 +340,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <label>ルール</label>
           <textarea id="settingRules" rows="3">合計長で順位を決定。写真必須。</textarea>
         </div>
+        <div class="form-group">
+          <label>管理者パスワード変更</label>
+          <input type="text" id="settingPassword" placeholder="新しいパスワード">
+          <div class="hint">空欄の場合は変更されません</div>
+        </div>
         <button class="btn btn-primary btn-full" onclick="saveSettings()">設定を保存</button>
       </div>
     </div>
@@ -424,6 +428,7 @@ function loadData(){
   var d = localStorage.getItem(DATA_KEY);
   if(d) return JSON.parse(d);
   return {
+    adminPassword: '[PASSWORD]',
     catches: [
       {id:1, name:'鈴木 一郎', fish:'ブラックバス', size:52.0, memo:'スピナーベイト', status:'approved', time:'09:15', event:'第5回 バス釣り大会'},
       {id:2, name:'鈴木 一郎', fish:'ブラックバス', size:38.0, memo:'', status:'approved', time:'10:30', event:'第5回 バス釣り大会'},
@@ -453,10 +458,18 @@ function saveData(data){
 
 var appData = loadData();
 
-// ===== ロール切替 =====
+// ===== ロール切替（パスワード付き） =====
 var currentRole = 'participant';
 
 function switchRole(role){
+  if(role === 'admin'){
+    var pw = prompt('🔒 管理者パスワードを入力してください');
+    if(pw === null) return;
+    if(pw !== appData.adminPassword){
+      showToast('⚠️ パスワードが違います');
+      return;
+    }
+  }
   currentRole = role;
   var btns = document.querySelectorAll('.role-btn');
   btns[0].className = 'role-btn' + (role==='participant' ? ' p-active active' : '');
@@ -816,15 +829,20 @@ function confirmDelete(){
 // ===== 設定保存 =====
 function saveSettings(){
   var name = document.getElementById('settingEventName').value.trim();
+  var newPw = document.getElementById('settingPassword').value.trim();
   var activeEvent = appData.events.find(function(e){return e.active});
   if(activeEvent && name){
     activeEvent.name = name;
     activeEvent.date = document.getElementById('settingDate').value || activeEvent.date;
     document.getElementById('pEventName').textContent = name;
     document.getElementById('aEventName').textContent = name;
-    saveData(appData);
-    showToast('✅ 設定を保存しました');
   }
+  if(newPw){
+    appData.adminPassword = newPw;
+  }
+  saveData(appData);
+  document.getElementById('settingPassword').value = '';
+  showToast('✅ 設定を保存しました');
 }
 
 // ===== トースト =====
