@@ -3,707 +3,357 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>🎣 釣り大会管理ツール</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh;padding-bottom:70px}
-.page{display:none}
-.page.active{display:block}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh}
+.page{display:none}.page.active{display:block}
 .role-switch{position:fixed;top:10px;right:12px;z-index:200;background:rgba(255,255,255,0.95);border-radius:20px;padding:3px;display:flex;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
-.role-btn{padding:5px 11px;border:none;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#666;-webkit-tap-highlight-color:transparent}
-.role-btn.p-active{background:#1a73e8;color:white}
-.role-btn.a-active{background:#2e7d32;color:white}
-.header{color:white;padding:14px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
-.header.admin{background:linear-gradient(135deg,#2e7d32,#1b5e20)}
-.header.participant{background:linear-gradient(135deg,#1a73e8,#0d47a1)}
-.header-top{display:flex;justify-content:space-between;align-items:center}
-.header h1{font-size:17px;font-weight:600}
-.hbadge{background:rgba(255,255,255,0.2);padding:3px 9px;border-radius:16px;font-size:10px}
-.event-name{font-size:12px;opacity:0.9;margin-top:3px}
+.role-btn{padding:6px 12px;border:none;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#666;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.role-btn.on-p{background:#1a73e8;color:#fff}
+.role-btn.on-a{background:#2e7d32;color:#fff}
+.hd{color:#fff;padding:14px 18px;position:sticky;top:0;z-index:100}
+.hd-p{background:linear-gradient(135deg,#1a73e8,#0d47a1)}
+.hd-a{background:linear-gradient(135deg,#2e7d32,#1b5e20)}
+.hd-top{display:flex;justify-content:space-between;align-items:center}
+.hd h1{font-size:17px}.hd .badge-h{background:rgba(255,255,255,0.2);padding:3px 9px;border-radius:16px;font-size:10px}
+.hd .sub{font-size:12px;opacity:0.9;margin-top:3px}
 .container{max-width:540px;margin:0 auto;padding:14px}
-.card{background:white;border-radius:13px;padding:16px 14px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.card{background:#fff;border-radius:13px;padding:16px 14px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
 .badge{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;display:inline-block}
-.badge.pending{background:#fff3e0;color:#f57c00}
-.badge.approved{background:#e8f5e9;color:#388e3c}
-.badge.rejected{background:#ffebee;color:#d32f2f}
-.badge.active{background:#e8f5e9;color:#388e3c}
-.badge.closed{background:#f5f5f5;color:#999}
-.form-group{margin-bottom:12px}
-.form-group label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
-.form-group .req{color:#d32f2f;font-size:10px;margin-left:3px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:9px;font-size:16px;-webkit-appearance:none;background:white}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#1a73e8}
-.form-group textarea{resize:vertical;min-height:60px;font-family:inherit}
+.b-pend{background:#fff3e0;color:#f57c00}.b-ok{background:#e8f5e9;color:#388e3c}.b-ng{background:#ffebee;color:#d32f2f}.b-act{background:#e8f5e9;color:#388e3c}.b-cls{background:#f5f5f5;color:#999}
+.fg{margin-bottom:12px}.fg label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:9px;font-size:16px;background:#fff;-webkit-appearance:none}
+.fg input:focus,.fg select:focus{outline:none;border-color:#1a73e8}
+.fg textarea{resize:vertical;min-height:60px;font-family:inherit}
 .hint{font-size:10px;color:#999;margin-top:3px}
-.input-unit{position:relative}
-.input-unit span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#999;font-size:13px}
-.input-unit input{padding-right:36px}
-.btn{padding:11px 18px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.btn-primary{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:white}
-.btn-blue{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white}
-.btn-secondary{background:#f5f5f5;color:#666;border:1px solid #ddd}
-.btn-danger{background:#d32f2f;color:white}
-.btn-warning{background:#f57c00;color:white}
-.btn-full{width:100%}
-.btn-row{display:flex;gap:10px}
-.btn-row .btn{flex:1}
-.btn-sm{padding:6px 12px;font-size:11px}
-.photo-label{display:block;border:2px dashed #ccc;border-radius:11px;padding:26px 14px;text-align:center;margin-bottom:14px;cursor:pointer;background:#fafafa;-webkit-tap-highlight-color:transparent}
-.photo-label.has-photo{border-color:#4caf50;background:#f0fff0;padding:8px}
-.photo-label .pu-icon{font-size:32px;margin-bottom:5px}
-.photo-label .pu-text{font-size:13px;color:#666}
-.photo-label .pu-sub{font-size:11px;color:#999;margin-top:2px}
-.photo-preview{max-width:100%;max-height:160px;border-radius:8px;display:none}
-.exif-info{background:#e3f2fd;border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:#1565c0;display:none}
-.exif-info.show{display:block}
-.nav-tabs{display:flex;background:white;border-bottom:1px solid #e0e0e0;overflow-x:auto;position:sticky;top:52px;z-index:90}
-.nav-tab{flex:1;padding:11px 6px;text-align:center;font-size:11px;font-weight:600;color:#666;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-width:60px;-webkit-tap-highlight-color:transparent}
-.nav-tab.active{color:#1a73e8;border-bottom-color:#1a73e8}
-.nav-tab.a-active{color:#2e7d32;border-bottom-color:#2e7d32}
-.tab-badge{background:#ff5722;color:white;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
-.stat-card{background:white;border-radius:9px;padding:10px 6px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.stat-num{font-size:18px;font-weight:700}
-.stat-num.green{color:#2e7d32}
-.stat-num.blue{color:#1565c0}
-.stat-num.orange{color:#f57c00}
-.stat-label{font-size:10px;color:#999;margin-top:1px}
-.podium{background:white;border-radius:13px;padding:18px 12px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);text-align:center}
-.podium h3{font-size:13px;color:#666;margin-bottom:14px}
-.podium-row{display:flex;justify-content:center;align-items:flex-end;gap:8px}
-.podium-item{text-align:center;flex:1;max-width:100px}
-.rank-icon{font-size:24px;margin-bottom:3px}
-.pod-name{font-size:11px;font-weight:600;color:#333}
-.pod-total{font-size:15px;font-weight:700;color:#2e7d32}
-.pod-label{font-size:9px;color:#999}
-.podium-item .bar{width:100%;border-radius:5px 5px 0 0;margin-top:5px}
-.podium-item.second .bar{background:linear-gradient(180deg,#c0c0c0,#9e9e9e);height:45px}
-.podium-item.first .bar{background:linear-gradient(180deg,#ffd700,#ffa000);height:65px}
-.podium-item.third .bar{background:linear-gradient(180deg,#cd7f32,#a0522d);height:32px}
-.ranking-list{background:white;border-radius:13px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.05)}
-.r-row{display:grid;grid-template-columns:32px 1fr 60px 55px;padding:11px 12px;align-items:center;border-bottom:1px solid #f5f5f5;cursor:pointer}
-.rank{font-size:14px;font-weight:700;color:#333}
-.rank.gold{color:#ffa000}.rank.silver{color:#9e9e9e}.rank.bronze{color:#a0522d}
-.r-name{font-size:12px;font-weight:600}
-.r-total{font-size:13px;font-weight:700;color:#2e7d32;text-align:right}
-.r-count{font-size:11px;color:#666;text-align:right}
-.r-detail{display:none;padding:6px 12px 10px 44px;background:#fafffe;border-bottom:1px solid #f0f0f0}
-.r-detail.show{display:block}
-.rd-fish{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;color:#666;border-bottom:1px dashed #e8e8e8}
-.rd-fish:last-child{border-bottom:none}
-.m-card{background:white;border-radius:13px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06);overflow:hidden}
-.mc-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f0f0f0}
-.mc-info{padding:10px 12px}
-.mc-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #f8f8f8}
-.mc-row:last-child{border-bottom:none}
-.mc-row span:first-child{color:#666}
-.mc-row span:last-child{font-weight:600;color:#333}
-.mc-actions{padding:8px 12px 12px}
-.mc-btns{display:flex;gap:7px}
-.mc-btns .btn{flex:1}
-.btn-approve{background:#2e7d32;color:white}
-.btn-reject{background:#ffebee;color:#d32f2f;border:1.5px solid #ef9a9a}
-.event-item{background:white;border-radius:11px;padding:11px 13px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.ev-title{font-size:13px;font-weight:600;color:#333}
-.ev-date{font-size:10px;color:#999;margin-top:2px}
-.ev-actions{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
-.history-item{background:white;border-radius:10px;padding:11px 12px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;align-items:center;gap:9px}
-.thumb{width:38px;height:38px;background:#e3f2fd;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.h-info{flex:1}
-.h-length{font-size:14px;font-weight:600;color:#333}
-.h-detail{font-size:10px;color:#999;margin-top:1px}
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.show{display:flex}
-.modal-box{background:white;border-radius:14px;padding:20px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto}
-.modal-box h3{font-size:15px;margin-bottom:12px;color:#333}
-.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#999}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:white;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:all 0.3s;z-index:400;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #1a73e8;background:white;color:#1a73e8;cursor:pointer}
-.section-title{font-size:13px;font-weight:600;color:#666;margin-bottom:10px}
-.reset-area{text-align:center;padding:20px;margin-top:20px}
-.reset-btn{padding:8px 16px;border:1.5px solid #d32f2f;background:white;color:#d32f2f;border-radius:9px;font-size:11px;cursor:pointer}
-.event-select{margin-bottom:12px}
-.event-select select{width:100%;padding:9px 12px;border:1.5px solid #1a73e8;border-radius:9px;font-size:13px;font-weight:600;color:#1a73e8;background:white}
+.iu{position:relative}.iu span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#999;font-size:13px}.iu input{padding-right:36px}
+.btn{padding:11px 18px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn-g{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff}
+.btn-b{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff}
+.btn-s{background:#f5f5f5;color:#666;border:1px solid #ddd}
+.btn-d{background:#d32f2f;color:#fff}
+.btn-w{background:#f57c00;color:#fff}
+.btn-f{width:100%}.btn-sm{padding:6px 12px;font-size:11px}
+.btn-row{display:flex;gap:10px}.btn-row .btn{flex:1}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #e0e0e0;position:sticky;top:52px;z-index:90;overflow-x:auto}
+.tab{flex:1;padding:11px 6px;text-align:center;font-size:11px;font-weight:600;color:#666;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.tab.on{color:#1a73e8;border-bottom-color:#1a73e8}
+.tab.on-a{color:#2e7d32;border-bottom-color:#2e7d32}
+.tab-badge{background:#ff5722;color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px}
+.tc{display:none}.tc.on{display:block}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.sc{background:#fff;border-radius:9px;padding:10px 6px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.sn{font-size:18px;font-weight:700}.sn-g{color:#2e7d32}.sn-o{color:#f57c00}.sn-b{color:#1565c0}
+.sl{font-size:10px;color:#999;margin-top:1px}
+.es{margin-bottom:12px}.es select{width:100%;padding:9px 12px;border:1.5px solid #1a73e8;border-radius:9px;font-size:13px;font-weight:600;color:#1a73e8;background:#fff}
 .closed-msg{background:#fff3e0;border-radius:9px;padding:12px;text-align:center;font-size:13px;color:#f57c00;margin-bottom:12px}
-.pw-input{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:9px;font-size:16px;text-align:center;margin-bottom:12px}
-.pw-input:focus{outline:none;border-color:#2e7d32}
+.photo-lbl{display:block;border:2px dashed #ccc;border-radius:11px;padding:26px 14px;text-align:center;margin-bottom:14px;cursor:pointer;background:#fafafa;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.photo-lbl.has{border-color:#4caf50;background:#f0fff0;padding:8px}
+.photo-lbl .pi{font-size:32px;margin-bottom:5px}.photo-lbl .pt{font-size:13px;color:#666}.photo-lbl .ps{font-size:11px;color:#999;margin-top:2px}
+#photoPreview{max-width:100%;max-height:160px;border-radius:8px;display:none}
+.exif{background:#e3f2fd;border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:#1565c0;display:none}.exif.on{display:block}
+.hi{background:#fff;border-radius:10px;padding:11px 12px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;align-items:center;gap:9px}
+.hi .th{width:38px;height:38px;background:#e3f2fd;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hi .inf{flex:1}.hi .t1{font-size:14px;font-weight:600;color:#333}.hi .t2{font-size:10px;color:#999;margin-top:1px}
+.podium{background:#fff;border-radius:13px;padding:18px 12px;margin-bottom:12px;text-align:center}
+.podium h3{font-size:13px;color:#666;margin-bottom:14px}
+.pod-row{display:flex;justify-content:center;align-items:flex-end;gap:8px}
+.pod-i{text-align:center;flex:1;max-width:100px}
+.pod-i .ri{font-size:24px;margin-bottom:3px}.pod-i .pn{font-size:11px;font-weight:600}.pod-i .pv{font-size:15px;font-weight:700;color:#2e7d32}.pod-i .pl{font-size:9px;color:#999}
+.pod-i .bar{width:100%;border-radius:5px 5px 0 0;margin-top:5px}
+.pod-i.p2 .bar{background:linear-gradient(180deg,#c0c0c0,#9e9e9e);height:45px}
+.pod-i.p1 .bar{background:linear-gradient(180deg,#ffd700,#ffa000);height:65px}
+.pod-i.p3 .bar{background:linear-gradient(180deg,#cd7f32,#a0522d);height:32px}
+.rl{background:#fff;border-radius:13px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.05)}
+.rr{display:grid;grid-template-columns:32px 1fr 60px 55px;padding:11px 12px;align-items:center;border-bottom:1px solid #f5f5f5;cursor:pointer}
+.rr .rk{font-size:14px;font-weight:700}.rk-1{color:#ffa000}.rk-2{color:#9e9e9e}.rk-3{color:#a0522d}
+.rr .rn{font-size:12px;font-weight:600}.rr .rt{font-size:13px;font-weight:700;color:#2e7d32;text-align:right}.rr .rc{font-size:11px;color:#666;text-align:right}
+.rd{display:none;padding:6px 12px 10px 44px;background:#fafffe;border-bottom:1px solid #f0f0f0}.rd.on{display:block}
+.rd-f{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;color:#666;border-bottom:1px dashed #e8e8e8}.rd-f:last-child{border-bottom:none}
+.mc{background:#fff;border-radius:13px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06);overflow:hidden}
+.mc-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f0f0f0}
+.mc-i{padding:10px 12px}
+.mc-r{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #f8f8f8}.mc-r:last-child{border-bottom:none}
+.mc-r span:first-child{color:#666}.mc-r span:last-child{font-weight:600;color:#333}
+.mc-a{padding:8px 12px 12px}.mc-b{display:flex;gap:7px}.mc-b .btn{flex:1}
+.ev-i{background:#fff;border-radius:11px;padding:11px 13px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.ev-i .et{font-size:13px;font-weight:600;color:#333}.ev-i .ed{font-size:10px;color:#999;margin-top:2px}
+.ev-i .ea{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.mo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;padding:20px}
+.mo.on{display:flex}
+.mo-b{background:#fff;border-radius:14px;padding:20px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto}
+.mo-b h3{font-size:15px;margin-bottom:12px;color:#333}
+.mo-x{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#999}
+.pw-in{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:9px;font-size:16px;text-align:center;margin-bottom:12px}
+.pw-in:focus{outline:none;border-color:#2e7d32}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:all 0.3s;z-index:400;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.st{font-size:13px;font-weight:600;color:#666;margin-bottom:10px}
+.csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #1a73e8;background:#fff;color:#1a73e8;cursor:pointer}
+.reset-area{text-align:center;padding:20px;margin-top:20px}
+.reset-btn{padding:8px 16px;border:1.5px solid #d32f2f;background:#fff;color:#d32f2f;border-radius:9px;font-size:11px;cursor:pointer}
 </style>
 </head>
 <body>
+<div class="role-switch"><button class="role-btn on-p" id="rP">参加者</button><button class="role-btn" id="rA">管理者</button></div>
 
-<div class="role-switch">
-  <button class="role-btn p-active" id="btnParticipant">参加者</button>
-  <button class="role-btn" id="btnAdmin">管理者</button>
+<div id="pPage" class="page active">
+<div class="hd hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="badge-h">参加者</span></div><div class="sub" id="pEvName">大会を選択してください</div></div>
+<div class="tabs"><button class="tab on" id="tSubmit">📝 申請</button><button class="tab" id="tMy">📋 My記録</button><button class="tab" id="tRank">🏆 ランキング</button></div>
+<div class="tc on" id="tcSubmit"><div class="container">
+<div class="es"><select id="selEv"><option value="">大会を選択してください</option></select></div>
+<div class="closed-msg" id="clMsg" style="display:none">🔒 この大会は登録が締め切られています</div>
+<div id="formArea"><div class="card"><h3 style="font-size:14px;margin-bottom:12px">🐟 釣果を申請</h3>
+<div class="fg"><label>名前 <span style="color:#d32f2f;font-size:10px">*必須</span></label><input type="text" id="iName" placeholder="例: 山田 太郎"></div>
+<div class="fg"><label>魚種 <span style="color:#d32f2f;font-size:10px">*必須</span></label><select id="iFish"><option value="">選択してください</option><option>ブラックバス</option><option>ブルーギル</option><option>ナマズ</option><option>ライギョ</option><option>その他</option></select></div>
+<div class="fg"><label>サイズ <span style="color:#d32f2f;font-size:10px">*必須</span></label><div class="iu"><input type="number" id="iSize" placeholder="0.0" step="0.1"><span>cm</span></div></div>
+<div class="fg"><label>撮影日時</label><input type="datetime-local" id="iDT"><div class="hint">写真から自動検出、または手動入力</div></div>
+<label class="photo-lbl" for="iPhoto"><div class="pi" id="piI">📷</div><div class="pt" id="piT">計測写真をアップロード</div><div class="ps" id="piS">タップして写真を選択</div><img id="photoPreview"></label>
+<input type="file" id="iPhoto" accept="image/*" capture="environment" style="display:none">
+<div class="exif" id="exifBox"></div>
+<div class="fg"><label>メモ（任意）</label><textarea id="iMemo" placeholder="ルアー、ポイントなど"></textarea></div>
+<button class="btn btn-b btn-f" id="bSubmit">申請する</button>
+</div></div>
+</div></div>
+<div class="tc" id="tcMy"><div class="container">
+<div class="es"><select id="selMyEv"><option value="">全ての大会</option></select></div>
+<p class="st">📋 自分の申請一覧</p><div id="myList"></div><div id="noRec" style="text-align:center;padding:30px;color:#999;font-size:13px">まだ申請がありません</div>
+</div></div>
+<div class="tc" id="tcRank"><div class="container">
+<div class="es"><select id="selRkEv"><option value="">全ての大会</option></select></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p class="st" style="margin:0">🏆 ランキング</p><button class="csv-btn" id="bCSV">📥 CSV</button></div>
+<div id="podArea"></div><div class="rl" id="rkList"></div>
+</div></div>
 </div>
 
-<!-- 参加者ページ -->
-<div id="participantPage" class="page active">
-  <div class="header participant">
-    <div class="header-top"><h1>🎣 釣り大会</h1><span class="hbadge">参加者</span></div>
-    <div class="event-name" id="pEventName">大会を選択してください</div>
-  </div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" data-ptab="submit">📝 申請</button>
-    <button class="nav-tab" data-ptab="myrecords">📋 My記録</button>
-    <button class="nav-tab" data-ptab="ranking">🏆 ランキング</button>
-  </div>
-  <div class="tab-content active" id="pTab-submit">
-    <div class="container">
-      <div class="event-select"><select id="pEventSelect"><option value="">大会を選択してください</option></select></div>
-      <div class="closed-msg" id="closedMsg" style="display:none">🔒 この大会は登録が締め切られています</div>
-      <div id="submitForm">
-        <div class="card">
-          <h3 style="font-size:14px;margin-bottom:12px">🐟 釣果を申請</h3>
-          <div class="form-group"><label>名前<span class="req">*必須</span></label><input type="text" id="pName" placeholder="例: 山田 太郎"></div>
-          <div class="form-group"><label>魚種<span class="req">*必須</span></label><select id="pFishType"><option value="">選択してください</option><option>ブラックバス</option><option>ブルーギル</option><option>ナマズ</option><option>ライギョ</option><option>その他</option></select></div>
-          <div class="form-group"><label>サイズ<span class="req">*必須</span></label><div class="input-unit"><input type="number" id="pSize" placeholder="0.0" step="0.1"><span>cm</span></div></div>
-          <div class="form-group"><label>撮影日時</label><input type="datetime-local" id="pDateTime"><div class="hint">写真から自動検出、または手動入力</div></div>
-          <label class="photo-label" id="photoLabel" for="photoInput">
-            <div class="pu-icon" id="puIcon">📷</div>
-            <div class="pu-text" id="puText">計測写真をアップロード</div>
-            <div class="pu-sub" id="puSub">タップして写真を選択</div>
-            <img class="photo-preview" id="photoPreview">
-          </label>
-          <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">
-          <div class="exif-info" id="exifInfo"></div>
-          <div class="form-group"><label>メモ（任意）</label><textarea id="pMemo" placeholder="ルアー、ポイントなど"></textarea></div>
-          <button class="btn btn-blue btn-full" id="btnSubmit">申請する</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="tab-content" id="pTab-myrecords">
-    <div class="container">
-      <div class="event-select"><select id="pMyEventSelect"><option value="">全ての大会</option></select></div>
-      <p class="section-title">📋 自分の申請一覧</p>
-      <div id="myRecordsList"></div>
-      <div id="noRecords" style="text-align:center;padding:30px;color:#999;font-size:13px">まだ申請がありません</div>
-    </div>
-  </div>
-  <div class="tab-content" id="pTab-ranking">
-    <div class="container">
-      <div class="event-select"><select id="pRankEventSelect"><option value="">全ての大会</option></select></div>
-      <div class="controls"><p class="section-title" style="margin:0">🏆 ランキング</p><button class="csv-btn" id="btnCSV">📥 CSV</button></div>
-      <div id="podiumArea"></div>
-      <div class="ranking-list" id="rankingList"></div>
-    </div>
-  </div>
+<div id="aPage" class="page">
+<div class="hd hd-a"><div class="hd-top"><h1>🎣 管理パネル</h1><span class="badge-h">管理者</span></div><div class="sub">管理者モード</div></div>
+<div class="tabs"><button class="tab on-a" id="tAppr">✅ 承認<span class="tab-badge" id="pBadge">0</span></button><button class="tab" id="tMem">👥 参加者</button><button class="tab" id="tEvt">📅 大会</button><button class="tab" id="tSet">⚙️ 設定</button></div>
+<div class="tc on" id="tcAppr"><div class="container">
+<div class="es"><select id="selAEv"><option value="">全ての大会</option></select></div>
+<div class="sg"><div class="sc"><div class="sn sn-g" id="sOk">0</div><div class="sl">承認済</div></div><div class="sc"><div class="sn sn-o" id="sPn">0</div><div class="sl">未承認</div></div><div class="sc"><div class="sn sn-b" id="sAll">0</div><div class="sl">合計</div></div></div>
+<div id="apList"></div><div id="noAp" style="text-align:center;padding:30px;color:#999;font-size:13px">未承認の申請はありません</div>
+</div></div>
+<div class="tc" id="tcMem"><div class="container">
+<div class="es"><select id="selMEv"><option value="">全ての大会</option></select></div>
+<p class="st">👥 登録者一覧（タップで編集）</p><div id="memList"></div>
+</div></div>
+<div class="tc" id="tcEvt"><div class="container">
+<p class="st">📅 大会一覧</p><div id="evList"></div>
+<button class="btn btn-g btn-f" style="margin-top:12px" id="bNewEv">＋ 新しい大会を作成</button>
+</div></div>
+<div class="tc" id="tcSet"><div class="container"><div class="card">
+<h3 style="font-size:14px;margin-bottom:12px">⚙️ 設定</h3>
+<div class="fg"><label>管理者パスワード変更</label><input type="text" id="iPw" placeholder="新しいパスワード"><div class="hint">空欄の場合は変更されません</div></div>
+<button class="btn btn-g btn-f" id="bSavePw">設定を保存</button>
+</div><div class="reset-area"><button class="reset-btn" id="bReset">🗑 データをリセット</button><div class="hint" style="margin-top:5px">全てのデータを初期状態に戻します</div></div>
+</div></div>
 </div>
 
-<!-- 管理者ページ -->
-<div id="adminPage" class="page">
-  <div class="header admin">
-    <div class="header-top"><h1>🎣 管理パネル</h1><span class="hbadge">管理者</span></div>
-    <div class="event-name" id="aEventName">管理者モード</div>
-  </div>
-  <div class="nav-tabs">
-    <button class="nav-tab a-active" data-atab="approval">✅ 承認<span class="tab-badge" id="pendingBadge">0</span></button>
-    <button class="nav-tab" data-atab="members">👥 参加者</button>
-    <button class="nav-tab" data-atab="events">📅 大会</button>
-    <button class="nav-tab" data-atab="settings">⚙️ 設定</button>
-  </div>
-  <div class="tab-content active" id="aTab-approval">
-    <div class="container">
-      <div class="event-select"><select id="aApprovalEventSelect"><option value="">全ての大会</option></select></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-num green" id="statApproved">0</div><div class="stat-label">承認済</div></div>
-        <div class="stat-card"><div class="stat-num orange" id="statPending">0</div><div class="stat-label">未承認</div></div>
-        <div class="stat-card"><div class="stat-num blue" id="statTotal">0</div><div class="stat-label">合計</div></div>
-      </div>
-      <div id="approvalList"></div>
-      <div id="noApprovals" style="text-align:center;padding:30px;color:#999;font-size:13px">未承認の申請はありません</div>
-    </div>
-  </div>
-  <div class="tab-content" id="aTab-members">
-    <div class="container">
-      <div class="event-select"><select id="aMemberEventSelect"><option value="">全ての大会</option></select></div>
-      <p class="section-title">👥 登録者一覧（タップで編集）</p>
-      <div id="membersList"></div>
-    </div>
-  </div>
-  <div class="tab-content" id="aTab-events">
-    <div class="container">
-      <p class="section-title">📅 大会一覧</p>
-      <div id="eventsList"></div>
-      <button class="btn btn-primary btn-full" style="margin-top:12px" id="btnNewEvent">＋ 新しい大会を作成</button>
-    </div>
-  </div>
-  <div class="tab-content" id="aTab-settings">
-    <div class="container">
-      <div class="card">
-        <h3 style="font-size:14px;margin-bottom:12px">⚙️ 設定</h3>
-        <div class="form-group"><label>管理者パスワード変更</label><input type="text" id="settingPassword" placeholder="新しいパスワード"><div class="hint">空欄の場合は変更されません</div></div>
-        <button class="btn btn-primary btn-full" id="btnSaveSettings">設定を保存</button>
-      </div>
-      <div class="reset-area"><button class="reset-btn" id="btnReset">🗑 データをリセット（初期化）</button><div class="hint" style="margin-top:5px">全てのデータを初期状態に戻します</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- パスワードモーダル -->
-<div class="modal-overlay" id="pwModal">
-  <div class="modal-box" style="text-align:center">
-    <h3>🔒 管理者パスワード</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:12px">パスワードを入力してください</p>
-    <input type="password" class="pw-input" id="pwInput" placeholder="パスワード" autocomplete="off">
-    <div class="btn-row">
-      <button class="btn btn-secondary" id="btnPwCancel">キャンセル</button>
-      <button class="btn btn-primary" id="btnPwOk">ログイン</button>
-    </div>
-  </div>
-</div>
-
-<!-- 編集モーダル -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal-box">
-    <button class="modal-close" id="btnEditClose">&times;</button>
-    <h3>📝 登録内容を編集</h3>
-    <div class="form-group"><label>名前</label><input type="text" id="editName"></div>
-    <div class="form-group"><label>魚種</label><select id="editFishType"><option>ブラックバス</option><option>ブルーギル</option><option>ナマズ</option><option>ライギョ</option><option>その他</option></select></div>
-    <div class="form-group"><label>サイズ (cm)</label><input type="number" id="editSize" step="0.1"></div>
-    <div class="form-group"><label>撮影日時</label><input type="datetime-local" id="editDateTime"></div>
-    <div class="form-group"><label>メモ</label><textarea id="editMemo"></textarea></div>
-    <input type="hidden" id="editId">
-    <button class="btn btn-primary btn-full" id="btnEditSave">変更を保存</button>
-  </div>
-</div>
-
-<!-- 新規大会モーダル -->
-<div class="modal-overlay" id="newEventModal">
-  <div class="modal-box">
-    <button class="modal-close" id="btnNewEventClose">&times;</button>
-    <h3>📅 新しい大会を作成</h3>
-    <div class="form-group"><label>大会名<span class="req">*必須</span></label><input type="text" id="newEventName" placeholder="例: 第6回 バス釣り大会"></div>
-    <div class="form-group"><label>開催日<span class="req">*必須</span></label><input type="date" id="newEventDate"></div>
-    <div class="form-group"><label>場所</label><input type="text" id="newEventPlace" placeholder="例: 琵琶湖"></div>
-    <button class="btn btn-primary btn-full" id="btnCreateEvent">作成する</button>
-  </div>
-</div>
-
-<!-- 削除確認モーダル -->
-<div class="modal-overlay" id="deleteModal">
-  <div class="modal-box" style="text-align:center">
-    <h3>⚠️ 大会を削除</h3>
-    <p style="font-size:13px;color:#666;margin:12px 0" id="deleteMsg"></p>
-    <div class="btn-row">
-      <button class="btn btn-secondary" id="btnDeleteCancel">キャンセル</button>
-      <button class="btn btn-danger" id="btnDeleteOk">削除する</button>
-    </div>
-    <input type="hidden" id="deleteEventId">
-  </div>
-</div>
-
+<div class="mo" id="moPw"><div class="mo-b" style="text-align:center"><h3>🔒 管理者パスワード</h3><p style="font-size:12px;color:#666;margin-bottom:12px">パスワードを入力してください</p><input type="password" class="pw-in" id="iPwIn" placeholder="パスワード" autocomplete="off"><div class="btn-row"><button class="btn btn-s" id="bPwNo">キャンセル</button><button class="btn btn-g" id="bPwOk">ログイン</button></div></div></div>
+<div class="mo" id="moEdit"><div class="mo-b"><button class="mo-x" id="bEdX">&times;</button><h3>📝 登録内容を編集</h3><div class="fg"><label>名前</label><input type="text" id="edName"></div><div class="fg"><label>魚種</label><select id="edFish"><option>ブラックバス</option><option>ブルーギル</option><option>ナマズ</option><option>ライギョ</option><option>その他</option></select></div><div class="fg"><label>サイズ (cm)</label><input type="number" id="edSize" step="0.1"></div><div class="fg"><label>撮影日時</label><input type="datetime-local" id="edDT"></div><div class="fg"><label>メモ</label><textarea id="edMemo"></textarea></div><input type="hidden" id="edId"><button class="btn btn-g btn-f" id="bEdOk">変更を保存</button></div></div>
+<div class="mo" id="moNewEv"><div class="mo-b"><button class="mo-x" id="bNeX">&times;</button><h3>📅 新しい大会を作成</h3><div class="fg"><label>大会名 <span style="color:#d32f2f;font-size:10px">*必須</span></label><input type="text" id="neName" placeholder="例: 第6回 バス釣り大会"></div><div class="fg"><label>開催日 <span style="color:#d32f2f;font-size:10px">*必須</span></label><input type="date" id="neDate"></div><div class="fg"><label>場所</label><input type="text" id="nePlace" placeholder="例: 琵琶湖"></div><button class="btn btn-g btn-f" id="bNeOk">作成する</button></div></div>
+<div class="mo" id="moDel"><div class="mo-b" style="text-align:center"><h3>⚠️ 大会を削除</h3><p style="font-size:13px;color:#666;margin:12px 0" id="delMsg"></p><input type="hidden" id="delId"><div class="btn-row"><button class="btn btn-s" id="bDelNo">キャンセル</button><button class="btn btn-d" id="bDelOk">削除する</button></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
 (function(){
-// ===== EXIF =====
-function getExifDateTime(file,cb){
-  var reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      var v=new DataView(e.target.result);
-      if(v.getUint16(0,false)!==0xFFD8){cb(null);return}
-      var off=2,len=v.byteLength;
-      while(off<len){
-        if(off+4>len)break;
-        if(v.getUint16(off,false)===0xFFE1){
-          var eo=off+4;
-          if(eo+6>len||v.getUint32(eo,false)!==0x45786966){cb(null);return}
-          var to=eo+6;
-          if(to+8>len){cb(null);return}
-          var be=v.getUint16(to,false)===0x4D4D;
-          var io=v.getUint32(to+4,!be);
-          var is=to+io;
-          if(is+2>len){cb(null);return}
-          var tags=v.getUint16(is,!be);
-          var exifP=null;
-          for(var i=0;i<tags;i++){
-            var en=is+2+(i*12);
-            if(en+12>len)break;
-            var tag=v.getUint16(en,!be);
-            if(tag===0x0132){
-              var vo=v.getUint32(en+8,!be)+to;
-              var s='';for(var j=0;j<19&&vo+j<len;j++)s+=String.fromCharCode(v.getUint8(vo+j));
-              var p=s.split(' ');
-              if(p.length===2){cb(p[0].replace(/:/g,'-')+'T'+p[1].substring(0,5));return}
-            }
-            if(tag===0x8769)exifP=v.getUint32(en+8,!be);
-          }
-          if(exifP!==null){
-            var es=to+exifP;
-            if(es+2<=len){
-              var et=v.getUint16(es,!be);
-              for(var k=0;k<et;k++){
-                var ee=es+2+(k*12);
-                if(ee+12>len)break;
-                var etag=v.getUint16(ee,!be);
-                if(etag===0x9003||etag===0x9004){
-                  var vv=v.getUint32(ee+8,!be)+to;
-                  var ss='';for(var j=0;j<19&&vv+j<len;j++)ss+=String.fromCharCode(v.getUint8(vv+j));
-                  var pp=ss.split(' ');
-                  if(pp.length===2){cb(pp[0].replace(/:/g,'-')+'T'+pp[1].substring(0,5));return}
-                }
-              }
-            }
-          }
-          cb(null);return;
-        }
-        if(off+2>=len)break;
-        off+=2+v.getUint16(off+2,false);
-      }
-      cb(null);
-    }catch(x){cb(null)}
-  };
-  reader.onerror=function(){cb(null)};
-  reader.readAsArrayBuffer(file.slice(0,131072));
-}
-
-// ===== データ =====
-var KEY='fishingApp';
-function defaults(){
-  return{adminPassword:'[PASSWORD]',catches:[
-    {id:1,name:'鈴木 一郎',fish:'ブラックバス',size:52,memo:'スピナーベイト',status:'approved',time:'09:15',dateTime:'2026-08-15T09:15',event:'第5回 バス釣り大会'},
-    {id:2,name:'鈴木 一郎',fish:'ブラックバス',size:38,memo:'',status:'approved',time:'10:30',dateTime:'2026-08-15T10:30',event:'第5回 バス釣り大会'},
-    {id:3,name:'鈴木 一郎',fish:'ブラックバス',size:28.5,memo:'',status:'approved',time:'11:45',dateTime:'2026-08-15T11:45',event:'第5回 バス釣り大会'},
-    {id:4,name:'田中 太郎',fish:'ブラックバス',size:45.5,memo:'クランクベイト',status:'approved',time:'09:40',dateTime:'2026-08-15T09:40',event:'第5回 バス釣り大会'},
-    {id:5,name:'田中 太郎',fish:'ブラックバス',size:42,memo:'',status:'approved',time:'11:00',dateTime:'2026-08-15T11:00',event:'第5回 バス釣り大会'},
-    {id:6,name:'田中 太郎',fish:'ナマズ',size:41,memo:'',status:'approved',time:'13:20',dateTime:'2026-08-15T13:20',event:'第5回 バス釣り大会'},
-    {id:7,name:'佐藤 花子',fish:'ブラックバス',size:42,memo:'ワーム',status:'approved',time:'10:00',dateTime:'2026-08-15T10:00',event:'第5回 バス釣り大会'},
-    {id:8,name:'佐藤 花子',fish:'ブラックバス',size:40,memo:'',status:'approved',time:'12:15',dateTime:'2026-08-15T12:15',event:'第5回 バス釣り大会'},
-    {id:9,name:'佐藤 花子',fish:'ブルーギル',size:36,memo:'',status:'approved',time:'14:00',dateTime:'2026-08-15T14:00',event:'第5回 バス釣り大会'},
-    {id:10,name:'山田 次郎',fish:'ブラックバス',size:41,memo:'',status:'pending',time:'13:50',dateTime:'2026-08-15T13:50',event:'第5回 バス釣り大会'},
-    {id:11,name:'高橋 美咲',fish:'ブラックバス',size:40,memo:'',status:'pending',time:'14:10',dateTime:'2026-08-15T14:10',event:'第5回 バス釣り大会'}
-  ],events:[
-    {id:1,name:'第5回 バス釣り大会',date:'2026-08-15',place:'琵琶湖',status:'active'},
-    {id:2,name:'第4回 バス釣り大会',date:'2026-05-20',place:'琵琶湖',status:'closed'},
-    {id:3,name:'第3回 バス釣り大会',date:'2025-10-10',place:'河口湖',status:'closed'}
-  ],nextId:12,nextEventId:4};
-}
-function load(){
-  var d=localStorage.getItem(KEY);
-  if(d){var p=JSON.parse(d);if(!p.adminPassword)p.adminPassword='[PASSWORD]';
-    if(p.events)p.events.forEach(function(e){if(typeof e.active!=='undefined'){e.status=e.active?'active':'closed';delete e.active}});
-    return p;}
-  return defaults();
-}
+"use strict";
+var KEY='fishingApp2';
+function defs(){return{pw:'[PASSWORD]',catches:[
+{id:1,name:'鈴木 一郎',fish:'ブラックバス',size:52,memo:'スピナーベイト',status:'approved',time:'09:15',dt:'2026-08-15T09:15',ev:'第5回 バス釣り大会'},
+{id:2,name:'鈴木 一郎',fish:'ブラックバス',size:38,memo:'',status:'approved',time:'10:30',dt:'2026-08-15T10:30',ev:'第5回 バス釣り大会'},
+{id:3,name:'鈴木 一郎',fish:'ブラックバス',size:28.5,memo:'',status:'approved',time:'11:45',dt:'2026-08-15T11:45',ev:'第5回 バス釣り大会'},
+{id:4,name:'田中 太郎',fish:'ブラックバス',size:45.5,memo:'クランクベイト',status:'approved',time:'09:40',dt:'2026-08-15T09:40',ev:'第5回 バス釣り大会'},
+{id:5,name:'田中 太郎',fish:'ブラックバス',size:42,memo:'',status:'approved',time:'11:00',dt:'2026-08-15T11:00',ev:'第5回 バス釣り大会'},
+{id:6,name:'田中 太郎',fish:'ナマズ',size:41,memo:'',status:'approved',time:'13:20',dt:'2026-08-15T13:20',ev:'第5回 バス釣り大会'},
+{id:7,name:'佐藤 花子',fish:'ブラックバス',size:42,memo:'ワーム',status:'approved',time:'10:00',dt:'2026-08-15T10:00',ev:'第5回 バス釣り大会'},
+{id:8,name:'佐藤 花子',fish:'ブラックバス',size:40,memo:'',status:'approved',time:'12:15',dt:'2026-08-15T12:15',ev:'第5回 バス釣り大会'},
+{id:9,name:'佐藤 花子',fish:'ブルーギル',size:36,memo:'',status:'approved',time:'14:00',dt:'2026-08-15T14:00',ev:'第5回 バス釣り大会'},
+{id:10,name:'山田 次郎',fish:'ブラックバス',size:41,memo:'',status:'pending',time:'13:50',dt:'2026-08-15T13:50',ev:'第5回 バス釣り大会'},
+{id:11,name:'高橋 美咲',fish:'ブラックバス',size:40,memo:'',status:'pending',time:'14:10',dt:'2026-08-15T14:10',ev:'第5回 バス釣り大会'}
+],events:[
+{id:1,name:'第5回 バス釣り大会',date:'2026-08-15',place:'琵琶湖',st:'active'},
+{id:2,name:'第4回 バス釣り大会',date:'2026-05-20',place:'琵琶湖',st:'closed'},
+{id:3,name:'第3回 バス釣り大会',date:'2025-10-10',place:'河口湖',st:'closed'}
+],nid:12,neid:4}}
+function load(){var s=localStorage.getItem(KEY);if(s){try{return JSON.parse(s)}catch(e){}}return defs()}
 function save(){localStorage.setItem(KEY,JSON.stringify(D))}
 var D=load();
+function $(id){return document.getElementById(id)}
+function toast(m){var t=$('toast');t.textContent=m;t.className='toast';void t.offsetWidth;t.className='toast on';setTimeout(function(){t.className='toast'},2500)}
 
-// ===== トースト =====
-function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.remove('show');void t.offsetWidth;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+// EXIF
+function exif(file,cb){
+var r=new FileReader();
+r.onload=function(e){try{
+var v=new DataView(e.target.result);
+if(v.getUint16(0,false)!==0xFFD8){cb(null);return}
+var o=2,l=v.byteLength;
+while(o<l){if(o+4>l)break;
+if(v.getUint16(o,false)===0xFFE1){
+var eo=o+4;if(eo+6>l||v.getUint32(eo,false)!==0x45786966){cb(null);return}
+var to=eo+6;if(to+8>l){cb(null);return}
+var be=v.getUint16(to,false)===0x4D4D,io=v.getUint32(to+4,!be),is=to+io;
+if(is+2>l){cb(null);return}
+var tg=v.getUint16(is,!be),ep=null;
+for(var i=0;i<tg;i++){var en=is+2+i*12;if(en+12>l)break;var t2=v.getUint16(en,!be);
+if(t2===0x0132){var vo=v.getUint32(en+8,!be)+to,s='';for(var j=0;j<19&&vo+j<l;j++)s+=String.fromCharCode(v.getUint8(vo+j));var p=s.split(' ');if(p.length===2){cb(p[0].replace(/:/g,'-')+'T'+p[1].substring(0,5));return}}
+if(t2===0x8769)ep=v.getUint32(en+8,!be)}
+if(ep!==null){var es2=to+ep;if(es2+2<=l){var et=v.getUint16(es2,!be);
+for(var k=0;k<et;k++){var ee=es2+2+k*12;if(ee+12>l)break;var et2=v.getUint16(ee,!be);
+if(et2===0x9003||et2===0x9004){var vv=v.getUint32(ee+8,!be)+to,ss='';for(var j=0;j<19&&vv+j<l;j++)ss+=String.fromCharCode(v.getUint8(vv+j));var pp=ss.split(' ');if(pp.length===2){cb(pp[0].replace(/:/g,'-')+'T'+pp[1].substring(0,5));return}}}}}
+cb(null);return}
+if(o+2>=l)break;o+=2+v.getUint16(o+2,false)}cb(null)}catch(x){cb(null)}};
+r.onerror=function(){cb(null)};r.readAsArrayBuffer(file.slice(0,131072))}
 
-// ===== ロール切替 =====
-var role='participant';
-document.getElementById('btnParticipant').addEventListener('click',function(){
-  if(role==='participant')return;
-  role='participant';
-  document.getElementById('btnParticipant').className='role-btn p-active';
-  document.getElementById('btnAdmin').className='role-btn';
-  document.getElementById('participantPage').className='page active';
-  document.getElementById('adminPage').className='page';
-  updateSelects();renderRanking();
-});
-document.getElementById('btnAdmin').addEventListener('click',function(){
-  if(role==='admin')return;
-  document.getElementById('pwInput').value='';
-  document.getElementById('pwModal').classList.add('show');
-  setTimeout(function(){document.getElementById('pwInput').focus()},300);
-});
-document.getElementById('btnPwCancel').addEventListener('click',function(){
-  document.getElementById('pwModal').classList.remove('show');
-});
-document.getElementById('btnPwOk').addEventListener('click',function(){checkPw()});
-document.getElementById('pwInput').addEventListener('keyup',function(e){if(e.key==='Enter')checkPw()});
-function checkPw(){
-  var pw=document.getElementById('pwInput').value;
-  if(pw===D.adminPassword){
-    document.getElementById('pwModal').classList.remove('show');
-    role='admin';
-    document.getElementById('btnParticipant').className='role-btn';
-    document.getElementById('btnAdmin').className='role-btn a-active';
-    document.getElementById('participantPage').className='page';
-    document.getElementById('adminPage').className='page active';
-    updateSelects();renderApprovals();
-  }else{toast('⚠️ パスワードが違います');document.getElementById('pwInput').value='';document.getElementById('pwInput').focus()}
+// セレクト更新
+function updSel(){
+var ac=D.events.filter(function(e){return e.st==='active'}),al=D.events;
+var s1=$('selEv');s1.innerHTML='<option value="">大会を選択してください</option>';ac.forEach(function(e){s1.innerHTML+='<option>'+e.name+'</option>'});if(ac.length===1){s1.value=ac[0].name;onEvSel()}
+var s2=$('selMyEv');s2.innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){s2.innerHTML+='<option>'+e.name+'</option>'});
+var s3=$('selRkEv');s3.innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){s3.innerHTML+='<option>'+e.name+'</option>'});
+var s4=$('selAEv');s4.innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){s4.innerHTML+='<option>'+e.name+'</option>'});
+var s5=$('selMEv');s5.innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){s5.innerHTML+='<option>'+e.name+'</option>'});
 }
+function onEvSel(){var v=$('selEv').value,ev=D.events.find(function(e){return e.name===v});
+if(!v){$('pEvName').textContent='大会を選択してください';$('formArea').style.display='block';$('clMsg').style.display='none';return}
+$('pEvName').textContent=v;
+if(ev&&ev.st==='closed'){$('formArea').style.display='none';$('clMsg').style.display='block'}else{$('formArea').style.display='block';$('clMsg').style.display='none'}}
 
-// ===== 参加者タブ =====
-document.querySelectorAll('[data-ptab]').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('[data-ptab]').forEach(function(b){b.className='nav-tab'});
-    this.className='nav-tab active';
-    document.querySelectorAll('#participantPage .tab-content').forEach(function(t){t.className='tab-content'});
-    document.getElementById('pTab-'+this.getAttribute('data-ptab')).className='tab-content active';
-    if(this.getAttribute('data-ptab')==='myrecords')renderMyRecords();
-    if(this.getAttribute('data-ptab')==='ranking')renderRanking();
-  });
-});
+// ロール切替
+$('rP').addEventListener('click',function(){$('rP').className='role-btn on-p';$('rA').className='role-btn';$('pPage').className='page active';$('aPage').className='page';updSel()});
+$('rA').addEventListener('click',function(){$('iPwIn').value='';$('moPw').className='mo on';setTimeout(function(){$('iPwIn').focus()},300)});
+$('bPwNo').addEventListener('click',function(){$('moPw').className='mo'});
+$('bPwOk').addEventListener('click',doPw);
+$('iPwIn').addEventListener('keyup',function(e){if(e.key==='Enter')doPw()});
+function doPw(){if($('iPwIn').value===D.pw){$('moPw').className='mo';$('rP').className='role-btn';$('rA').className='role-btn on-a';$('pPage').className='page';$('aPage').className='page active';updSel();renderAp()}else{toast('⚠️ パスワードが違います');$('iPwIn').value='';$('iPwIn').focus()}}
 
-// ===== 管理者タブ =====
-document.querySelectorAll('[data-atab]').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('[data-atab]').forEach(function(b){b.className='nav-tab'});
-    this.className='nav-tab a-active';
-    document.querySelectorAll('#adminPage .tab-content').forEach(function(t){t.className='tab-content'});
-    document.getElementById('aTab-'+this.getAttribute('data-atab')).className='tab-content active';
-    var tab=this.getAttribute('data-atab');
-    if(tab==='approval')renderApprovals();
-    if(tab==='members')renderMembers();
-    if(tab==='events')renderEvents();
-  });
-});
+// 参加者タブ
+$('tSubmit').addEventListener('click',function(){setPTab('Submit',this)});
+$('tMy').addEventListener('click',function(){setPTab('My',this);renderMy()});
+$('tRank').addEventListener('click',function(){setPTab('Rank',this);renderRk()});
+function setPTab(id,btn){document.querySelectorAll('#pPage .tab').forEach(function(t){t.className='tab'});btn.className='tab on';document.querySelectorAll('#pPage .tc').forEach(function(t){t.className='tc'});$('tc'+id).className='tc on'}
 
-// ===== セレクト更新 =====
-function updateSelects(){
-  var active=D.events.filter(function(e){return e.status==='active'});
-  var all=D.events;
-  var ps=document.getElementById('pEventSelect');
-  ps.innerHTML='<option value="">大会を選択してください</option>';
-  active.forEach(function(e){ps.innerHTML+='<option value="'+e.name+'">'+e.name+'</option>'});
-  if(active.length===1){ps.value=active[0].name;onEventSelect()}
+// 管理者タブ
+$('tAppr').addEventListener('click',function(){setATab('Appr',this);renderAp()});
+$('tMem').addEventListener('click',function(){setATab('Mem',this);renderMem()});
+$('tEvt').addEventListener('click',function(){setATab('Evt',this);renderEv()});
+$('tSet').addEventListener('click',function(){setATab('Set',this)});
+function setATab(id,btn){document.querySelectorAll('#aPage .tab').forEach(function(t){t.className='tab'});btn.className='tab on-a';document.querySelectorAll('#aPage .tc').forEach(function(t){t.className='tc'});$('tc'+id).className='tc on'}
 
-  var ms=document.getElementById('pMyEventSelect');
-  ms.innerHTML='<option value="">全ての大会</option>';
-  all.forEach(function(e){ms.innerHTML+='<option value="'+e.name+'">'+e.name+'</option>'});
+// 大会選択
+$('selEv').addEventListener('change',onEvSel);
+$('selMyEv').addEventListener('change',renderMy);
+$('selRkEv').addEventListener('change',renderRk);
+$('selAEv').addEventListener('change',renderAp);
+$('selMEv').addEventListener('change',renderMem);
 
-  var rs=document.getElementById('pRankEventSelect');
-  rs.innerHTML='<option value="">全ての大会</option>';
-  all.forEach(function(e){rs.innerHTML+='<option value="'+e.name+'">'+e.name+'</option>'});
+// 写真
+$('iPhoto').addEventListener('change',function(){
+var f=this.files&&this.files[0];if(!f)return;
+var rd=new FileReader();rd.onload=function(e){$('photoPreview').src=e.target.result;$('photoPreview').style.display='block';document.querySelector('.photo-lbl').classList.add('has');$('piI').style.display='none';$('piT').style.display='none';$('piS').style.display='none'};rd.readAsDataURL(f);
+exif(f,function(dt){var b=$('exifBox');if(dt){$('iDT').value=dt;var d=new Date(dt);b.innerHTML='📅 撮影日時を検出: <b>'+d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+'</b>';b.className='exif on'}else{b.innerHTML='⚠️ 撮影日時を検出できませんでした';b.className='exif on'}})});
+function resetPh(){$('photoPreview').style.display='none';document.querySelector('.photo-lbl').classList.remove('has');$('piI').style.display='';$('piT').style.display='';$('piS').style.display='';$('iPhoto').value='';$('exifBox').className='exif'}
 
-  var aa=document.getElementById('aApprovalEventSelect');
-  aa.innerHTML='<option value="">全ての大会</option>';
-  all.forEach(function(e){aa.innerHTML+='<option value="'+e.name+'">'+e.name+'</option>'});
+// 申請
+$('bSubmit').addEventListener('click',function(){
+var ev=$('selEv').value;if(!ev){toast('⚠️ 大会を選択してください');return}
+var evo=D.events.find(function(e){return e.name===ev});if(evo&&evo.st==='closed'){toast('⚠️ 締め切られています');return}
+var nm=$('iName').value.trim(),fi=$('iFish').value,sz=parseFloat($('iSize').value),me=$('iMemo').value.trim(),dt=$('iDT').value;
+if(!nm){toast('⚠️ 名前を入力してください');return}if(!fi){toast('⚠️ 魚種を選択してください');return}if(!sz||sz<=0){toast('⚠️ サイズを入力してください');return}
+var now=new Date(),tm=dt?dt.split('T')[1]:('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+D.catches.push({id:D.nid++,name:nm,fish:fi,size:sz,memo:me,status:'pending',time:tm,dt:dt||now.toISOString().slice(0,16),ev:ev});save();
+$('iFish').value='';$('iSize').value='';$('iMemo').value='';$('iDT').value='';resetPh();toast('✅ 申請しました！')});
 
-  var am=document.getElementById('aMemberEventSelect');
-  am.innerHTML='<option value="">全ての大会</option>';
-  all.forEach(function(e){am.innerHTML+='<option value="'+e.name+'">'+e.name+'</option>'});
-}
+// My記録
+function renderMy(){
+var nm=$('iName').value.trim(),sel=$('selMyEv').value,list=$('myList'),no=$('noRec');
+if(!nm){list.innerHTML='';no.innerHTML='<p>名前を「申請」タブで入力すると表示されます</p>';no.style.display='block';return}
+var recs=D.catches.filter(function(c){return c.name===nm&&(!sel||c.ev===sel)});
+if(!recs.length){list.innerHTML='';no.style.display='block';no.innerHTML='まだ申請がありません';return}
+no.style.display='none';var h='';
+recs.forEach(function(r){var sc=r.status==='approved'?'b-ok':r.status==='pending'?'b-pend':'b-ng',st=r.status==='approved'?'承認済':r.status==='pending'?'審査中':'却下',dt=r.dt?r.dt.replace('T',' '):r.time;
+h+='<div class="hi"><div class="th">🐟</div><div class="inf"><div class="t1">'+r.fish+' '+r.size+'cm</div><div class="t2">'+dt+' | '+r.ev+(r.memo?' | '+r.memo:'')+'</div></div><span class="badge '+sc+'">'+st+'</span></div>'});
+list.innerHTML=h}
 
-// ===== 大会選択 =====
-document.getElementById('pEventSelect').addEventListener('change',onEventSelect);
-function onEventSelect(){
-  var sel=document.getElementById('pEventSelect').value;
-  var ev=D.events.find(function(e){return e.name===sel});
-  if(!sel){document.getElementById('pEventName').textContent='大会を選択してください';document.getElementById('submitForm').style.display='block';document.getElementById('closedMsg').style.display='none';return}
-  document.getElementById('pEventName').textContent=sel;
-  if(ev&&ev.status==='closed'){document.getElementById('submitForm').style.display='none';document.getElementById('closedMsg').style.display='block'}
-  else{document.getElementById('submitForm').style.display='block';document.getElementById('closedMsg').style.display='none'}
-}
+// ランキング
+function renderRk(){
+var sel=$('selRkEv').value,ap=D.catches.filter(function(c){return c.status==='approved'&&(!sel||c.ev===sel)});
+var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,best:0,cnt:0,fish:[]};pl[c.name].total+=c.size;pl[c.name].cnt++;if(c.size>pl[c.name].best)pl[c.name].best=c.size;pl[c.name].fish.push(c)});
+var rk=Object.values(pl).sort(function(a,b){return b.total-a.total});
+var ph='';if(rk.length>=3){ph='<div class="podium"><h3>🏆 TOP 3</h3><div class="pod-row"><div class="pod-i p2"><div class="ri">🥈</div><div class="pn">'+rk[1].name+'</div><div class="pv">'+rk[1].total.toFixed(1)+'</div><div class="pl">cm</div><div class="bar"></div></div><div class="pod-i p1"><div class="ri">🥇</div><div class="pn">'+rk[0].name+'</div><div class="pv">'+rk[0].total.toFixed(1)+'</div><div class="pl">cm</div><div class="bar"></div></div><div class="pod-i p3"><div class="ri">🥉</div><div class="pn">'+rk[2].name+'</div><div class="pv">'+rk[2].total.toFixed(1)+'</div><div class="pl">cm</div><div class="bar"></div></div></div></div>'}
+$('podArea').innerHTML=ph;
+var lh='';rk.forEach(function(p,i){var rc=i===0?'rk-1':i===1?'rk-2':i===2?'rk-3':'';
+lh+='<div class="rr" data-i="'+i+'"><div class="rk '+rc+'">'+(i+1)+'</div><div class="rn">'+p.name+'</div><div class="rt">'+p.total.toFixed(1)+'</div><div class="rc">'+p.cnt+'匹</div></div>';
+lh+='<div class="rd" id="rd'+i+'">';p.fish.sort(function(a,b){return b.size-a.size}).forEach(function(f){lh+='<div class="rd-f"><span>'+f.fish+' '+f.size+'cm</span><span>'+f.time+'</span></div>'});lh+='</div>'});
+$('rkList').innerHTML=lh;
+document.querySelectorAll('.rr').forEach(function(r){r.addEventListener('click',function(){var d=$('rd'+this.getAttribute('data-i'));d.classList.toggle('on')})})}
 
-// ===== 写真 =====
-document.getElementById('photoInput').addEventListener('change',function(){
-  var file=this.files&&this.files[0];
-  if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=document.getElementById('photoPreview');
-    img.src=e.target.result;img.style.display='block';
-    document.getElementById('photoLabel').classList.add('has-photo');
-    document.getElementById('puIcon').style.display='none';
-    document.getElementById('puText').style.display='none';
-    document.getElementById('puSub').style.display='none';
-  };
-  reader.readAsDataURL(file);
-  getExifDateTime(file,function(dt){
-    var info=document.getElementById('exifInfo');
-    if(dt){
-      document.getElementById('pDateTime').value=dt;
-      var d=new Date(dt);
-      info.innerHTML='📅 撮影日時を検出: <strong>'+d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+'</strong>';
-      info.classList.add('show');
-    }else{
-      info.innerHTML='⚠️ 撮影日時を検出できませんでした（手動で入力してください）';
-      info.classList.add('show');
-    }
-  });
-});
-function resetPhoto(){
-  document.getElementById('photoPreview').style.display='none';
-  document.getElementById('photoLabel').classList.remove('has-photo');
-  document.getElementById('puIcon').style.display='';
-  document.getElementById('puText').style.display='';
-  document.getElementById('puSub').style.display='';
-  document.getElementById('photoInput').value='';
-  document.getElementById('exifInfo').classList.remove('show');
-}
+// CSV
+$('bCSV').addEventListener('click',function(){
+var sel=$('selRkEv').value,ap=D.catches.filter(function(c){return c.status==='approved'&&(!sel||c.ev===sel)});
+var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,best:0,cnt:0};pl[c.name].total+=c.size;pl[c.name].cnt++;if(c.size>pl[c.name].best)pl[c.name].best=c.size});
+var rk=Object.values(pl).sort(function(a,b){return b.total-a.total}),d=[['順位','名前','合計(cm)','最大(cm)','匹数']];
+rk.forEach(function(p,i){d.push([i+1,p.name,p.total.toFixed(1),p.best.toFixed(1),p.cnt])});
+var csv='\uFEFF'+d.map(function(r){return r.join(',')}).join('\n'),bl=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='ranking.csv';a.click()});
 
-// ===== 申請 =====
-document.getElementById('btnSubmit').addEventListener('click',function(){
-  var sel=document.getElementById('pEventSelect').value;
-  if(!sel){toast('⚠️ 大会を選択してください');return}
-  var ev=D.events.find(function(e){return e.name===sel});
-  if(ev&&ev.status==='closed'){toast('⚠️ この大会は締め切られています');return}
-  var name=document.getElementById('pName').value.trim();
-  var fish=document.getElementById('pFishType').value;
-  var size=parseFloat(document.getElementById('pSize').value);
-  var memo=document.getElementById('pMemo').value.trim();
-  var dt=document.getElementById('pDateTime').value;
-  if(!name){toast('⚠️ 名前を入力してください');return}
-  if(!fish){toast('⚠️ 魚種を選択してください');return}
-  if(!size||size<=0){toast('⚠️ サイズを入力してください');return}
-  var now=new Date();
-  var time=dt?dt.split('T')[1]:('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
-  D.catches.push({id:D.nextId++,name:name,fish:fish,size:size,memo:memo,status:'pending',time:time,dateTime:dt||now.toISOString().slice(0,16),event:sel});
-  save();
-  document.getElementById('pFishType').value='';document.getElementById('pSize').value='';document.getElementById('pMemo').value='';document.getElementById('pDateTime').value='';
-  resetPhoto();toast('✅ 申請しました！承認をお待ちください');
-});
+// 承認
+function renderAp(){
+var sel=$('selAEv').value,fil=D.catches.filter(function(c){return!sel||c.ev===sel});
+var pn=fil.filter(function(c){return c.status==='pending'}),ok=fil.filter(function(c){return c.status==='approved'});
+$('sPn').textContent=pn.length;$('sOk').textContent=ok.length;$('sAll').textContent=fil.length;
+$('pBadge').textContent=D.catches.filter(function(c){return c.status==='pending'}).length;
+if(!pn.length){$('apList').innerHTML='';$('noAp').style.display='block';return}
+$('noAp').style.display='none';var h='';
+pn.forEach(function(c){var dt=c.dt?c.dt.replace('T',' '):c.time;
+h+='<div class="mc"><div class="mc-h"><strong style="font-size:13px">'+c.name+'</strong><span class="badge b-pend">未承認</span></div><div class="mc-i"><div class="mc-r"><span>大会</span><span>'+c.ev+'</span></div><div class="mc-r"><span>魚種</span><span>'+c.fish+'</span></div><div class="mc-r"><span>サイズ</span><span style="color:#2e7d32">'+c.size+' cm</span></div><div class="mc-r"><span>日時</span><span>'+dt+'</span></div>'+(c.memo?'<div class="mc-r"><span>メモ</span><span>'+c.memo+'</span></div>':'')+'</div><div class="mc-a"><div class="mc-b"><button class="btn btn-g btn-sm" data-ok="'+c.id+'">✅ 承認</button><button class="btn btn-sm" style="background:#ffebee;color:#d32f2f;border:1px solid #ef9a9a" data-ng="'+c.id+'">❌ 却下</button></div></div></div>'});
+$('apList').innerHTML=h;
+document.querySelectorAll('[data-ok]').forEach(function(b){b.addEventListener('click',function(){var c=D.catches.find(function(x){return x.id===+this.getAttribute('data-ok')}.bind(this));if(c){c.status='approved';save();renderAp();toast('✅ 承認しました')}}.bind(b))});
+document.querySelectorAll('[data-ng]').forEach(function(b){b.addEventListener('click',function(){var c=D.catches.find(function(x){return x.id===+this.getAttribute('data-ng')}.bind(this));if(c){c.status='rejected';save();renderAp();toast('❌ 却下しました')}}.bind(b))})}
 
-// ===== My記録 =====
-document.getElementById('pMyEventSelect').addEventListener('change',renderMyRecords);
-function renderMyRecords(){
-  var name=document.getElementById('pName').value.trim();
-  var sel=document.getElementById('pMyEventSelect').value;
-  var list=document.getElementById('myRecordsList');
-  var noRec=document.getElementById('noRecords');
-  if(!name){list.innerHTML='';noRec.innerHTML='<p>名前を「申請」タブで入力すると、<br>自分の記録が表示されます</p>';noRec.style.display='block';return}
-  var recs=D.catches.filter(function(c){return c.name===name&&(!sel||c.event===sel)});
-  if(!recs.length){list.innerHTML='';noRec.style.display='block';noRec.innerHTML='まだ申請がありません';return}
-  noRec.style.display='none';
-  var h='';
-  recs.forEach(function(r){
-    var sc=r.status==='approved'?'approved':r.status==='pending'?'pending':'rejected';
-    var st=r.status==='approved'?'承認済':r.status==='pending'?'審査中':'却下';
-    var dt=r.dateTime?r.dateTime.replace('T',' '):r.time;
-    h+='<div class="history-item"><div class="thumb">🐟</div><div class="h-info"><div class="h-length">'+r.fish+' '+r.size+'cm</div><div class="h-detail">'+dt+' | '+r.event+(r.memo?' | '+r.memo:'')+'</div></div><span class="badge '+sc+'">'+st+'</span></div>';
-  });
-  list.innerHTML=h;
-}
+// 参加者管理
+function renderMem(){
+var sel=$('selMEv').value,fil=D.catches.filter(function(c){return!sel||c.ev===sel}),mem={};
+fil.forEach(function(c){if(!mem[c.name])mem[c.name]=[];mem[c.name].push(c)});
+var h='';Object.keys(mem).forEach(function(nm){
+h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong style="font-size:13px">'+nm+'</strong><span style="font-size:11px;color:#999">'+mem[nm].length+'件</span></div>';
+mem[nm].forEach(function(c){var sc=c.status==='approved'?'b-ok':c.status==='pending'?'b-pend':'b-ng',st=c.status==='approved'?'承認済':c.status==='pending'?'審査中':'却下';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px"><span>'+c.fish+' '+c.size+'cm</span><div style="display:flex;align-items:center;gap:6px"><span class="badge '+sc+'">'+st+'</span><button class="btn btn-s btn-sm" data-ed="'+c.id+'">✏️</button></div></div>'});h+='</div>'});
+$('memList').innerHTML=h||'<div style="text-align:center;padding:30px;color:#999;font-size:13px">登録者がいません</div>';
+document.querySelectorAll('[data-ed]').forEach(function(b){b.addEventListener('click',function(){openEd(+this.getAttribute('data-ed'))})})}
 
-// ===== ランキング =====
-document.getElementById('pRankEventSelect').addEventListener('change',renderRanking);
-function renderRanking(){
-  var sel=document.getElementById('pRankEventSelect').value;
-  var ap=D.catches.filter(function(c){return c.status==='approved'&&(!sel||c.event===sel)});
-  var pl={};
-  ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,best:0,count:0,fish:[]};pl[c.name].total+=c.size;pl[c.name].count++;if(c.size>pl[c.name].best)pl[c.name].best=c.size;pl[c.name].fish.push(c)});
-  var rk=Object.values(pl).sort(function(a,b){return b.total-a.total});
-  var ph='';
-  if(rk.length>=3){
-    ph='<div class="podium"><h3>🏆 TOP 3</h3><div class="podium-row">';
-    ph+='<div class="podium-item second"><div class="rank-icon">🥈</div><div class="pod-name">'+rk[1].name+'</div><div class="pod-total">'+rk[1].total.toFixed(1)+'</div><div class="pod-label">cm</div><div class="bar"></div></div>';
-    ph+='<div class="podium-item first"><div class="rank-icon">🥇</div><div class="pod-name">'+rk[0].name+'</div><div class="pod-total">'+rk[0].total.toFixed(1)+'</div><div class="pod-label">cm</div><div class="bar"></div></div>';
-    ph+='<div class="podium-item third"><div class="rank-icon">🥉</div><div class="pod-name">'+rk[2].name+'</div><div class="pod-total">'+rk[2].total.toFixed(1)+'</div><div class="pod-label">cm</div><div class="bar"></div></div>';
-    ph+='</div></div>';
-  }
-  document.getElementById('podiumArea').innerHTML=ph;
-  var lh='';
-  rk.forEach(function(p,i){
-    var rc=i===0?'gold':i===1?'silver':i===2?'bronze':'';
-    lh+='<div class="r-row" data-rd="rd-'+i+'"><div class="rank '+rc+'">'+(i+1)+'</div><div class="r-name">'+p.name+'</div><div class="r-total">'+p.total.toFixed(1)+'</div><div class="r-count">'+p.count+'匹</div></div>';
-    lh+='<div class="r-detail" id="rd-'+i+'">';
-    p.fish.sort(function(a,b){return b.size-a.size}).forEach(function(f){lh+='<div class="rd-fish"><span>'+f.fish+' '+f.size+'cm</span><span>'+f.time+'</span></div>'});
-    lh+='</div>';
-  });
-  document.getElementById('rankingList').innerHTML=lh;
-  document.querySelectorAll('.r-row').forEach(function(row){
-    row.addEventListener('click',function(){var id=this.getAttribute('data-rd');document.getElementById(id).classList.toggle('show')});
-  });
-}
+// 編集
+function openEd(id){var c=D.catches.find(function(x){return x.id===id});if(!c)return;$('edName').value=c.name;$('edFish').value=c.fish;$('edSize').value=c.size;$('edDT').value=c.dt||'';$('edMemo').value=c.memo||'';$('edId').value=id;$('moEdit').className='mo on'}
+$('bEdX').addEventListener('click',function(){$('moEdit').className='mo'});
+$('bEdOk').addEventListener('click',function(){var id=+$('edId').value,c=D.catches.find(function(x){return x.id===id});if(!c)return;c.name=$('edName').value.trim();c.fish=$('edFish').value;c.size=parseFloat($('edSize').value);c.dt=$('edDT').value;c.memo=$('edMemo').value.trim();if(c.dt)c.time=c.dt.split('T')[1];save();$('moEdit').className='mo';renderMem();toast('✅ 保存しました')});
 
-// ===== CSV =====
-document.getElementById('btnCSV').addEventListener('click',function(){
-  var sel=document.getElementById('pRankEventSelect').value;
-  var ap=D.catches.filter(function(c){return c.status==='approved'&&(!sel||c.event===sel)});
-  var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,best:0,count:0};pl[c.name].total+=c.size;pl[c.name].count++;if(c.size>pl[c.name].best)pl[c.name].best=c.size});
-  var rk=Object.values(pl).sort(function(a,b){return b.total-a.total});
-  var data=[['順位','名前','合計長(cm)','最大長(cm)','承認匹数']];
-  rk.forEach(function(p,i){data.push([(i+1),p.name,p.total.toFixed(1),p.best.toFixed(1),p.count])});
-  var csv='\uFEFF'+data.map(function(r){return r.join(',')}).join('\n');
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ranking.csv';a.click();
-});
+// 大会管理
+function renderEv(){var h='';D.events.forEach(function(ev){
+var sb=ev.st==='active'?'<span class="badge b-act">受付中</span>':'<span class="badge b-cls">締切</span>';
+h+='<div class="ev-i"><div class="et">'+ev.name+' '+sb+'</div><div class="ed">📍 '+(ev.place||'未設定')+' ｜ 📅 '+ev.date+'</div><div class="ea">';
+if(ev.st==='active')h+='<button class="btn btn-w btn-sm" data-cls="'+ev.id+'">🔒 締切</button>';
+else h+='<button class="btn btn-b btn-sm" data-opn="'+ev.id+'">🔓 再開</button><button class="btn btn-d btn-sm" data-del="'+ev.id+'" data-dn="'+ev.name+'">🗑</button>';
+h+='</div></div>'});$('evList').innerHTML=h;
+document.querySelectorAll('[data-cls]').forEach(function(b){b.addEventListener('click',function(){var ev=D.events.find(function(e){return e.id===+this.getAttribute('data-cls')}.bind(this));if(ev&&confirm('締め切りますか？')){ev.st='closed';save();renderEv();updSel();toast('🔒 締め切りました')}}.bind(b))});
+document.querySelectorAll('[data-opn]').forEach(function(b){b.addEventListener('click',function(){var ev=D.events.find(function(e){return e.id===+this.getAttribute('data-opn')}.bind(this));if(ev){ev.st='active';save();renderEv();updSel();toast('🔓 再開しました')}}.bind(b))});
+document.querySelectorAll('[data-del]').forEach(function(b){b.addEventListener('click',function(){$('delMsg').textContent='「'+this.getAttribute('data-dn')+'」を削除しますか？';$('delId').value=this.getAttribute('data-del');$('moDel').className='mo on'})})}
+$('bNewEv').addEventListener('click',function(){$('moNewEv').className='mo on'});
+$('bNeX').addEventListener('click',function(){$('moNewEv').className='mo'});
+$('bNeOk').addEventListener('click',function(){var nm=$('neName').value.trim(),dt=$('neDate').value,pl=$('nePlace').value.trim();if(!nm||!dt){toast('⚠️ 大会名と日付を入力');return}D.events.push({id:D.neid++,name:nm,date:dt,place:pl,st:'active'});save();$('moNewEv').className='mo';$('neName').value='';$('neDate').value='';$('nePlace').value='';renderEv();updSel();toast('✅ 作成しました')});
+$('bDelNo').addEventListener('click',function(){$('moDel').className='mo'});
+$('bDelOk').addEventListener('click',function(){var id=+$('delId').value;D.events=D.events.filter(function(e){return e.id!==id});save();$('moDel').className='mo';renderEv();updSel();toast('🗑 削除しました')});
 
-// ===== 承認 =====
-document.getElementById('aApprovalEventSelect').addEventListener('change',renderApprovals);
-function renderApprovals(){
-  var sel=document.getElementById('aApprovalEventSelect').value;
-  var fil=D.catches.filter(function(c){return!sel||c.event===sel});
-  var pend=fil.filter(function(c){return c.status==='pending'});
-  var appr=fil.filter(function(c){return c.status==='approved'});
-  document.getElementById('statPending').textContent=pend.length;
-  document.getElementById('statApproved').textContent=appr.length;
-  document.getElementById('statTotal').textContent=fil.length;
-  document.getElementById('pendingBadge').textContent=D.catches.filter(function(c){return c.status==='pending'}).length;
-  if(!pend.length){document.getElementById('approvalList').innerHTML='';document.getElementById('noApprovals').style.display='block';return}
-  document.getElementById('noApprovals').style.display='none';
-  var h='';
-  pend.forEach(function(c){
-    var dt=c.dateTime?c.dateTime.replace('T',' '):c.time;
-    h+='<div class="m-card"><div class="mc-header"><strong style="font-size:13px">'+c.name+'</strong><span class="badge pending">未承認</span></div>';
-    h+='<div class="mc-info"><div class="mc-row"><span>大会</span><span>'+c.event+'</span></div><div class="mc-row"><span>魚種</span><span>'+c.fish+'</span></div><div class="mc-row"><span>サイズ</span><span style="color:#2e7d32;font-size:15px">'+c.size+' cm</span></div><div class="mc-row"><span>撮影日時</span><span>'+dt+'</span></div>';
-    if(c.memo)h+='<div class="mc-row"><span>メモ</span><span>'+c.memo+'</span></div>';
-    h+='</div><div class="mc-actions"><div class="mc-btns"><button class="btn btn-approve btn-sm" data-approve="'+c.id+'">✅ 承認</button><button class="btn btn-reject btn-sm" data-reject="'+c.id+'">❌ 却下</button></div></div></div>';
-  });
-  document.getElementById('approvalList').innerHTML=h;
-  document.querySelectorAll('[data-approve]').forEach(function(b){b.addEventListener('click',function(){var id=parseInt(this.getAttribute('data-approve'));var c=D.catches.find(function(x){return x.id===id});if(c){c.status='approved';save();renderApprovals();toast('✅ 承認しました')}})});
-  document.querySelectorAll('[data-reject]').forEach(function(b){b.addEventListener('click',function(){var id=parseInt(this.getAttribute('data-reject'));var c=D.catches.find(function(x){return x.id===id});if(c){c.status='rejected';save();renderApprovals();toast('❌ 却下しました')}})});
-}
+// 設定
+$('bSavePw').addEventListener('click',function(){var p=$('iPw').value.trim();if(p){D.pw=p;save();$('iPw').value='';toast('✅ パスワード変更しました')}else{toast('⚠️ パスワードを入力')}});
+$('bReset').addEventListener('click',function(){if(confirm('全データを初期化しますか？')){localStorage.removeItem(KEY);D=defs();save();toast('🔄 リセットしました');setTimeout(function(){location.reload()},1000)}});
 
-// ===== 参加者管理 =====
-document.getElementById('aMemberEventSelect').addEventListener('change',renderMembers);
-function renderMembers(){
-  var sel=document.getElementById('aMemberEventSelect').value;
-  var fil=D.catches.filter(function(c){return!sel||c.event===sel});
-  var mem={};fil.forEach(function(c){if(!mem[c.name])mem[c.name]=[];mem[c.name].push(c)});
-  var h='';
-  Object.keys(mem).forEach(function(name){
-    h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong style="font-size:13px">'+name+'</strong><span style="font-size:11px;color:#999">'+mem[name].length+'件</span></div>';
-    mem[name].forEach(function(c){
-      var sc=c.status==='approved'?'approved':c.status==='pending'?'pending':'rejected';
-      var st=c.status==='approved'?'承認済':c.status==='pending'?'審査中':'却下';
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px"><span>'+c.fish+' '+c.size+'cm</span><div style="display:flex;align-items:center;gap:6px"><span class="badge '+sc+'">'+st+'</span><button class="btn btn-secondary btn-sm" data-edit="'+c.id+'">✏️</button></div></div>';
-    });
-    h+='</div>';
-  });
-  document.getElementById('membersList').innerHTML=h||'<div style="text-align:center;padding:30px;color:#999;font-size:13px">登録者がいません</div>';
-  document.querySelectorAll('[data-edit]').forEach(function(b){b.addEventListener('click',function(){openEdit(parseInt(this.getAttribute('data-edit')))})});
-}
+// 初期化
+updSel();renderRk();
+})();
+</script>
+</body>
+</html>
 
-// ===== 編集モーダル =====
-function openEdit(id){
-  var c=D.catches.find(function(x){return x.id===id});if(!c)return;
-  document.getElementById('editName').value=c.name;
-  document.getElementById('editFishType').value=c.fish;
-  document.getElementById('editSize').value=c.size;
-  document.getElementById('editDateTime').value=c.dateTime||'';
-  document.getElementById('editMemo').value=c.memo||'';
-  document.getElementById('editId').value=id;
-  document.getElementById('editModal').classList.add('show');
-}
-document.getElementById('btnEditClose').addEventListener('click',function(){document.getElementById('editModal').classList.remove('show')});
-document.getElementById('btnEditSave').addEventListener('click',function(){
-  var id=parseInt(document.getElementById('editId').value);
-  var c=D.catches.find(function(x){return x.id===id});if(!c)return;
-  c.name=document.getElementById('editName').value.trim();
-  c.fish=document.getElementById('editFishType').value;
-  c.size=parseFloat(document.getElementById('editSize').value);
-  c.dateTime=document.getElementById('editDateTime').value;
-  c.memo=document.getElementById('editMemo').value.trim();
-  if(c.dateTime)c.time=c.dateTime.split('T')[1];
-  save();document.getElementById('editModal').classList.remove('show');renderMembers();toast('✅ 変更を保存しました');
-});
-
-// ===== 大会管理 =====
-function renderEvents(){
-  var h='';
-  D.events.forEach(function(ev){
-    var sb=ev.status==='active'?'<span class="badge active">受付中</span>':ev.status==='closed'?'<span class="badge closed">締切</span>':'<span class="badge" style="background:#e3f2fd;color:#1565c0">準備中</span>';
-    h+='<div class="event-item"><div><div class="ev-title">'+ev.name+' '+sb+'</div><div class="ev-date">📍 '+(ev.place||'未設定')+' ｜ 📅 '+ev.date+'</div></div><div class="ev-actions">';
-    if(ev.status==='active')h+='<button class="btn btn-warning btn-sm" data-close-ev="'+ev.id+'">🔒 締切</button>';
-    else if(ev.status==='closed')h+='<button class="btn btn-blue btn-sm" data-reopen-ev="'+ev.id+'">🔓 再開</button><button class="btn btn-danger btn-sm" data-del-ev="'+ev.id+'" data-del-name="'+ev.name+'">🗑</button>';
-    else h+='<button class="btn btn-primary btn-sm" data-start-ev="'+ev.id+'">▶️ 開始</button><button class="btn btn-danger btn-sm" data-del-ev="'+ev.id+'" data-del-name="'+ev.name+'">🗑</button>';
-    h+='</div></div>';
-  });
-  document.getElementById('eventsList').innerHTML=h;
-  document.querySelectorAll('[data-close-ev]').forEach(function(b){b.addEventListener('click',function(){var id=parseInt(this.getAttribute('data-close-ev'));if(confirm('この大会の登録を締め切りますか？')){var ev=D.events.find(function(e){return e.id===id});if(ev){ev.status='closed';save();renderEvents();updateSelects();toast('🔒 締め切りました')}}})});
-  document.querySelectorAll('[data-reopen-ev]').forEach(function(b){b.addEventListener('click',function(){var id=parseInt(this.getAttribute('data-reopen-ev'));var ev=D.events.find(function(e){return e.id===id});if(ev){ev.status='active';save();renderEvents();updateSelects();toast('🔓 再開しました')}})});
-  document.querySelectorAll('[data-start-ev]').forEach(function(b){b.addEventListener('click',function(){var id=parseInt(this.getAttribute('data-start-ev'));var ev=D.events.find(function(e){return e.id===id});if(ev){ev.status='active';save();renderEvents();updateSelects();toast('▶️ 開始しました')}})});
-  document.querySelectorAll('[data-del-ev]').forEach(function(b){b.addEventListener('click',function(){
-    document.getElementById('deleteMsg').textContent
