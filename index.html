@@ -9,14 +9,12 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh;padding-bottom:70px}
 
-/* ロール切替 */
 .role-switch{position:fixed;top:10px;right:12px;z-index:200;background:rgba(255,255,255,0.95);border-radius:20px;padding:3px;display:flex;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
 .role-btn{padding:5px 11px;border:none;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#666;transition:all 0.3s}
 .role-btn.active{color:white}
 .role-btn.p-active{background:#1a73e8}
 .role-btn.a-active{background:#2e7d32}
 
-/* ヘッダー */
 .header{color:white;padding:14px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
 .header.admin{background:linear-gradient(135deg,#2e7d32,#1b5e20)}
 .header.participant{background:linear-gradient(135deg,#1a73e8,#0d47a1)}
@@ -25,20 +23,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .hbadge{background:rgba(255,255,255,0.2);padding:3px 9px;border-radius:16px;font-size:10px}
 .event-name{font-size:12px;opacity:0.9;margin-top:3px}
 
-/* コンテナ */
 .container{max-width:540px;margin:0 auto;padding:14px}
-
-/* カード */
 .card{background:white;border-radius:13px;padding:16px 14px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
 
-/* バッジ */
 .badge{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;display:inline-block}
 .badge.pending{background:#fff3e0;color:#f57c00}
 .badge.approved{background:#e8f5e9;color:#388e3c}
 .badge.rejected{background:#ffebee;color:#d32f2f}
 .badge.active{background:#e8f5e9;color:#388e3c}
+.badge.closed{background:#f5f5f5;color:#999}
+.badge.upcoming{background:#e3f2fd;color:#1565c0}
 
-/* フォーム */
 .form-group{margin-bottom:12px}
 .form-group label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
 .form-group label .req{color:#d32f2f;font-size:10px;margin-left:3px}
@@ -50,7 +45,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .input-unit span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#999;font-size:13px}
 .input-unit input{padding-right:36px}
 
-/* ボタン */
 .btn{padding:11px 18px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
 .btn-primary{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:white}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(46,125,50,0.4)}
@@ -59,12 +53,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-secondary{background:#f5f5f5;color:#666;border:1px solid #ddd}
 .btn-danger{background:#d32f2f;color:white}
 .btn-danger:hover{background:#b71c1c}
+.btn-warning{background:#f57c00;color:white}
+.btn-warning:hover{background:#e65100}
 .btn-full{width:100%}
 .btn-row{display:flex;gap:10px}
 .btn-row .btn{flex:1}
 .btn-sm{padding:6px 12px;font-size:11px}
 
-/* 写真アップロード */
 .photo-upload{border:2px dashed #ccc;border-radius:11px;padding:26px 14px;text-align:center;margin-bottom:14px;cursor:pointer;transition:all 0.3s;background:#fafafa}
 .photo-upload:hover{border-color:#1a73e8;background:#f0f4ff}
 .photo-upload.has-photo{border-color:#4caf50;background:#f0fff0;padding:8px}
@@ -73,7 +68,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pu-sub{font-size:11px;color:#999;margin-top:2px}
 .photo-preview{max-width:100%;max-height:160px;border-radius:8px;display:none}
 
-/* タブ */
 .nav-tabs{display:flex;background:white;border-bottom:1px solid #e0e0e0;overflow-x:auto;position:sticky;top:52px;z-index:90}
 .nav-tab{flex:1;padding:11px 6px;text-align:center;font-size:11px;font-weight:600;color:#666;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-width:60px}
 .nav-tab.active{color:#2e7d32;border-bottom-color:#2e7d32}
@@ -82,7 +76,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* 統計 */
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
 .stat-card{background:white;border-radius:9px;padding:10px 6px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
 .stat-num{font-size:18px;font-weight:700}
@@ -91,7 +84,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-num.orange{color:#f57c00}
 .stat-label{font-size:10px;color:#999;margin-top:1px}
 
-/* ランキング */
 .podium{background:white;border-radius:13px;padding:18px 12px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);text-align:center}
 .podium h3{font-size:13px;color:#666;margin-bottom:14px}
 .podium-row{display:flex;justify-content:center;align-items:flex-end;gap:8px}
@@ -119,7 +111,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rd-fish{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;color:#666;border-bottom:1px dashed #e8e8e8}
 .rd-fish:last-child{border-bottom:none}
 
-/* 承認カード */
 .m-card{background:white;border-radius:13px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06);overflow:hidden}
 .mc-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f0f0f0}
 .mc-player{display:flex;align-items:center;gap:8px}
@@ -134,45 +125,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-approve{background:#2e7d32;color:white}
 .btn-reject{background:#ffebee;color:#d32f2f;border:1.5px solid #ef9a9a}
 
-/* 大会リスト */
-.event-item{background:white;border-radius:11px;padding:11px 13px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;justify-content:space-between;align-items:center}
+.event-item{background:white;border-radius:11px;padding:11px 13px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.ev-top{display:flex;justify-content:space-between;align-items:center}
 .ev-info{flex:1}
 .ev-title{font-size:13px;font-weight:600;color:#333}
 .ev-date{font-size:10px;color:#999;margin-top:2px}
-.ev-actions{display:flex;gap:5px}
+.ev-actions{display:flex;gap:5px;margin-top:6px}
 
-/* 履歴 */
 .history-item{background:white;border-radius:10px;padding:11px 12px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;align-items:center;gap:9px}
 .thumb{width:38px;height:38px;background:#e3f2fd;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .h-info{flex:1}
 .h-length{font-size:14px;font-weight:600;color:#333}
 .h-detail{font-size:10px;color:#999;margin-top:1px}
 
-/* モーダル */
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.show{display:flex}
 .modal-box{background:white;border-radius:14px;padding:20px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto}
 .modal-box h3{font-size:15px;margin-bottom:12px;color:#333}
 .modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#999}
 
-/* トースト */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:white;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:all 0.3s;z-index:400;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* CSV */
 .controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #1a73e8;background:white;color:#1a73e8;cursor:pointer}
 .csv-btn:hover{background:#1a73e8;color:white}
 
-/* セクションタイトル */
 .section-title{font-size:13px;font-weight:600;color:#666;margin-bottom:10px}
 
-/* リセットボタン */
 .reset-area{text-align:center;padding:20px;margin-top:20px}
 .reset-btn{padding:8px 16px;border:1.5px solid #d32f2f;background:white;color:#d32f2f;border-radius:9px;font-size:11px;cursor:pointer}
 .reset-btn:hover{background:#d32f2f;color:white}
 
-/* レスポンシブ */
+.event-select{margin-bottom:12px}
+.event-select select{width:100%;padding:9px 12px;border:1.5px solid #1a73e8;border-radius:9px;font-size:13px;font-weight:600;color:#1a73e8;background:white;-webkit-appearance:none}
+.event-select select:focus{outline:none;box-shadow:0 0 0 3px rgba(26,115,232,0.1)}
+
+.closed-msg{background:#fff3e0;border-radius:9px;padding:12px;text-align:center;font-size:13px;color:#f57c00;margin-bottom:12px}
+
 @media(max-width:360px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .podium-row{gap:4px}
@@ -194,7 +184,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <h1>🎣 釣り大会</h1>
       <span class="hbadge">参加者</span>
     </div>
-    <div class="event-name" id="pEventName">第5回 バス釣り大会</div>
+    <div class="event-name" id="pEventName">大会を選択してください</div>
   </div>
 
   <!-- 参加者タブ -->
@@ -207,42 +197,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- 申請タブ -->
   <div class="tab-content active" id="pTab-submit">
     <div class="container">
-      <div class="card">
-        <h3 style="font-size:14px;margin-bottom:12px">🐟 釣果を申請</h3>
-        <div class="form-group">
-          <label>名前<span class="req">*必須</span></label>
-          <input type="text" id="pName" placeholder="例: 山田 太郎">
-        </div>
-        <div class="form-group">
-          <label>魚種<span class="req">*必須</span></label>
-          <select id="pFishType">
-            <option value="">選択してください</option>
-            <option>ブラックバス</option>
-            <option>ブルーギル</option>
-            <option>ナマズ</option>
-            <option>ライギョ</option>
-            <option>その他</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>サイズ<span class="req">*必須</span></label>
-          <div class="input-unit">
-            <input type="number" id="pSize" placeholder="0.0" step="0.1">
-            <span>cm</span>
+      <!-- 大会選択 -->
+      <div class="event-select">
+        <select id="pEventSelect" onchange="onEventSelect()">
+          <option value="">大会を選択してください</option>
+        </select>
+      </div>
+      <div class="closed-msg" id="closedMsg" style="display:none">🔒 この大会は登録が締め切られています</div>
+      <div id="submitForm">
+        <div class="card">
+          <h3 style="font-size:14px;margin-bottom:12px">🐟 釣果を申請</h3>
+          <div class="form-group">
+            <label>名前<span class="req">*必須</span></label>
+            <input type="text" id="pName" placeholder="例: 山田 太郎">
           </div>
+          <div class="form-group">
+            <label>魚種<span class="req">*必須</span></label>
+            <select id="pFishType">
+              <option value="">選択してください</option>
+              <option>ブラックバス</option>
+              <option>ブルーギル</option>
+              <option>ナマズ</option>
+              <option>ライギョ</option>
+              <option>その他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>サイズ<span class="req">*必須</span></label>
+            <div class="input-unit">
+              <input type="number" id="pSize" placeholder="0.0" step="0.1">
+              <span>cm</span>
+            </div>
+          </div>
+          <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
+            <div class="pu-icon">📷</div>
+            <div class="pu-text">計測写真をアップロード</div>
+            <div class="pu-sub">タップして写真を選択</div>
+            <img class="photo-preview" id="photoPreview">
+          </div>
+          <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(this)">
+          <div class="form-group">
+            <label>メモ（任意）</label>
+            <textarea id="pMemo" placeholder="ルアー、ポイントなど"></textarea>
+          </div>
+          <button class="btn btn-blue btn-full" onclick="submitCatch()">申請する</button>
         </div>
-        <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
-          <div class="pu-icon">📷</div>
-          <div class="pu-text">計測写真をアップロード</div>
-          <div class="pu-sub">タップして写真を選択</div>
-          <img class="photo-preview" id="photoPreview">
-        </div>
-        <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(this)">
-        <div class="form-group">
-          <label>メモ（任意）</label>
-          <textarea id="pMemo" placeholder="ルアー、ポイントなど"></textarea>
-        </div>
-        <button class="btn btn-blue btn-full" onclick="submitCatch()">申請する</button>
       </div>
     </div>
   </div>
@@ -250,6 +249,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- My記録タブ -->
   <div class="tab-content" id="pTab-myrecords">
     <div class="container">
+      <div class="event-select">
+        <select id="pMyEventSelect" onchange="renderMyRecords()">
+          <option value="">全ての大会</option>
+        </select>
+      </div>
       <p class="section-title">📋 自分の申請一覧</p>
       <div id="myRecordsList"></div>
       <div id="noRecords" style="text-align:center;padding:30px;color:#999;font-size:13px">
@@ -261,6 +265,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ランキングタブ -->
   <div class="tab-content" id="pTab-ranking">
     <div class="container">
+      <div class="event-select">
+        <select id="pRankEventSelect" onchange="renderRanking()">
+          <option value="">大会を選択</option>
+        </select>
+      </div>
       <div class="controls">
         <p class="section-title" style="margin:0">🏆 ランキング</p>
         <button class="csv-btn" onclick="downloadCSV()">📥 CSV</button>
@@ -278,7 +287,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <h1>🎣 管理パネル</h1>
       <span class="hbadge">管理者</span>
     </div>
-    <div class="event-name" id="aEventName">第5回 バス釣り大会</div>
+    <div class="event-name" id="aEventName">管理者モード</div>
   </div>
 
   <!-- 管理者タブ -->
@@ -292,6 +301,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- 承認タブ -->
   <div class="tab-content active" id="aTab-approval">
     <div class="container">
+      <div class="event-select">
+        <select id="aApprovalEventSelect" onchange="renderApprovals()">
+          <option value="">全ての大会</option>
+        </select>
+      </div>
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-num green" id="statApproved">0</div><div class="stat-label">承認済</div></div>
         <div class="stat-card"><div class="stat-num orange" id="statPending">0</div><div class="stat-label">未承認</div></div>
@@ -307,6 +321,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- 参加者管理タブ -->
   <div class="tab-content" id="aTab-members">
     <div class="container">
+      <div class="event-select">
+        <select id="aMemberEventSelect" onchange="renderMembers()">
+          <option value="">全ての大会</option>
+        </select>
+      </div>
       <p class="section-title">👥 登録者一覧（タップで編集）</p>
       <div id="membersList"></div>
     </div>
@@ -325,23 +344,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="tab-content" id="aTab-settings">
     <div class="container">
       <div class="card">
-        <h3 style="font-size:14px;margin-bottom:12px">⚙️ 大会設定</h3>
-        <div class="form-group">
-          <label>大会名</label>
-          <input type="text" id="settingEventName" value="第5回 バス釣り大会">
-        </div>
-        <div class="form-group">
-          <label>開催日</label>
-          <input type="date" id="settingDate">
-        </div>
-        <div class="form-group">
-          <label>対象魚種</label>
-          <input type="text" id="settingFish" value="ブラックバス, ブルーギル, ナマズ, ライギョ">
-        </div>
-        <div class="form-group">
-          <label>ルール</label>
-          <textarea id="settingRules" rows="3">合計長で順位を決定。写真必須。</textarea>
-        </div>
+        <h3 style="font-size:14px;margin-bottom:12px">⚙️ 設定</h3>
         <div class="form-group">
           <label>管理者パスワード変更</label>
           <input type="text" id="settingPassword" placeholder="新しいパスワード">
@@ -349,7 +352,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <button class="btn btn-primary btn-full" onclick="saveSettings()">設定を保存</button>
       </div>
-      <!-- データリセット -->
       <div class="reset-area">
         <button class="reset-btn" onclick="resetAllData()">🗑 データをリセット（初期化）</button>
         <div class="hint" style="margin-top:5px">全てのデータを初期状態に戻します</div>
@@ -448,9 +450,9 @@ function getDefaultData(){
       {id:11, name:'高橋 美咲', fish:'ブラックバス', size:40.0, memo:'', status:'pending', time:'14:10', event:'第5回 バス釣り大会'}
     ],
     events: [
-      {id:1, name:'第5回 バス釣り大会', date:'2026-08-15', place:'琵琶湖', active:true},
-      {id:2, name:'第4回 バス釣り大会', date:'2026-05-20', place:'琵琶湖', active:false},
-      {id:3, name:'第3回 バス釣り大会', date:'2025-10-10', place:'河口湖', active:false}
+      {id:1, name:'第5回 バス釣り大会', date:'2026-08-15', place:'琵琶湖', status:'active'},
+      {id:2, name:'第4回 バス釣り大会', date:'2026-05-20', place:'琵琶湖', status:'closed'},
+      {id:3, name:'第3回 バス釣り大会', date:'2025-10-10', place:'河口湖', status:'closed'}
     ],
     nextId: 12,
     nextEventId: 4
@@ -461,8 +463,13 @@ function loadData(){
   var d = localStorage.getItem(DATA_KEY);
   if(d){
     var parsed = JSON.parse(d);
-    // 古いデータにパスワードが無い場合は追加
     if(!parsed.adminPassword) parsed.adminPassword = '[PASSWORD]';
+    // 古いデータのactive→status変換
+    parsed.events.forEach(function(ev){
+      if(ev.active === true && !ev.status) ev.status = 'active';
+      else if(ev.active === false && !ev.status) ev.status = 'closed';
+      delete ev.active;
+    });
     return parsed;
   }
   return getDefaultData();
@@ -472,7 +479,6 @@ function saveData(data){
   localStorage.setItem(DATA_KEY, JSON.stringify(data));
 }
 
-// ===== データリセット =====
 function resetAllData(){
   if(confirm('⚠️ 全てのデータを初期状態に戻しますか？\nこの操作は取り消せません。')){
     localStorage.removeItem(DATA_KEY);
@@ -484,6 +490,74 @@ function resetAllData(){
 }
 
 var appData = loadData();
+
+// ===== 大会セレクト更新 =====
+function updateEventSelects(){
+  var activeEvents = appData.events.filter(function(e){return e.status==='active'});
+  var allEvents = appData.events;
+
+  // 参加者 申請用（activeのみ）
+  var pSelect = document.getElementById('pEventSelect');
+  pSelect.innerHTML = '<option value="">大会を選択してください</option>';
+  activeEvents.forEach(function(ev){
+    pSelect.innerHTML += '<option value="'+ev.name+'">'+ev.name+'</option>';
+  });
+  if(activeEvents.length === 1){
+    pSelect.value = activeEvents[0].name;
+    onEventSelect();
+  }
+
+  // 参加者 My記録用（全大会）
+  var mySelect = document.getElementById('pMyEventSelect');
+  mySelect.innerHTML = '<option value="">全ての大会</option>';
+  allEvents.forEach(function(ev){
+    mySelect.innerHTML += '<option value="'+ev.name+'">'+ev.name+'</option>';
+  });
+
+  // 参加者 ランキング用（全大会）
+  var rankSelect = document.getElementById('pRankEventSelect');
+  rankSelect.innerHTML = '<option value="">全ての大会</option>';
+  allEvents.forEach(function(ev){
+    rankSelect.innerHTML += '<option value="'+ev.name+'">'+ev.name+'</option>';
+  });
+
+  // 管理者 承認用
+  var aApproval = document.getElementById('aApprovalEventSelect');
+  aApproval.innerHTML = '<option value="">全ての大会</option>';
+  allEvents.forEach(function(ev){
+    aApproval.innerHTML += '<option value="'+ev.name+'">'+ev.name+'</option>';
+  });
+
+  // 管理者 参加者用
+  var aMember = document.getElementById('aMemberEventSelect');
+  aMember.innerHTML = '<option value="">全ての大会</option>';
+  allEvents.forEach(function(ev){
+    aMember.innerHTML += '<option value="'+ev.name+'">'+ev.name+'</option>';
+  });
+}
+
+// ===== 大会選択時 =====
+function onEventSelect(){
+  var selected = document.getElementById('pEventSelect').value;
+  var ev = appData.events.find(function(e){return e.name === selected});
+
+  if(!selected){
+    document.getElementById('pEventName').textContent = '大会を選択してください';
+    document.getElementById('submitForm').style.display = 'block';
+    document.getElementById('closedMsg').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('pEventName').textContent = selected;
+
+  if(ev && ev.status === 'closed'){
+    document.getElementById('submitForm').style.display = 'none';
+    document.getElementById('closedMsg').style.display = 'block';
+  } else {
+    document.getElementById('submitForm').style.display = 'block';
+    document.getElementById('closedMsg').style.display = 'none';
+  }
+}
 
 // ===== ロール切替（パスワード付き） =====
 var currentRole = 'participant';
@@ -530,6 +604,12 @@ function switchATab(tab){
 
 // ===== 申請 =====
 function submitCatch(){
+  var selectedEvent = document.getElementById('pEventSelect').value;
+  if(!selectedEvent){showToast('⚠️ 大会を選択してください');return}
+
+  var ev = appData.events.find(function(e){return e.name === selectedEvent});
+  if(ev && ev.status === 'closed'){showToast('⚠️ この大会は締め切られています');return}
+
   var name = document.getElementById('pName').value.trim();
   var fish = document.getElementById('pFishType').value;
   var size = parseFloat(document.getElementById('pSize').value);
@@ -541,7 +621,6 @@ function submitCatch(){
 
   var now = new Date();
   var time = ('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
-  var activeEvent = appData.events.find(function(e){return e.active});
 
   appData.catches.push({
     id: appData.nextId++,
@@ -551,7 +630,7 @@ function submitCatch(){
     memo: memo,
     status: 'pending',
     time: time,
-    event: activeEvent ? activeEvent.name : ''
+    event: selectedEvent
   });
   saveData(appData);
 
@@ -592,6 +671,7 @@ function resetPhoto(){
 // ===== My記録 =====
 function renderMyRecords(){
   var name = document.getElementById('pName').value.trim();
+  var selectedEvent = document.getElementById('pMyEventSelect').value;
   var list = document.getElementById('myRecordsList');
   var noRec = document.getElementById('noRecords');
 
@@ -602,7 +682,12 @@ function renderMyRecords(){
     return;
   }
 
-  var records = appData.catches.filter(function(c){return c.name === name});
+  var records = appData.catches.filter(function(c){
+    var matchName = c.name === name;
+    var matchEvent = !selectedEvent || c.event === selectedEvent;
+    return matchName && matchEvent;
+  });
+
   if(records.length === 0){
     list.innerHTML = '';
     noRec.style.display = 'block';
@@ -618,7 +703,7 @@ function renderMyRecords(){
     html += '<div class="history-item">';
     html += '<div class="thumb">🐟</div>';
     html += '<div class="h-info"><div class="h-length">'+r.fish+' '+r.size+'cm</div>';
-    html += '<div class="h-detail">'+r.time+' '+(r.memo||'')+'</div></div>';
+    html += '<div class="h-detail">'+r.time+' '+r.event+' '+(r.memo||'')+'</div></div>';
     html += '<span class="badge '+statusClass+'">'+statusText+'</span>';
     html += '</div>';
   });
@@ -627,7 +712,13 @@ function renderMyRecords(){
 
 // ===== ランキング =====
 function renderRanking(){
-  var approved = appData.catches.filter(function(c){return c.status==='approved'});
+  var selectedEvent = document.getElementById('pRankEventSelect').value;
+  var approved = appData.catches.filter(function(c){
+    var matchStatus = c.status==='approved';
+    var matchEvent = !selectedEvent || c.event === selectedEvent;
+    return matchStatus && matchEvent;
+  });
+
   var players = {};
   approved.forEach(function(c){
     if(!players[c.name]) players[c.name] = {name:c.name, total:0, best:0, count:0, fish:[]};
@@ -639,7 +730,6 @@ function renderRanking(){
 
   var ranking = Object.values(players).sort(function(a,b){return b.total - a.total});
 
-  // 表彰台
   var podiumHtml = '';
   if(ranking.length >= 3){
     podiumHtml = '<div class="podium"><h3>🏆 TOP 3</h3><div class="podium-row">';
@@ -650,7 +740,6 @@ function renderRanking(){
   }
   document.getElementById('podiumArea').innerHTML = podiumHtml;
 
-  // リスト
   var listHtml = '';
   ranking.forEach(function(p, i){
     var rankClass = i===0?'gold':i===1?'silver':i===2?'bronze':'';
@@ -675,7 +764,13 @@ function toggleDetail(id){
 
 // ===== CSV =====
 function downloadCSV(){
-  var approved = appData.catches.filter(function(c){return c.status==='approved'});
+  var selectedEvent = document.getElementById('pRankEventSelect').value;
+  var approved = appData.catches.filter(function(c){
+    var matchStatus = c.status==='approved';
+    var matchEvent = !selectedEvent || c.event === selectedEvent;
+    return matchStatus && matchEvent;
+  });
+
   var players = {};
   approved.forEach(function(c){
     if(!players[c.name]) players[c.name] = {name:c.name, total:0, best:0, count:0};
@@ -699,13 +794,18 @@ function downloadCSV(){
 
 // ===== 管理者: 承認 =====
 function renderApprovals(){
-  var pending = appData.catches.filter(function(c){return c.status==='pending'});
-  var approved = appData.catches.filter(function(c){return c.status==='approved'});
+  var selectedEvent = document.getElementById('aApprovalEventSelect').value;
+  var filtered = appData.catches.filter(function(c){
+    return !selectedEvent || c.event === selectedEvent;
+  });
+
+  var pending = filtered.filter(function(c){return c.status==='pending'});
+  var approved = filtered.filter(function(c){return c.status==='approved'});
 
   document.getElementById('statPending').textContent = pending.length;
   document.getElementById('statApproved').textContent = approved.length;
-  document.getElementById('statTotal').textContent = appData.catches.length;
-  document.getElementById('pendingBadge').textContent = pending.length;
+  document.getElementById('statTotal').textContent = filtered.length;
+  document.getElementById('pendingBadge').textContent = appData.catches.filter(function(c){return c.status==='pending'}).length;
 
   if(pending.length === 0){
     document.getElementById('approvalList').innerHTML = '';
@@ -719,6 +819,7 @@ function renderApprovals(){
     html += '<div class="m-card" id="card-'+c.id+'">';
     html += '<div class="mc-header"><div class="mc-player"><strong style="font-size:13px">'+c.name+'</strong></div><span class="badge pending">未承認</span></div>';
     html += '<div class="mc-info">';
+    html += '<div class="mc-row"><span>大会</span><span>'+c.event+'</span></div>';
     html += '<div class="mc-row"><span>魚種</span><span>'+c.fish+'</span></div>';
     html += '<div class="mc-row"><span>サイズ</span><span style="color:#2e7d32;font-size:15px">'+c.size+' cm</span></div>';
     html += '<div class="mc-row"><span>時刻</span><span>'+c.time+'</span></div>';
@@ -744,8 +845,13 @@ function rejectCatch(id){
 
 // ===== 管理者: 参加者管理（編集） =====
 function renderMembers(){
+  var selectedEvent = document.getElementById('aMemberEventSelect').value;
+  var filtered = appData.catches.filter(function(c){
+    return !selectedEvent || c.event === selectedEvent;
+  });
+
   var members = {};
-  appData.catches.forEach(function(c){
+  filtered.forEach(function(c){
     if(!members[c.name]) members[c.name] = [];
     members[c.name].push(c);
   });
@@ -765,7 +871,7 @@ function renderMembers(){
     });
     html += '</div>';
   });
-  document.getElementById('membersList').innerHTML = html;
+  document.getElementById('membersList').innerHTML = html || '<div style="text-align:center;padding:30px;color:#999;font-size:13px">登録者がいません</div>';
 }
 
 // ===== 編集モーダル =====
@@ -802,14 +908,44 @@ function saveEdit(){
 function renderEvents(){
   var html = '';
   appData.events.forEach(function(ev){
+    var statusBadge = '';
+    if(ev.status === 'active') statusBadge = '<span class="badge active">受付中</span>';
+    else if(ev.status === 'closed') statusBadge = '<span class="badge closed">締切</span>';
+    else if(ev.status === 'upcoming') statusBadge = '<span class="badge upcoming">準備中</span>';
+
     html += '<div class="event-item">';
-    html += '<div class="ev-info"><div class="ev-title">'+ev.name+(ev.active?' <span class="badge active">開催中</span>':'')+'</div>';
-    html += '<div class="ev-date">📍 '+(ev.place||'未設定')+' ｜ 📅 '+ev.date+'</div></div>';
+    html += '<div class="ev-top"><div class="ev-info"><div class="ev-title">'+ev.name+' '+statusBadge+'</div>';
+    html += '<div class="ev-date">📍 '+(ev.place||'未設定')+' ｜ 📅 '+ev.date+'</div></div></div>';
     html += '<div class="ev-actions">';
-    if(!ev.active) html += '<button class="btn btn-danger btn-sm" onclick="openDeleteModal('+ev.id+',\''+ev.name+'\')">🗑</button>';
+    if(ev.status === 'active'){
+      html += '<button class="btn btn-warning btn-sm" onclick="closeEvent('+ev.id+')">🔒 締切</button>';
+    } else if(ev.status === 'closed'){
+      html += '<button class="btn btn-blue btn-sm" onclick="reopenEvent('+ev.id+')">🔓 再開</button> ';
+      html += '<button class="btn btn-danger btn-sm" onclick="openDeleteModal('+ev.id+',\''+ev.name+'\')">🗑</button>';
+    } else if(ev.status === 'upcoming'){
+      html += '<button class="btn btn-primary btn-sm" onclick="activateEvent('+ev.id+')">▶️ 開始</button> ';
+      html += '<button class="btn btn-danger btn-sm" onclick="openDeleteModal('+ev.id+',\''+ev.name+'\')">🗑</button>';
+    }
     html += '</div></div>';
   });
   document.getElementById('eventsList').innerHTML = html;
+}
+
+function closeEvent(id){
+  if(confirm('この大会の登録を締め切りますか？')){
+    var ev = appData.events.find(function(e){return e.id===id});
+    if(ev){ev.status = 'closed'; saveData(appData); renderEvents(); updateEventSelects(); showToast('🔒 大会を締め切りました');}
+  }
+}
+
+function reopenEvent(id){
+  var ev = appData.events.find(function(e){return e.id===id});
+  if(ev){ev.status = 'active'; saveData(appData); renderEvents(); updateEventSelects(); showToast('🔓 大会を再開しました');}
+}
+
+function activateEvent(id){
+  var ev = appData.events.find(function(e){return e.id===id});
+  if(ev){ev.status = 'active'; saveData(appData); renderEvents(); updateEventSelects(); showToast('▶️ 大会を開始しました');}
 }
 
 function openNewEventModal(){
@@ -825,10 +961,11 @@ function createEvent(){
   var place = document.getElementById('newEventPlace').value.trim();
   if(!name||!date){showToast('⚠️ 大会名と日付を入力してください');return}
 
-  appData.events.push({id:appData.nextEventId++, name:name, date:date, place:place, active:false});
+  appData.events.push({id:appData.nextEventId++, name:name, date:date, place:place, status:'upcoming'});
   saveData(appData);
   closeNewEventModal();
   renderEvents();
+  updateEventSelects();
   showToast('✅ 大会を作成しました');
   document.getElementById('newEventName').value='';
   document.getElementById('newEventDate').value='';
@@ -850,26 +987,21 @@ function confirmDelete(){
   saveData(appData);
   closeDeleteModal();
   renderEvents();
+  updateEventSelects();
   showToast('🗑 大会を削除しました');
 }
 
 // ===== 設定保存 =====
 function saveSettings(){
-  var name = document.getElementById('settingEventName').value.trim();
   var newPw = document.getElementById('settingPassword').value.trim();
-  var activeEvent = appData.events.find(function(e){return e.active});
-  if(activeEvent && name){
-    activeEvent.name = name;
-    activeEvent.date = document.getElementById('settingDate').value || activeEvent.date;
-    document.getElementById('pEventName').textContent = name;
-    document.getElementById('aEventName').textContent = name;
-  }
   if(newPw){
     appData.adminPassword = newPw;
+    saveData(appData);
+    document.getElementById('settingPassword').value = '';
+    showToast('✅ パスワードを変更しました');
+  } else {
+    showToast('⚠️ パスワードを入力してください');
   }
-  saveData(appData);
-  document.getElementById('settingPassword').value = '';
-  showToast('✅ 設定を保存しました');
 }
 
 // ===== トースト =====
@@ -885,19 +1017,12 @@ function showToast(msg){
 // ===== 初期化 =====
 function renderAdmin(){
   renderApprovals();
+  updateEventSelects();
 }
 function renderParticipant(){
+  updateEventSelects();
   renderRanking();
 }
 
-// モーダル外クリックで閉じる
 document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this)closeEditModal()});
-  document.getElementById('newEventModal').addEventListener('click',function(e){if(e.target===this)closeNewEventModal()});
-  document.getElementById('deleteModal').addEventListener('click',function(e){if(e.target===this)closeDeleteModal()});
-  renderRanking();
-});
-</script>
-</body>
-</html>
-
+  document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this)closeEdit
