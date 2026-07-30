@@ -48,7 +48,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 #photoPreview{max-width:100%;max-height:160px;border-radius:8px;display:none}
 .exif{background:#e3f2fd;border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:#1565c0;display:none}.exif.on{display:block}
 .hi{background:#fff;border-radius:10px;padding:11px 12px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;align-items:center;gap:9px}
-.hi .th{width:38px;height:38px;background:#e3f2fd;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hi .th{width:38px;height:38px;background:#e3f2fd;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden}
+.hi .th img{width:100%;height:100%;object-fit:cover;border-radius:7px}
 .hi .inf{flex:1}.hi .t1{font-size:14px;font-weight:600}.hi .t2{font-size:10px;color:#999;margin-top:1px}
 .rl{background:#fff;border-radius:13px;overflow:hidden}
 .rr{display:grid;grid-template-columns:32px 1fr 60px 55px;padding:11px 12px;align-items:center;border-bottom:1px solid #f5f5f5;cursor:pointer}
@@ -60,6 +61,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 .mc-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f0f0f0}
 .mc-i{padding:10px 12px}.mc-r{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #f8f8f8}.mc-r:last-child{border-bottom:none}
 .mc-r span:first-child{color:#666}.mc-r span:last-child{font-weight:600;color:#333}
+.mc-photo{padding:8px 12px}.mc-photo img{width:100%;max-height:200px;object-fit:contain;border-radius:8px;cursor:pointer}
 .mc-a{padding:8px 12px 12px}.mc-b{display:flex;gap:7px}.mc-b .btn{flex:1}
 .ev-i{background:#fff;border-radius:11px;padding:11px 13px;margin-bottom:7px}
 .ev-i .et{font-size:13px;font-weight:600}.ev-i .ed{font-size:10px;color:#999;margin-top:2px}.ev-i .ea{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
@@ -85,6 +87,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 .user-bar strong{color:#1a73e8}
 .logout-btn{background:none;border:1px solid #1a73e8;color:#1a73e8;padding:3px 10px;border-radius:12px;font-size:10px;cursor:pointer}
 .mem-item{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.img-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;padding:20px;cursor:pointer}
+.img-modal.on{display:flex}
+.img-modal img{max-width:100%;max-height:90vh;border-radius:8px}
 </style>
 </head>
 <body>
@@ -198,23 +203,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 <!-- モーダル: パスワードリセット -->
 <div class="mo" id="moRsPw"><div class="mo-b" style="text-align:center"><h3>🔑 パスワードリセット</h3><p style="font-size:13px;color:#666;margin:12px 0" id="rsPwMsg"></p><div class="fg"><label>新しいパスワード</label><input type="text" id="rsPwNew" placeholder="新しいパスワード"></div><input type="hidden" id="rsPwName"><div class="btn-row"><button class="btn btn-s" id="bRsPwNo">キャンセル</button><button class="btn btn-g" id="bRsPwOk">リセット</button></div></div></div>
 
+<!-- 写真拡大モーダル -->
+<div class="img-modal" id="imgModal"><img id="imgModalImg"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 (function(){
 "use strict";
-var KEY="fishApp3";
+var KEY="fishApp4";
 function $(id){return document.getElementById(id)}
 function toast(m){var t=$("toast");t.textContent=m;t.className="toast";void t.offsetWidth;t.className="toast on";setTimeout(function(){t.className="toast"},2500)}
 
 function defs(){return{adminPw:"[PASSWORD]",users:[],catches:[
-{id:1,name:"鈴木 一郎",fish:"ブラックバス",size:52,memo:"スピナーベイト",status:"approved",time:"09:15",dt:"2026-08-15T09:15",ev:"第5回 バス釣り大会"},
-{id:2,name:"鈴木 一郎",fish:"ブラックバス",size:38,memo:"",status:"approved",time:"10:30",dt:"2026-08-15T10:30",ev:"第5回 バス釣り大会"},
-{id:3,name:"田中 太郎",fish:"ブラックバス",size:45.5,memo:"クランクベイト",status:"approved",time:"09:40",dt:"2026-08-15T09:40",ev:"第5回 バス釣り大会"},
-{id:4,name:"田中 太郎",fish:"ブラックバス",size:42,memo:"",status:"approved",time:"11:00",dt:"2026-08-15T11:00",ev:"第5回 バス釣り大会"},
-{id:5,name:"佐藤 花子",fish:"ブラックバス",size:42,memo:"ワーム",status:"approved",time:"10:00",dt:"2026-08-15T10:00",ev:"第5回 バス釣り大会"},
-{id:6,name:"佐藤 花子",fish:"ブルーギル",size:36,memo:"",status:"approved",time:"14:00",dt:"2026-08-15T14:00",ev:"第5回 バス釣り大会"},
-{id:7,name:"山田 次郎",fish:"ブラックバス",size:41,memo:"",status:"pending",time:"13:50",dt:"2026-08-15T13:50",ev:"第5回 バス釣り大会"}
+{id:1,name:"鈴木 一郎",fish:"ブラックバス",size:52,memo:"スピナーベイト",status:"approved",time:"09:15",dt:"2026-08-15T09:15",ev:"第5回 バス釣り大会",photo:""},
+{id:2,name:"鈴木 一郎",fish:"ブラックバス",size:38,memo:"",status:"approved",time:"10:30",dt:"2026-08-15T10:30",ev:"第5回 バス釣り大会",photo:""},
+{id:3,name:"田中 太郎",fish:"ブラックバス",size:45.5,memo:"クランクベイト",status:"approved",time:"09:40",dt:"2026-08-15T09:40",ev:"第5回 バス釣り大会",photo:""},
+{id:4,name:"田中 太郎",fish:"ブラックバス",size:42,memo:"",status:"approved",time:"11:00",dt:"2026-08-15T11:00",ev:"第5回 バス釣り大会",photo:""},
+{id:5,name:"佐藤 花子",fish:"ブラックバス",size:42,memo:"ワーム",status:"approved",time:"10:00",dt:"2026-08-15T10:00",ev:"第5回 バス釣り大会",photo:""},
+{id:6,name:"佐藤 花子",fish:"ブルーギル",size:36,memo:"",status:"approved",time:"14:00",dt:"2026-08-15T14:00",ev:"第5回 バス釣り大会",photo:""},
+{id:7,name:"山田 次郎",fish:"ブラックバス",size:41,memo:"",status:"pending",time:"13:50",dt:"2026-08-15T13:50",ev:"第5回 バス釣り大会",photo:""}
 ],events:[
 {id:1,name:"第5回 バス釣り大会",date:"2026-08-15",place:"琵琶湖",st:"active"},
 {id:2,name:"第4回 バス釣り大会",date:"2026-05-20",place:"琵琶湖",st:"closed"}
@@ -222,7 +230,28 @@ function defs(){return{adminPw:"[PASSWORD]",users:[],catches:[
 function load(){try{var s=localStorage.getItem(KEY);return s?JSON.parse(s):defs()}catch(e){return defs()}}
 function save(){localStorage.setItem(KEY,JSON.stringify(D))}
 var D=load();
-var currentUser=localStorage.getItem("fishUser3")||"";
+var currentUser=localStorage.getItem("fishUser4")||"";
+var pendingPhoto="";
+
+// 写真圧縮
+function compressPhoto(file,cb){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement("canvas");
+      var max=600;
+      var w=img.width,h=img.height;
+      if(w>h){if(w>max){h=h*(max/w);w=max}}else{if(h>max){w=w*(max/h);h=max}}
+      canvas.width=w;canvas.height=h;
+      var ctx=canvas.getContext("2d");
+      ctx.drawImage(img,0,0,w,h);
+      cb(canvas.toDataURL("image/jpeg",0.6));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
 // EXIF
 function exif(file,cb){var r=new FileReader();r.onload=function(e){try{var v=new DataView(e.target.result);if(v.getUint16(0,false)!==0xFFD8){cb(null);return}var o=2,l=v.byteLength;while(o<l){if(o+4>l)break;if(v.getUint16(o,false)===0xFFE1){var eo=o+4;if(eo+6>l||v.getUint32(eo,false)!==0x45786966){cb(null);return}var to=eo+6;if(to+8>l){cb(null);return}var be=v.getUint16(to,false)===0x4D4D,io=v.getUint32(to+4,!be),is=to+io;if(is+2>l){cb(null);return}var tg=v.getUint16(is,!be),ep=null;for(var i=0;i<tg;i++){var en=is+2+i*12;if(en+12>l)break;var t2=v.getUint16(en,!be);if(t2===0x0132){var vo=v.getUint32(en+8,!be)+to,s="";for(var j=0;j<19&&vo+j<l;j++)s+=String.fromCharCode(v.getUint8(vo+j));var p=s.split(" ");if(p.length===2){cb(p[0].replace(/:/g,"-")+"T"+p[1].substring(0,5));return}}if(t2===0x8769)ep=v.getUint32(en+8,!be)}if(ep!==null){var es2=to+ep;if(es2+2<=l){var et=v.getUint16(es2,!be);for(var k=0;k<et;k++){var ee=es2+2+k*12;if(ee+12>l)break;var et2=v.getUint16(ee,!be);if(et2===0x9003||et2===0x9004){var vv=v.getUint32(ee+8,!be)+to,ss="";for(var j2=0;j2<19&&vv+j2<l;j2++)ss+=String.fromCharCode(v.getUint8(vv+j2));var pp=ss.split(" ");if(pp.length===2){cb(pp[0].replace(/:/g,"-")+"T"+pp[1].substring(0,5));return}}}}}cb(null);return}if(o+2>=l)break;o+=2+v.getUint16(o+2,false)}cb(null)}catch(x){cb(null)}};r.onerror=function(){cb(null)};r.readAsArrayBuffer(file.slice(0,131072))}
@@ -242,7 +271,7 @@ $("bLogin").addEventListener("click",function(){
   var u=D.users.find(function(x){return x.name===nm});
   if(!u){toast("⚠️ ユーザーが見つかりません");return}
   if(u.pw!==pw){toast("⚠️ パスワードが違います");return}
-  currentUser=nm;localStorage.setItem("fishUser3",nm);showMain();toast("✅ ログインしました")
+  currentUser=nm;localStorage.setItem("fishUser4",nm);showMain();toast("✅ ログインしました")
 });
 $("bReg").addEventListener("click",function(){
   var nm=$("rName").value.trim(),pw=$("rPass").value,pw2=$("rPass2").value;
@@ -251,9 +280,9 @@ $("bReg").addEventListener("click",function(){
   if(pw!==pw2){toast("⚠️ パスワードが一致しません");return}
   if(D.users.find(function(x){return x.name===nm})){toast("⚠️ この名前は既に登録されています");return}
   D.users.push({name:nm,pw:pw});save();
-  currentUser=nm;localStorage.setItem("fishUser3",nm);showMain();toast("✅ 登録完了！")
+  currentUser=nm;localStorage.setItem("fishUser4",nm);showMain();toast("✅ 登録完了！")
 });
-$("bLogout").addEventListener("click",function(){currentUser="";localStorage.removeItem("fishUser3");showLogin();toast("ログアウトしました")});
+$("bLogout").addEventListener("click",function(){currentUser="";localStorage.removeItem("fishUser4");showLogin();toast("ログアウトしました")});
 
 // ロール切替
 $("rP").addEventListener("click",function(){if(currentUser){showMain()}else{showLogin()}});
@@ -292,7 +321,20 @@ $("selMEv").addEventListener("change",renderMem);
 function onEvSel(){var v=$("selEv").value,ev=D.events.find(function(e){return e.name===v});$("pEvName").textContent=v||"大会を選択してください";if(ev&&ev.st==="closed"){$("formArea").classList.add("hide");$("clMsg").classList.remove("hide")}else{$("formArea").classList.remove("hide");$("clMsg").classList.add("hide")}}
 
 // 写真
-$("iPhoto").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(e){$("photoPreview").src=e.target.result;$("photoPreview").style.display="block";document.querySelector(".photo-lbl").classList.add("has");$("piI").style.display="none";$("piT").style.display="none";$("piS").style.display="none"};rd.readAsDataURL(f);exif(f,function(dt){var b=$("exifBox");if(dt){$("iDT").value=dt;b.innerHTML="📅 撮影日時を検出: <b>"+dt.replace("T"," ")+"</b>";b.className="exif on"}else{b.innerHTML="⚠️ 検出できませんでした（手動入力してください）";b.className="exif on"}})});
+$("iPhoto").addEventListener("change",function(){
+  var f=this.files&&this.files[0];if(!f)return;
+  compressPhoto(f,function(dataUrl){
+    pendingPhoto=dataUrl;
+    $("photoPreview").src=dataUrl;$("photoPreview").style.display="block";
+    document.querySelector(".photo-lbl").classList.add("has");
+    $("piI").style.display="none";$("piT").style.display="none";$("piS").style.display="none";
+  });
+  exif(f,function(dt){var b=$("exifBox");if(dt){$("iDT").value=dt;b.innerHTML="📅 撮影日時を検出: <b>"+dt.replace("T"," ")+"</b>";b.className="exif on"}else{b.innerHTML="⚠️ 検出できませんでした（手動入力してください）";b.className="exif on"}});
+});
+
+// 写真拡大
+$("imgModal").addEventListener("click",function(){this.className="img-modal"});
+function showImg(src){$("imgModalImg").src=src;$("imgModal").className="img-modal on"}
 
 // 申請
 $("bSubmit").addEventListener("click",function(){
@@ -301,9 +343,9 @@ $("bSubmit").addEventListener("click",function(){
   var fi=$("iFish").value,sz=parseFloat($("iSize").value),me=$("iMemo").value.trim(),dt=$("iDT").value;
   if(!fi){toast("⚠️ 魚種を選択");return}if(!sz||sz<=0){toast("⚠️ サイズを入力");return}
   var now=new Date(),tm=dt?dt.split("T")[1]:("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2);
-  D.catches.push({id:D.nid++,name:currentUser,fish:fi,size:sz,memo:me,status:"pending",time:tm,dt:dt||now.toISOString().slice(0,16),ev:ev});save();
+  D.catches.push({id:D.nid++,name:currentUser,fish:fi,size:sz,memo:me,status:"pending",time:tm,dt:dt||now.toISOString().slice(0,16),ev:ev,photo:pendingPhoto});save();
   $("iFish").value="";$("iSize").value="";$("iMemo").value="";$("iDT").value="";
-  $("photoPreview").style.display="none";document.querySelector(".photo-lbl").classList.remove("has");$("piI").style.display="";$("piT").style.display="";$("piS").style.display="";$("iPhoto").value="";$("exifBox").className="exif";
+  $("photoPreview").style.display="none";document.querySelector(".photo-lbl").classList.remove("has");$("piI").style.display="";$("piT").style.display="";$("piS").style.display="";$("iPhoto").value="";$("exifBox").className="exif";pendingPhoto="";
   toast("✅ 申請しました！")
 });
 
@@ -312,8 +354,10 @@ function renderMy(){
   var sel=$("selMyEv").value;
   var recs=D.catches.filter(function(c){return c.name===currentUser&&(!sel||c.ev===sel)});
   if(!recs.length){$("myList").innerHTML='<div style="text-align:center;padding:30px;color:#999;font-size:13px">まだ申請がありません</div>';return}
-  var h="";recs.forEach(function(r){var sc=r.status==="approved"?"b-ok":r.status==="pending"?"b-pend":"b-ng",st=r.status==="approved"?"承認済":r.status==="pending"?"審査中":"却下",dt=r.dt?r.dt.replace("T"," "):r.time;
-  h+='<div class="hi"><div class="th">🐟</div><div class="inf"><div class="t1">'+r.fish+" "+r.size+'cm</div><div class="t2">'+dt+" | "+r.ev+(r.memo?" | "+r.memo:"")+'</div></div><span class="badge '+sc+'">'+st+"</span></div>"});
+  var h="";recs.forEach(function(r){
+    var sc=r.status==="approved"?"b-ok":r.status==="pending"?"b-pend":"b-ng",st=r.status==="approved"?"承認済":r.status==="pending"?"審査中":"却下",dt=r.dt?r.dt.replace("T"," "):r.time;
+    var thumb=r.photo?'<img src="'+r.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px">':"🐟";
+    h+='<div class="hi"><div class="th">'+thumb+'</div><div class="inf"><div class="t1">'+r.fish+" "+r.size+'cm</div><div class="t2">'+dt+" | "+r.ev+(r.memo?" | "+r.memo:"")+'</div></div><span class="badge '+sc+'">'+st+"</span></div>"});
   $("myList").innerHTML=h}
 
 // ランキング（管理者側）
@@ -337,7 +381,7 @@ $("bCSV").addEventListener("click",function(){
   rk.forEach(function(p,i){d.push([i+1,p.name,p.total.toFixed(1),p.best.toFixed(1),p.cnt])});
   var csv="\uFEFF"+d.map(function(r){return r.join(",")}).join("\n"),bl=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="ranking.csv";a.click()});
 
-// 承認
+// 承認（写真付き）
 function renderAp(){
   var sel=$("selAEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel});
   var pn=fil.filter(function(c){return c.status==="pending"}),ok=fil.filter(function(c){return c.status==="approved"});
@@ -345,22 +389,28 @@ function renderAp(){
   $("pBdg").textContent=D.catches.filter(function(c){return c.status==="pending"}).length;
   if(!pn.length){$("apList").innerHTML='<div style="text-align:center;padding:30px;color:#999;font-size:13px">未承認の申請はありません</div>';return}
   var h="";pn.forEach(function(c){var dt=c.dt?c.dt.replace("T"," "):c.time;
-  h+='<div class="mc"><div class="mc-h"><strong style="font-size:13px">'+c.name+'</strong><span class="badge b-pend">未承認</span></div><div class="mc-i"><div class="mc-r"><span>大会</span><span>'+c.ev+'</span></div><div class="mc-r"><span>魚種</span><span>'+c.fish+'</span></div><div class="mc-r"><span>サイズ</span><span style="color:#2e7d32">'+c.size+' cm</span></div><div class="mc-r"><span>日時</span><span>'+dt+'</span></div>'+(c.memo?'<div class="mc-r"><span>メモ</span><span>'+c.memo+"</span></div>":"")+'</div><div class="mc-a"><div class="mc-b"><button class="btn btn-g btn-sm" data-ok="'+c.id+'">✅ 承認</button><button class="btn btn-sm" style="background:#ffebee;color:#d32f2f;border:1px solid #ef9a9a" data-ng="'+c.id+'">❌ 却下</button></div></div></div>'});
+  h+='<div class="mc"><div class="mc-h"><strong style="font-size:13px">'+c.name+'</strong><span class="badge b-pend">未承認</span></div>';
+  if(c.photo)h+='<div class="mc-photo"><img src="'+c.photo+'" data-img="'+c.id+'"></div>';
+  h+='<div class="mc-i"><div class="mc-r"><span>大会</span><span>'+c.ev+'</span></div><div class="mc-r"><span>魚種</span><span>'+c.fish+'</span></div><div class="mc-r"><span>サイズ</span><span style="color:#2e7d32">'+c.size+' cm</span></div><div class="mc-r"><span>日時</span><span>'+dt+'</span></div>'+(c.memo?'<div class="mc-r"><span>メモ</span><span>'+c.memo+"</span></div>":"")+'</div><div class="mc-a"><div class="mc-b"><button class="btn btn-g btn-sm" data-ok="'+c.id+'">✅ 承認</button><button class="btn btn-sm" style="background:#ffebee;color:#d32f2f;border:1px solid #ef9a9a" data-ng="'+c.id+'">❌ 却下</button></div></div></div>'});
   $("apList").innerHTML=h;
   document.querySelectorAll("[data-ok]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-ok"),c=D.catches.find(function(x){return x.id===id});if(c){c.status="approved";save();renderAp();toast("✅ 承認")}})});
-  document.querySelectorAll("[data-ng]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-ng"),c=D.catches.find(function(x){return x.id===id});if(c){c.status="rejected";save();renderAp();toast("❌ 却下")}})})
+  document.querySelectorAll("[data-ng]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-ng"),c=D.catches.find(function(x){return x.id===id});if(c){c.status="rejected";save();renderAp();toast("❌ 却下")}})});
+  document.querySelectorAll("[data-img]").forEach(function(img){img.addEventListener("click",function(){showImg(this.src)})})
 }
 
-// 参加者管理
+// 参加者管理（写真付き）
 function renderMem(){
   var sel=$("selMEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel}),mem={};
   fil.forEach(function(c){if(!mem[c.name])mem[c.name]=[];mem[c.name].push(c)});
   var h="";Object.keys(mem).forEach(function(nm){
   h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong style="font-size:13px">'+nm+'</strong><span style="font-size:11px;color:#999">'+mem[nm].length+'件</span></div>';
-  mem[nm].forEach(function(c){var sc=c.status==="approved"?"b-ok":c.status==="pending"?"b-pend":"b-ng",st=c.status==="approved"?"承認済":c.status==="pending"?"審査中":"却下";
-  h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px"><span>'+c.fish+" "+c.size+'cm</span><div style="display:flex;align-items:center;gap:6px"><span class="badge '+sc+'">'+st+'</span><button class="btn btn-s btn-sm" data-ed="'+c.id+'">✏️</button></div></div>'});h+="</div>"});
+  mem[nm].forEach(function(c){
+    var sc=c.status==="approved"?"b-ok":c.status==="pending"?"b-pend":"b-ng",st=c.status==="approved"?"承認済":c.status==="pending"?"審査中":"却下";
+    var photoBtn=c.photo?'<button class="btn btn-sm" style="background:#e3f2fd;color:#1565c0;border:none" data-vimg="'+c.id+'">📷</button>':"";
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px"><span>'+c.fish+" "+c.size+'cm</span><div style="display:flex;align-items:center;gap:4px"><span class="badge '+sc+'">'+st+"</span>"+photoBtn+'<button class="btn btn-s btn-sm" data-ed="'+c.id+'">✏️</button></div></div>'});h+="</div>"});
   $("memList").innerHTML=h||'<div style="text-align:center;padding:30px;color:#999">登録なし</div>';
   document.querySelectorAll("[data-ed]").forEach(function(b){b.addEventListener("click",function(){openEd(+this.getAttribute("data-ed"))})});
+  document.querySelectorAll("[data-vimg]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-vimg"),c=D.catches.find(function(x){return x.id===id});if(c&&c.photo)showImg(c.photo)})});
   var ph="";D.users.forEach(function(u){ph+='<div class="mem-item"><span>'+u.name+'</span><button class="btn btn-w btn-sm" data-rspw="'+u.name+'">リセット</button></div>'});
   $("pwResetList").innerHTML=ph||'<div style="text-align:center;padding:20px;color:#999;font-size:12px">登録ユーザーなし</div>';
   document.querySelectorAll("[data-rspw]").forEach(function(b){b.addEventListener("click",function(){var nm=this.getAttribute("data-rspw");$("rsPwMsg").textContent="「"+nm+"」のパスワードをリセット";$("rsPwName").value=nm;$("rsPwNew").value="";$("moRsPw").className="mo on"})})
@@ -397,10 +447,10 @@ $("bNeOk").addEventListener("click",function(){var nm=$("neNm").value.trim(),dt=
 
 // 設定
 $("bSvPw").addEventListener("click",function(){var p=$("iPwCh").value.trim();if(p){D.adminPw=p;save();$("iPwCh").value="";toast("✅ パスワード変更")}else{toast("⚠️ 入力してください")}});
-$("bReset").addEventListener("click",function(){if(confirm("全データを初期化しますか？")){localStorage.removeItem(KEY);localStorage.removeItem("fishUser3");D=defs();save();toast("🔄 リセット");setTimeout(function(){location.reload()},1000)}});
+$("bReset").addEventListener("click",function(){if(confirm("全データを初期化しますか？")){localStorage.removeItem(KEY);localStorage.removeItem("fishUser4");D=defs();save();toast("🔄 リセット");setTimeout(function(){location.reload()},1000)}});
 
 // 初期表示
-if(currentUser&&D.users.find(function(u){return u.name===currentUser})){showMain()}else{currentUser="";localStorage.removeItem("fishUser3");showLogin()}
+if(currentUser&&D.users.find(function(u){return u.name===currentUser})){showMain()}else{currentUser="";localStorage.removeItem("fishUser4");showLogin()}
 })();
 </script>
 </body>
