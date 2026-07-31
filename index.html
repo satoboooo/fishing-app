@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>🎣 釣り大会管理ツール</title>
+<title>🎣 Fishing Tournament Manager</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;min-height:100vh}
@@ -90,158 +90,290 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;
 .img-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;padding:20px;cursor:pointer}
 .img-modal.on{display:flex}
 .img-modal img{max-width:100%;max-height:90vh;border-radius:8px}
+.lang-page{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.lang-box{text-align:center}
+.lang-box h2{font-size:20px;margin-bottom:20px}
+.lang-btn{display:block;width:200px;margin:10px auto;padding:16px;border:2px solid #ddd;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;background:#fff;transition:all 0.2s}
+.lang-btn:hover{border-color:#1a73e8;background:#e3f2fd}
 </style>
 </head>
 <body>
-<div class="role-sw"><button class="rb on-p" id="rP">参加者</button><button class="rb" id="rA">管理者</button></div>
 
-<div id="loginPage">
-<div class="header hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="hbadge">参加者</span></div></div>
+<!-- 言語選択 -->
+<div id="langPage" class="lang-page">
+<div class="lang-box">
+<h2>🎣</h2>
+<p style="font-size:14px;color:#666;margin-bottom:20px">Select Language / 言語を選択</p>
+<button class="lang-btn" id="langJa">🇯🇵 日本語</button>
+<button class="lang-btn" id="langEn">🇺🇸 English</button>
+</div>
+</div>
+
+<div id="appWrap" class="hide">
+<div class="role-sw"><button class="rb on-p" id="rP"></button><button class="rb" id="rA"></button></div>
+
+<div id="loginPage" class="hide">
+<div class="header hd-p"><div class="hd-top"><h1 id="hLogin"></h1><span class="hbadge" id="bParticipant"></span></div></div>
 <div class="login-box"><div class="card">
-<h2>🎣 参加者ログイン</h2>
-<p>名前とパスワードを入力してください</p>
-<div class="fg"><label>名前</label><input type="text" id="lName" placeholder="例: 山田 太郎"></div>
-<div class="fg"><label>パスワード</label><input type="password" id="lPass" placeholder="パスワード"></div>
-<button class="btn btn-b btn-f" id="bLogin">ログイン</button>
+<h2 id="loginTitle"></h2>
+<p id="loginDesc"></p>
+<div class="fg"><label id="lbName"></label><input type="text" id="lName"></div>
+<div class="fg"><label id="lbPass"></label><input type="password" id="lPass"></div>
+<button class="btn btn-b btn-f" id="bLogin"></button>
 <div style="margin-top:12px;border-top:1px solid #eee;padding-top:12px">
-<p style="font-size:11px;color:#999;margin-bottom:8px">初めての方はこちら</p>
-<button class="btn btn-s btn-f" id="bGoReg">新規登録</button>
+<p style="font-size:11px;color:#999;margin-bottom:8px" id="newUserMsg"></p>
+<button class="btn btn-s btn-f" id="bGoReg"></button>
 </div>
 </div></div>
 </div>
 
 <div id="regPage" class="hide">
-<div class="header hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="hbadge">新規登録</span></div></div>
+<div class="header hd-p"><div class="hd-top"><h1 id="hReg"></h1><span class="hbadge" id="bNewReg"></span></div></div>
 <div class="login-box"><div class="card">
-<h2>📝 参加者登録</h2>
-<p>名前とパスワードを設定してください</p>
-<div class="fg"><label>名前 <span style="color:#d32f2f;font-size:10px">*必須</span></label><input type="text" id="rName" placeholder="例: 山田 太郎"></div>
-<div class="fg"><label>パスワード <span style="color:#d32f2f;font-size:10px">*必須</span></label><input type="password" id="rPass" placeholder="4文字以上"></div>
-<div class="fg"><label>パスワード確認 <span style="color:#d32f2f;font-size:10px">*必須</span></label><input type="password" id="rPass2" placeholder="もう一度入力"></div>
-<button class="btn btn-b btn-f" id="bReg">登録する</button>
-<button class="btn btn-s btn-f" style="margin-top:8px" id="bBackLogin">← ログインに戻る</button>
+<h2 id="regTitle"></h2>
+<p id="regDesc"></p>
+<div class="fg"><label id="lbRegName"></label><input type="text" id="rName"></div>
+<div class="fg"><label id="lbRegPass"></label><input type="password" id="rPass"></div>
+<div class="fg"><label id="lbRegPass2"></label><input type="password" id="[PASSWORD]"></div>
+<button class="btn btn-b btn-f" id="bReg"></button>
+<button class="btn btn-s btn-f" style="margin-top:8px" id="bBackLogin"></button>
 </div></div>
 </div>
 
 <div id="pPage" class="hide">
-<div class="header hd-p"><div class="hd-top"><h1>🎣 釣り大会</h1><span class="hbadge">参加者</span></div><div class="sub" id="pEvName">大会を選択してください</div></div>
-<div class="user-bar"><span>👤 <strong id="uName"></strong> さん</span><button class="logout-btn" id="bLogout">ログアウト</button></div>
-<div class="tabs"><button class="tab on" id="tSub">📝 申請</button><button class="tab" id="tMy">📋 My記録</button></div>
+<div class="header hd-p"><div class="hd-top"><h1 id="hMain"></h1><span class="hbadge" id="bPart2"></span></div><div class="sub" id="pEvName"></div></div>
+<div class="user-bar"><span>👤 <strong id="uName"></strong></span><button class="logout-btn" id="bLogout"></button></div>
+<div class="tabs"><button class="tab on" id="tSub"></button><button class="tab" id="tMy"></button></div>
 <div class="tc on" id="tcSub"><div class="container">
-<div class="es"><select id="selEv"><option value="">大会を選択してください</option></select></div>
-<div class="closed-msg hide" id="clMsg">🔒 この大会は登録が締め切られています</div>
-<div id="formArea"><div class="card"><h3 style="font-size:14px;margin-bottom:12px">🐟 釣果を申請</h3>
-<div class="fg"><label>魚種 <span style="color:#d32f2f;font-size:10px">*必須</span></label><select id="iFish"><option value="">選択してください</option><option>スモールマウスバス</option><option>ラージマウスバス</option><option>その他</option></select></div>
-<div class="fg"><label>サイズ <span style="color:#d32f2f;font-size:10px">*必須</span></label><div class="iu"><input type="number" id="iSize" placeholder="0.0" step="0.1"><span>cm</span></div></div>
-<div class="fg"><label>撮影日時</label><input type="datetime-local" id="iDT"><div class="hint">写真から自動検出、または手動入力</div></div>
-<label class="photo-lbl" for="iPhoto"><span id="piI">📷</span> <span id="piT">計測写真をアップロード</span><br><small id="piS" style="color:#999">タップして写真を選択</small><img id="photoPreview"></label>
+<div class="es"><select id="selEv"></select></div>
+<div class="closed-msg hide" id="clMsg"></div>
+<div id="formArea"><div class="card"><h3 style="font-size:14px;margin-bottom:12px" id="formTitle"></h3>
+<div class="fg"><label id="lbFish"></label><select id="iFish"></select></div>
+<div class="fg"><label id="lbSize"></label><div class="iu"><input type="number" id="iSize" placeholder="0.0" step="0.1"><span>cm</span></div></div>
+<div class="fg"><label id="lbDT"></label><input type="datetime-local" id="iDT"><div class="hint" id="dtHint"></div></div>
+<label class="photo-lbl" for="iPhoto"><span id="piI">📷</span> <span id="piT"></span><br><small id="piS"></small><img id="photoPreview"></label>
 <input type="file" id="iPhoto" accept="image/*" capture="environment" style="display:none">
 <div class="exif" id="exifBox"></div>
-<div class="fg"><label>メモ（任意）</label><textarea id="iMemo" placeholder="ルアー、ポイントなど"></textarea></div>
-<button class="btn btn-b btn-f" id="bSubmit">申請する</button>
+<div class="fg"><label id="lbMemo"></label><textarea id="iMemo"></textarea></div>
+<button class="btn btn-b btn-f" id="bSubmit"></button>
 </div></div>
 </div></div>
 <div class="tc" id="tcMy"><div class="container">
-<div class="es"><select id="selMyEv"><option value="">全ての大会</option></select></div>
-<p class="st">📋 自分の申請一覧</p><div id="myList"></div>
+<div class="es"><select id="selMyEv"></select></div>
+<p class="st" id="myTitle"></p><div id="myList"></div>
 </div></div>
 </div>
 
 <div id="aPage" class="hide">
-<div class="header hd-a"><div class="hd-top"><h1>🎣 管理パネル</h1><span class="hbadge">管理者</span></div></div>
-<div class="tabs"><button class="tab on-a" id="tAp">✅ 承認<span class="tab-badge" id="pBdg">0</span></button><button class="tab" id="tRk">🏆 ランキング</button><button class="tab" id="tMm">👥 参加者</button><button class="tab" id="tEv">📅 大会</button><button class="tab" id="tSt">⚙️ 設定</button></div>
+<div class="header hd-a"><div class="hd-top"><h1 id="hAdmin"></h1><span class="hbadge" id="bAdmin"></span></div></div>
+<div class="tabs"><button class="tab on-a" id="tAp"><span id="tApTx"></span><span class="tab-badge" id="pBdg">0</span></button><button class="tab" id="tRk"></button><button class="tab" id="tMm"></button><button class="tab" id="tEv"></button><button class="tab" id="tSt"></button></div>
 <div class="tc on" id="tcAp"><div class="container">
-<div class="es"><select id="selAEv"><option value="">全ての大会</option></select></div>
-<div class="sg"><div class="sc"><div class="sn sn-g" id="sOk">0</div><div class="sl">承認済</div></div><div class="sc"><div class="sn sn-o" id="sPn">0</div><div class="sl">未承認</div></div><div class="sc"><div class="sn sn-b" id="sAl">0</div><div class="sl">合計</div></div></div>
+<div class="es"><select id="selAEv"></select></div>
+<div class="sg"><div class="sc"><div class="sn sn-g" id="sOk">0</div><div class="sl" id="slOk"></div></div><div class="sc"><div class="sn sn-o" id="sPn">0</div><div class="sl" id="slPn"></div></div><div class="sc"><div class="sn sn-b" id="sAl">0</div><div class="sl" id="slAl"></div></div></div>
 <div id="apList"></div>
 </div></div>
 <div class="tc" id="tcRk"><div class="container">
-<div class="es"><select id="selRkEv"><option value="">全ての大会</option></select></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p class="st" style="margin:0">🏆 ランキング</p><button class="csv-btn" id="bCSV">📥 CSV</button></div>
+<div class="es"><select id="selRkEv"></select></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p class="st" style="margin:0" id="rkTitle"></p><button class="csv-btn" id="bCSV">📥 CSV</button></div>
 <div id="podArea"></div><div class="rl" id="rkList"></div>
 </div></div>
 <div class="tc" id="tcMm"><div class="container">
-<div class="es"><select id="selMEv"><option value="">全ての大会</option></select></div>
-<p class="st">👥 登録者一覧</p><div id="memList"></div>
-<p class="st" style="margin-top:16px">🔑 パスワードリセット</p><div id="pwResetList"></div>
+<div class="es"><select id="selMEv"></select></div>
+<p class="st" id="memTitle"></p><div id="memList"></div>
+<p class="st" style="margin-top:16px" id="pwResetTitle"></p><div id="pwResetList"></div>
 </div></div>
 <div class="tc" id="tcEv"><div class="container">
-<p class="st">📅 大会一覧</p><div id="evList"></div>
-<button class="btn btn-g btn-f" style="margin-top:12px" id="bNewEv">＋ 新しい大会を作成</button>
+<p class="st" id="evTitle"></p><div id="evList"></div>
+<button class="btn btn-g btn-f" style="margin-top:12px" id="bNewEv"></button>
 </div></div>
 <div class="tc" id="tcSt"><div class="container"><div class="card">
-<h3 style="font-size:14px;margin-bottom:12px">⚙️ 設定</h3>
-<div class="fg"><label>管理者パスワード変更</label><input type="text" id="iPwCh" placeholder="新しいパスワード"><div class="hint">空欄の場合は変更されません</div></div>
-<button class="btn btn-g btn-f" id="bSvPw">設定を保存</button>
-</div><div class="reset-area"><button class="reset-btn" id="bReset">🗑 データをリセット</button></div>
+<h3 style="font-size:14px;margin-bottom:12px" id="stTitle"></h3>
+<div class="fg"><label id="lbPwCh"></label><input type="text" id="iPwCh"><div class="hint" id="pwHint"></div></div>
+<button class="btn btn-g btn-f" id="bSvPw"></button>
+</div><div class="reset-area"><button class="reset-btn" id="bReset"></button></div>
 </div></div>
 </div>
 
-<div class="mo" id="moPw"><div class="mo-b" style="text-align:center"><h3>🔒 管理者パスワード</h3><div class="fg"><input type="password" id="iPwIn" placeholder="パスワード" style="text-align:center"></div><div class="btn-row"><button class="btn btn-s" id="bPwNo">キャンセル</button><button class="btn btn-g" id="bPwOk">ログイン</button></div></div></div>
+<div class="mo" id="moPw"><div class="mo-b" style="text-align:center"><h3 id="moPwTitle"></h3><div class="fg"><input type="password" id="iPwIn" style="text-align:center"></div><div class="btn-row"><button class="btn btn-s" id="bPwNo"></button><button class="btn btn-g" id="bPwOk"></button></div></div></div>
 
-<div class="mo" id="moEd"><div class="mo-b"><button class="mo-x" id="bEdX">&times;</button><h3>📝 編集</h3>
-<div class="fg"><label>名前</label><input type="text" id="edNm"></div>
-<div class="fg"><label>魚種</label><select id="edFi"><option>スモールマウスバス</option><option>ラージマウスバス</option><option>その他</option></select></div>
-<div class="fg"><label>サイズ(cm)</label><input type="number" id="edSz" step="0.1"></div>
-<div class="fg"><label>日時</label><input type="datetime-local" id="edDT"></div>
-<div class="fg"><label>メモ</label><textarea id="edMe"></textarea></div>
-<input type="hidden" id="edId"><button class="btn btn-g btn-f" id="bEdOk">保存</button></div></div>
+<div class="mo" id="moEd"><div class="mo-b"><button class="mo-x" id="bEdX">&times;</button><h3 id="moEdTitle"></h3>
+<div class="fg"><label id="lbEdNm"></label><input type="text" id="edNm"></div>
+<div class="fg"><label id="lbEdFi"></label><select id="edFi"></select></div>
+<div class="fg"><label id="lbEdSz"></label><input type="number" id="edSz" step="0.1"></div>
+<div class="fg"><label id="lbEdDT"></label><input type="datetime-local" id="edDT"></div>
+<div class="fg"><label id="lbEdMe"></label><textarea id="edMe"></textarea></div>
+<input type="hidden" id="edId"><button class="btn btn-g btn-f" id="bEdOk"></button></div></div>
 
-<div class="mo" id="moNe"><div class="mo-b"><button class="mo-x" id="bNeX">&times;</button><h3>📅 新しい大会</h3>
-<div class="fg"><label>大会名</label><input type="text" id="neNm" placeholder="例: 第6回 バス釣り大会"></div>
-<div class="fg"><label>開催日</label><input type="date" id="neDt"></div>
-<div class="fg"><label>場所</label><input type="text" id="nePl" placeholder="例: 琵琶湖"></div>
-<button class="btn btn-g btn-f" id="bNeOk">作成</button></div></div>
+<div class="mo" id="moNe"><div class="mo-b"><button class="mo-x" id="bNeX">&times;</button><h3 id="moNeTitle"></h3>
+<div class="fg"><label id="lbNeNm"></label><input type="text" id="neNm"></div>
+<div class="fg"><label id="lbNeDt"></label><input type="date" id="neDt"></div>
+<div class="fg"><label id="lbNePl"></label><input type="text" id="nePl"></div>
+<button class="btn btn-g btn-f" id="bNeOk"></button></div></div>
 
-<div class="mo" id="moRsPw"><div class="mo-b" style="text-align:center"><h3>🔑 パスワードリセット</h3><p style="font-size:13px;color:#666;margin:12px 0" id="rsPwMsg"></p><div class="fg"><label>新しいパスワード</label><input type="text" id="rsPwNew" placeholder="新しいパスワード"></div><input type="hidden" id="rsPwName"><div class="btn-row"><button class="btn btn-s" id="bRsPwNo">キャンセル</button><button class="btn btn-g" id="bRsPwOk">リセット</button></div></div></div>
+<div class="mo" id="moRsPw"><div class="mo-b" style="text-align:center"><h3 id="moRsPwTitle"></h3><p style="font-size:13px;color:#666;margin:12px 0" id="rsPwMsg"></p><div class="fg"><label id="lbRsPw"></label><input type="text" id="rsPwNew"></div><input type="hidden" id="rsPwName"><div class="btn-row"><button class="btn btn-s" id="bRsPwNo"></button><button class="btn btn-g" id="bRsPwOk"></button></div></div></div>
 
 <div class="img-modal" id="imgModal"><img id="imgModalImg"></div>
-
 <div class="toast" id="toast"></div>
+</div>
 
 <script>
 (function(){
 "use strict";
-var KEY="fishApp4";
+var KEY="fishApp5";
+var L={};
+var LANG={
+ja:{
+  participant:"参加者",admin:"管理者",appTitle:"🎣 釣り大会",adminPanel:"🎣 管理パネル",
+  loginTitle:"🎣 参加者ログイン",loginDesc:"名前とパスワードを入力してください",
+  name:"名前",password:"パスワード",login:"ログイン",newUser:"初めての方はこちら",register:"新規登録",
+  regTitle:"📝 参加者登録",regDesc:"名前とパスワードを設定してください",
+  passConfirm:"パスワード確認",registerBtn:"登録する",backLogin:"← ログインに戻る",
+  required:"*必須",logout:"ログアウト",
+  tabSubmit:"📝 申請",tabMy:"📋 My記録",
+  tabApprove:"✅ 承認",tabRanking:"🏆 ランキング",tabMembers:"👥 参加者",tabEvents:"📅 大会",tabSettings:"⚙️ 設定",
+  selectEvent:"大会を選択",allEvents:"全ての大会",closedMsg:"🔒 この大会は登録が締め切られています",
+  formTitle:"🐟 釣果を申請",fish:"魚種",size:"サイズ",datetime:"撮影日時",
+  dtHint:"写真から自動検出、または手動入力",photoUpload:"計測写真をアップロード",photoTap:"タップして写真を選択",
+  memo:"メモ（任意）",memoPlaceholder:"ルアー、ポイントなど",submit:"申請する",
+  myTitle:"📋 自分の申請一覧",noRecords:"まだ申請がありません",
+  approved:"承認済",pending:"審査中",rejected:"却下",
+  approvedSl:"承認済",pendingSl:"未承認",totalSl:"合計",
+  noApproval:"未承認の申請はありません",
+  event:"大会",species:"魚種",sizeLabel:"サイズ",timeLabel:"日時",memoLabel:"メモ",
+  approve:"✅ 承認",reject:"❌ 却下",
+  rankTitle:"🏆 ランキング",noData:"データがありません",
+  memTitle:"👥 登録者一覧",noMem:"登録なし",pwResetTitle:"🔑 パスワードリセット",noUsers:"登録ユーザーなし",
+  reset:"リセット",resetPwTitle:"🔑 パスワードリセット",resetMsg:"のパスワードをリセット",newPw:"新しいパスワード",
+  evTitle:"📅 大会一覧",newEvent:"＋ 新しい大会を作成",
+  evName:"大会名",evDate:"開催日",evPlace:"場所",create:"作成",
+  active:"受付中",closed:"締切",close:"🔒 締切",reopen:"🔓 再開",delete:"🗑",
+  confirmClose:"締め切りますか？",confirmDelete:"を削除しますか？",
+  stTitle:"⚙️ 設定",changePw:"管理者パスワード変更",pwHint:"空欄の場合は変更されません",savePw:"設定を保存",
+  resetData:"🗑 データをリセット",confirmReset:"全データを初期化しますか？",
+  adminPwTitle:"🔒 管理者パスワード",cancel:"キャンセル",
+  editTitle:"📝 編集",save:"保存",
+  tNameReq:"⚠️ 名前とパスワードを入力",tNoUser:"⚠️ ユーザーが見つかりません",tWrongPw:"⚠️ パスワードが違います",
+  tLoggedIn:"✅ ログインしました",tLoggedOut:"ログアウトしました",
+  tNameEmpty:"⚠️ 名前を入力",tPwShort:"⚠️ パスワードは4文字以上",tPwMismatch:"⚠️ パスワードが一致しません",
+  tNameExists:"⚠️ この名前は既に登録されています",tRegistered:"✅ 登録完了！",
+  tSelectEv:"⚠️ 大会を選択",tClosed:"⚠️ 締め切られています",tSelectFish:"⚠️ 魚種を選択",tEnterSize:"⚠️ サイズを入力",
+  tSubmitted:"✅ 申請しました！",tApproved:"✅ 承認",tRejected:"❌ 却下",
+  tSaved:"✅ 保存",tCreated:"✅ 作成",tPwChanged:"✅ パスワード変更",tResetDone:"🔄 リセット",
+  tPwWrong:"⚠️ パスワードが違います",tEnterPw:"⚠️ 入力してください",tPw4:"⚠️ 4文字以上",tPwReset:"✅ リセット完了",
+  tClosedEv:"🔒 締切",tReopened:"🔓 再開",tDeleted:"🗑 削除",
+  exifDetected:"📅 撮影日時を検出: ",exifFailed:"⚠️ 検出できませんでした（手動入力してください）",
+  fishOpt:["選択してください","スモールマウスバス","ラージマウスバス","その他"],
+  fishEdit:["スモールマウスバス","ラージマウスバス","その他"],
+  namePh:"例: 山田 太郎",evNamePh:"例: 第6回 バス釣り大会",evPlacePh:"例: 琵琶湖",
+  selectEvDefault:"大会を選択してください",fish_count:"匹"
+},
+en:{
+  participant:"Participant",admin:"Admin",appTitle:"🎣 Tournament",adminPanel:"🎣 Admin Panel",
+  loginTitle:"🎣 Participant Login",loginDesc:"Enter your name and password",
+  name:"Name",password:"Password",login:"Login",newUser:"New here?",register:"Sign Up",
+  regTitle:"📝 Registration",regDesc:"Set your name and password",
+  passConfirm:"Confirm Password",registerBtn:"Register",backLogin:"← Back to Login",
+  required:"*Required",logout:"Logout",
+  tabSubmit:"📝 Submit",tabMy:"📋 My Records",
+  tabApprove:"✅ Approve",tabRanking:"🏆 Ranking",tabMembers:"👥 Members",tabEvents:"📅 Events",tabSettings:"⚙️ Settings",
+  selectEvent:"Select Event",allEvents:"All Events",closedMsg:"🔒 Registration is closed for this event",
+  formTitle:"🐟 Submit Catch",fish:"Species",size:"Size",datetime:"Date/Time",
+  dtHint:"Auto-detected from photo or enter manually",photoUpload:"Upload measurement photo",photoTap:"Tap to select photo",
+  memo:"Notes (optional)",memoPlaceholder:"Lure, spot, etc.",submit:"Submit",
+  myTitle:"📋 My Submissions",noRecords:"No submissions yet",
+  approved:"Approved",pending:"Pending",rejected:"Rejected",
+  approvedSl:"Approved",pendingSl:"Pending",totalSl:"Total",
+  noApproval:"No pending submissions",
+  event:"Event",species:"Species",sizeLabel:"Size",timeLabel:"Date/Time",memoLabel:"Notes",
+  approve:"✅ Approve",reject:"❌ Reject",
+  rankTitle:"🏆 Ranking",noData:"No data available",
+  memTitle:"👥 Member List",noMem:"No members",pwResetTitle:"🔑 Password Reset",noUsers:"No registered users",
+  reset:"Reset",resetPwTitle:"🔑 Password Reset",resetMsg:"Reset password for",newPw:"New Password",
+  evTitle:"📅 Event List",newEvent:"＋ Create New Event",
+  evName:"Event Name",evDate:"Date",evPlace:"Location",create:"Create",
+  active:"Open",closed:"Closed",close:"🔒 Close",reopen:"🔓 Reopen",delete:"🗑",
+  confirmClose:"Close registration?",confirmDelete:"Delete this event?",
+  stTitle:"⚙️ Settings",changePw:"Change Admin Password",pwHint:"Leave blank to keep current",savePw:"Save Settings",
+  resetData:"🗑 Reset All Data",confirmReset:"Reset all data?",
+  adminPwTitle:"🔒 Admin Password",cancel:"Cancel",
+  editTitle:"📝 Edit",save:"Save",
+  tNameReq:"⚠️ Enter name and password",tNoUser:"⚠️ User not found",tWrongPw:"⚠️ Wrong password",
+  tLoggedIn:"✅ Logged in",tLoggedOut:"Logged out",
+  tNameEmpty:"⚠️ Enter a name",tPwShort:"⚠️ Password must be 4+ characters",tPwMismatch:"⚠️ Passwords don't match",
+  tNameExists:"⚠️ This name is already taken",tRegistered:"✅ Registered!",
+  tSelectEv:"⚠️ Select an event",tClosed:"⚠️ Registration closed",tSelectFish:"⚠️ Select species",tEnterSize:"⚠️ Enter size",
+  tSubmitted:"✅ Submitted!",tApproved:"✅ Approved",tRejected:"❌ Rejected",
+  tSaved:"✅ Saved",tCreated:"✅ Created",tPwChanged:"✅ Password changed",tResetDone:"🔄 Reset complete",
+  tPwWrong:"⚠️ Wrong password",tEnterPw:"⚠️ Enter a value",tPw4:"⚠️ 4+ characters required",tPwReset:"✅ Password reset",
+  tClosedEv:"🔒 Closed",tReopened:"🔓 Reopened",tDeleted:"🗑 Deleted",
+  exifDetected:"📅 Date detected: ",exifFailed:"⚠️ Could not detect (enter manually)",
+  fishOpt:["Select species","Smallmouth Bass","Largemouth Bass","Others"],
+  fishEdit:["Smallmouth Bass","Largemouth Bass","Others"],
+  namePh:"e.g. John Smith",evNamePh:"e.g. 6th Bass Tournament",evPlacePh:"e.g. Lake Biwa",
+  selectEvDefault:"Please select an event",fish_count:"fish"
+}};
+
 function $(id){return document.getElementById(id)}
 function toast(m){var t=$("toast");t.textContent=m;t.className="toast";void t.offsetWidth;t.className="toast on";setTimeout(function(){t.className="toast"},2500)}
 
-function defs(){return{adminPw:"[PASSWORD]",users:[],catches:[
-{id:1,name:"鈴木 一郎",fish:"ラージマウスバス",size:52,memo:"スピナーベイト",status:"approved",time:"09:15",dt:"2026-08-15T09:15",ev:"第5回 バス釣り大会",photo:""},
-{id:2,name:"鈴木 一郎",fish:"スモールマウスバス",size:38,memo:"",status:"approved",time:"10:30",dt:"2026-08-15T10:30",ev:"第5回 バス釣り大会",photo:""},
-{id:3,name:"田中 太郎",fish:"ラージマウスバス",size:45.5,memo:"クランクベイト",status:"approved",time:"09:40",dt:"2026-08-15T09:40",ev:"第5回 バス釣り大会",photo:""},
-{id:4,name:"田中 太郎",fish:"スモールマウスバス",size:42,memo:"",status:"approved",time:"11:00",dt:"2026-08-15T11:00",ev:"第5回 バス釣り大会",photo:""},
-{id:5,name:"佐藤 花子",fish:"ラージマウスバス",size:42,memo:"ワーム",status:"approved",time:"10:00",dt:"2026-08-15T10:00",ev:"第5回 バス釣り大会",photo:""},
-{id:6,name:"佐藤 花子",fish:"スモールマウスバス",size:36,memo:"",status:"approved",time:"14:00",dt:"2026-08-15T14:00",ev:"第5回 バス釣り大会",photo:""},
-{id:7,name:"山田 次郎",fish:"ラージマウスバス",size:41,memo:"",status:"pending",time:"13:50",dt:"2026-08-15T13:50",ev:"第5回 バス釣り大会",photo:""}
-],events:[
-{id:1,name:"第5回 バス釣り大会",date:"2026-08-15",place:"琵琶湖",st:"active"},
-{id:2,name:"第4回 バス釣り大会",date:"2026-05-20",place:"琵琶湖",st:"closed"}
-],nid:8,neid:3}}
+function applyLang(){
+  $("rP").textContent=L.participant;$("rA").textContent=L.admin;
+  $("hLogin").textContent=L.appTitle;$("bParticipant").textContent=L.participant;
+  $("loginTitle").textContent=L.loginTitle;$("loginDesc").textContent=L.loginDesc;
+  $("lbName").textContent=L.name;$("lbPass").textContent=L.password;
+  $("lName").placeholder=L.namePh;$("lPass").placeholder=L.password;
+  $("bLogin").textContent=L.login;$("newUserMsg").textContent=L.newUser;$("bGoReg").textContent=L.register;
+  $("hReg").textContent=L.appTitle;$("bNewReg").textContent=L.register;
+  $("regTitle").textContent=L.regTitle;$("regDesc").textContent=L.regDesc;
+  $("lbRegName").innerHTML=L.name+' <span style="color:#d32f2f;font-size:10px">'+L.required+"</span>";
+  $("lbRegPass").innerHTML=L.password+' <span style="color:#d32f2f;font-size:10px">'+L.required+"</span>";
+  $("lbRegPass2").innerHTML=L.passConfirm+' <span style="color:#d32f2f;font-size:10px">'+L.required+"</span>";
+  $("rName").placeholder=L.namePh;$("rPass").placeholder="4+";$("[PASSWORD]").placeholder=L.passConfirm;
+  $("bReg").textContent=L.registerBtn;$("bBackLogin").textContent=L.backLogin;
+  $("hMain").textContent=L.appTitle;$("bPart2").textContent=L.participant;
+  $("pEvName").textContent=L.selectEvDefault;$("bLogout").textContent=L.logout;
+  $("tSub").textContent=L.tabSubmit;$("tMy").textContent=L.tabMy;
+  $("clMsg").textContent=L.closedMsg;$("formTitle").textContent=L.formTitle;
+  $("lbFish").innerHTML=L.fish+' <span style="color:#d32f2f;font-size:10px">'+L.required+"</span>";
+  $("lbSize").innerHTML=L.size+' <span style="color:#d32f2f;font-size:10px">'+L.required+"</span>";
+  $("lbDT").textContent=L.datetime;$("dtHint").textContent=L.dtHint;
+  $("piT").textContent=L.photoUpload;$("piS").textContent=L.photoTap;
+  $("lbMemo").textContent=L.memo;$("iMemo").placeholder=L.memoPlaceholder;$("bSubmit").textContent=L.submit;
+  $("myTitle").textContent=L.myTitle;
+  $("iFish").innerHTML="";L.fishOpt.forEach(function(f,i){var o=document.createElement("option");o.textContent=f;if(i===0)o.value="";$("iFish").appendChild(o)});
+  $("hAdmin").textContent=L.adminPanel;$("bAdmin").textContent=L.admin;
+  $("tApTx").textContent=L.tabApprove;$("tRk").textContent=L.tabRanking;$("tMm").textContent=L.tabMembers;$("tEv").textContent=L.tabEvents;$("tSt").textContent=L.tabSettings;
+  $("slOk").textContent=L.approvedSl;$("slPn").textContent=L.pendingSl;$("slAl").textContent=L.totalSl;
+  $("rkTitle").textContent=L.rankTitle;$("memTitle").textContent=L.memTitle;$("pwResetTitle").textContent=L.pwResetTitle;
+  $("evTitle").textContent=L.evTitle;$("bNewEv").textContent=L.newEvent;
+  $("stTitle").textContent=L.stTitle;$("lbPwCh").textContent=L.changePw;$("iPwCh").placeholder=L.newPw;$("pwHint").textContent=L.pwHint;$("bSvPw").textContent=L.savePw;$("bReset").textContent=L.resetData;
+  $("moPwTitle").textContent=L.adminPwTitle;$("iPwIn").placeholder=L.password;$("bPwNo").textContent=L.cancel;$("bPwOk").textContent=L.login;
+  $("moEdTitle").textContent=L.editTitle;$("lbEdNm").textContent=L.name;$("lbEdFi").textContent=L.fish;$("lbEdSz").textContent=L.size+"(cm)";$("lbEdDT").textContent=L.datetime;$("lbEdMe").textContent=L.memo;$("bEdOk").textContent=L.save;
+  $("edFi").innerHTML="";L.fishEdit.forEach(function(f){var o=document.createElement("option");o.textContent=f;$("edFi").appendChild(o)});
+  $("moNeTitle").textContent=L.newEvent;$("lbNeNm").textContent=L.evName;$("neNm").placeholder=L.evNamePh;$("lbNeDt").textContent=L.evDate;$("lbNePl").textContent=L.evPlace;$("nePl").placeholder=L.evPlacePh;$("bNeOk").textContent=L.create;
+  $("moRsPwTitle").textContent=L.resetPwTitle;$("lbRsPw").textContent=L.newPw;$("rsPwNew").placeholder=L.newPw;$("bRsPwNo").textContent=L.cancel;$("bRsPwOk").textContent=L.reset;
+}
+
+// 言語選択
+var savedLang=localStorage.getItem("fishLang");
+if(savedLang){L=LANG[savedLang];$("langPage").classList.add("hide");$("appWrap").classList.remove("hide");applyLang();initApp()}
+$("langJa").addEventListener("click",function(){localStorage.setItem("fishLang","ja");L=LANG.ja;$("langPage").classList.add("hide");$("appWrap").classList.remove("hide");applyLang();initApp()});
+$("langEn").addEventListener("click",function(){localStorage.setItem("fishLang","en");L=LANG.en;$("langPage").classList.add("hide");$("appWrap").classList.remove("hide");applyLang();initApp()});
+
+function initApp(){
+function defs(){return{adminPw:"[PASSWORD]",users:[],catches:[],events:[
+{id:1,name:"5th Bass Tournament",date:"2026-08-15",place:"Lake Biwa",st:"active"},
+{id:2,name:"4th Bass Tournament",date:"2026-05-20",place:"Lake Biwa",st:"closed"}
+],nid:1,neid:3}}
 function load(){try{var s=localStorage.getItem(KEY);return s?JSON.parse(s):defs()}catch(e){return defs()}}
 function save(){localStorage.setItem(KEY,JSON.stringify(D))}
 var D=load();
-var currentUser=localStorage.getItem("fishUser4")||"";
+var currentUser=localStorage.getItem("fishUser5")||"";
 var pendingPhoto="";
 
-function compressPhoto(file,cb){
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      var canvas=document.createElement("canvas");
-      var max=600,w=img.width,h=img.height;
-      if(w>h){if(w>max){h=h*(max/w);w=max}}else{if(h>max){w=w*(max/h);h=max}}
-      canvas.width=w;canvas.height=h;
-      canvas.getContext("2d").drawImage(img,0,0,w,h);
-      cb(canvas.toDataURL("image/jpeg",0.6));
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
+function compressPhoto(file,cb){var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement("canvas");var max=600,w=img.width,h=img.height;if(w>h){if(w>max){h=h*(max/w);w=max}}else{if(h>max){w=w*(max/h);h=max}}canvas.width=w;canvas.height=h;canvas.getContext("2d").drawImage(img,0,0,w,h);cb(canvas.toDataURL("image/jpeg",0.6))};img.src=e.target.result};reader.readAsDataURL(file)}
 
-function exif(file,cb){var r=new FileReader();r.onload=function(e){try{var v=new DataView(e.target.result);if(v.getUint16(0,false)!==0xFFD8){cb(null);return}var o=2,l=v.byteLength;while(o<l){if(o+4>l)break;if(v.getUint16(o,false)===0xFFE1){var eo=o+4;if(eo+6>l||v.getUint32(eo,false)!==0x45786966){cb(null);return}var to=eo+6;if(to+8>l){cb(null);return}var be=v.getUint16(to,false)===0x4D4D,io=v.getUint32(to+4,!be),is=to+io;if(is+2>l){cb(null);return}var tg=v.getUint16(is,!be),ep=null;for(var i=0;i<tg;i++){var en=is+2+i*12;if(en+12>l)break;var t2=v.getUint16(en,!be);if(t2===0x0132){var vo=v.getUint32(en+8,!be)+to,s="";for(var j=0;j<19&&vo+j<l;j++)s+=String.fromCharCode(v.getUint8(vo+j));var p=s.split(" ");if(p.length===2){cb(p[0].replace(/:/g,"-")+"T"+p[1].substring(0,5));return}}if(t2===0x8769)ep=v.getUint32(en+8,!be)}if(ep!==null){var es2=to+ep;if(es2+2<=l){var et=v.getUint16(es2,!be);for(var k=0;k<et;k++){var ee=es2+2+k*12;if(ee+12>l)break;var et2=v.getUint16(ee,!be);if(et2===0x9003||et2===0x9004){var vv=v.getUint32(ee+8,!be)+to,ss="";for(var j2=0;j2<19&&vv+j2<l;j2++)ss+=String.fromCharCode(v.getUint8(vv+j2));var pp=ss.split(" ");if(pp.length===2){cb(pp[0].replace(/:/g,"-")+"T"+pp[1].substring(0,5));return}}}}}cb(null);return}if(o+2>=l)break;o+=2+v.getUint16(o+2,false)}cb(null)}catch(x){cb(null)}};r.onerror=function(){cb(null)};r.readAsArrayBuffer(file.slice(0,131072))}
+function exif(file,cb){var r=new FileReader();r.onload=function(e){try{var v=new DataView(e.target.result);if(v.getUint16(0,false)!==0xFFD8){cb(null);return}var o=2,l=v.byteLength;while(o<l){if(o+4>l)break;if(v.getUint16(o,false)===0xFFE1){var eo=o+4;if(eo+6>l||v.getUint32(eo,false)!==0x45786966){cb(null);return}var to=eo+6;if(to+8>l){cb(null);return}var be=v.getUint16(to,false)===0x4D4D,io=v.getUint32(to+4,!be),is2=to+io;if(is2+2>l){cb(null);return}var tg=v.getUint16(is2,!be),ep=null;for(var i=0;i<tg;i++){var en=is2+2+i*12;if(en+12>l)break;var t2=v.getUint16(en,!be);if(t2===0x0132){var vo=v.getUint32(en+8,!be)+to,s="";for(var j=0;j<19&&vo+j<l;j++)s+=String.fromCharCode(v.getUint8(vo+j));var p=s.split(" ");if(p.length===2){cb(p[0].replace(/:/g,"-")+"T"+p[1].substring(0,5));return}}if(t2===0x8769)ep=v.getUint32(en+8,!be)}if(ep!==null){var es2=to+ep;if(es2+2<=l){var et=v.getUint16(es2,!be);for(var k=0;k<et;k++){var ee=es2+2+k*12;if(ee+12>l)break;var et2=v.getUint16(ee,!be);if(et2===0x9003||et2===0x9004){var vv=v.getUint32(ee+8,!be)+to,ss="";for(var j2=0;j2<19&&vv+j2<l;j2++)ss+=String.fromCharCode(v.getUint8(vv+j2));var pp=ss.split(" ");if(pp.length===2){cb(pp[0].replace(/:/g,"-")+"T"+pp[1].substring(0,5));return}}}}}cb(null);return}if(o+2>=l)break;o+=2+v.getUint16(o+2,false)}cb(null)}catch(x){cb(null)}};r.onerror=function(){cb(null)};r.readAsArrayBuffer(file.slice(0,131072))}
 
 function showLogin(){$("loginPage").classList.remove("hide");$("regPage").classList.add("hide");$("pPage").classList.add("hide");$("aPage").classList.add("hide");$("rP").className="rb on-p";$("rA").className="rb"}
 function showReg(){$("loginPage").classList.add("hide");$("regPage").classList.remove("hide");$("pPage").classList.add("hide");$("aPage").classList.add("hide")}
@@ -250,35 +382,18 @@ function showAdmin(){$("loginPage").classList.add("hide");$("regPage").classList
 
 $("bGoReg").addEventListener("click",showReg);
 $("bBackLogin").addEventListener("click",showLogin);
-$("bLogin").addEventListener("click",function(){
-  var nm=$("lName").value.trim(),pw=$("lPass").value;
-  if(!nm||!pw){toast("⚠️ 名前とパスワードを入力");return}
-  var u=D.users.find(function(x){return x.name===nm});
-  if(!u){toast("⚠️ ユーザーが見つかりません");return}
-  if(u.pw!==pw){toast("⚠️ パスワードが違います");return}
-  currentUser=nm;localStorage.setItem("fishUser4",nm);showMain();toast("✅ ログインしました")
-});
-$("bReg").addEventListener("click",function(){
-  var nm=$("rName").value.trim(),pw=$("rPass").value,pw2=$("rPass2").value;
-  if(!nm){toast("⚠️ 名前を入力");return}
-  if(pw.length<4){toast("⚠️ パスワードは4文字以上");return}
-  if(pw!==pw2){toast("⚠️ パスワードが一致しません");return}
-  if(D.users.find(function(x){return x.name===nm})){toast("⚠️ この名前は既に登録されています");return}
-  D.users.push({name:nm,pw:pw});save();
-  currentUser=nm;localStorage.setItem("fishUser4",nm);showMain();toast("✅ 登録完了！")
-});
-$("bLogout").addEventListener("click",function(){currentUser="";localStorage.removeItem("fishUser4");showLogin();toast("ログアウトしました")});
+$("bLogin").addEventListener("click",function(){var nm=$("lName").value.trim(),pw=$("lPass").value;if(!nm||!pw){toast(L.tNameReq);return}var u=D.users.find(function(x){return x.name===nm});if(!u){toast(L.tNoUser);return}if(u.pw!==pw){toast(L.tWrongPw);return}currentUser=nm;localStorage.setItem("fishUser5",nm);showMain();toast(L.tLoggedIn)});
+$("bReg").addEventListener("click",function(){var nm=$("rName").value.trim(),pw=$("rPass").value,pw2=$("[PASSWORD]").value;if(!nm){toast(L.tNameEmpty);return}if(pw.length<4){toast(L.tPwShort);return}if(pw!==pw2){toast(L.tPwMismatch);return}if(D.users.find(function(x){return x.name===nm})){toast(L.tNameExists);return}D.users.push({name:nm,pw:pw});save();currentUser=nm;localStorage.setItem("fishUser5",nm);showMain();toast(L.tRegistered)});
+$("bLogout").addEventListener("click",function(){currentUser="";localStorage.removeItem("fishUser5");showLogin();toast(L.tLoggedOut)});
 
 $("rP").addEventListener("click",function(){if(currentUser){showMain()}else{showLogin()}});
 $("rA").addEventListener("click",function(){$("iPwIn").value="";$("moPw").className="mo on";setTimeout(function(){$("iPwIn").focus()},300)});
 $("bPwNo").addEventListener("click",function(){$("moPw").className="mo"});
-$("bPwOk").addEventListener("click",doPw);
-$("iPwIn").addEventListener("keyup",function(e){if(e.key==="Enter")doPw()});
-function doPw(){if($("iPwIn").value===D.adminPw){$("moPw").className="mo";showAdmin()}else{toast("⚠️ パスワードが違います");$("iPwIn").value="";$("iPwIn").focus()}}
+$("bPwOk").addEventListener("click",doPw);$("iPwIn").addEventListener("keyup",function(e){if(e.key==="Enter")doPw()});
+function doPw(){if($("iPwIn").value===D.adminPw){$("moPw").className="mo";showAdmin()}else{toast(L.tPwWrong);$("iPwIn").value="";$("iPwIn").focus()}}
 
 $("tSub").addEventListener("click",function(){$("tSub").className="tab on";$("tMy").className="tab";$("tcSub").className="tc on";$("tcMy").className="tc"});
 $("tMy").addEventListener("click",function(){$("tMy").className="tab on";$("tSub").className="tab";$("tcMy").className="tc on";$("tcSub").className="tc";renderMy()});
-
 $("tAp").addEventListener("click",function(){setAT("Ap",this);renderAp()});
 $("tRk").addEventListener("click",function(){setAT("Rk",this);renderRk()});
 $("tMm").addEventListener("click",function(){setAT("Mm",this);renderMem()});
@@ -288,139 +403,26 @@ function setAT(id,b){document.querySelectorAll("#aPage .tab").forEach(function(t
 
 function updSel(){
   var ac=D.events.filter(function(e){return e.st==="active"}),al=D.events;
-  $("selEv").innerHTML='<option value="">大会を選択</option>';ac.forEach(function(e){$("selEv").innerHTML+="<option>"+e.name+"</option>"});if(ac.length===1){$("selEv").value=ac[0].name;onEvSel()}
-  $("selMyEv").innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){$("selMyEv").innerHTML+="<option>"+e.name+"</option>"});
-  $("selRkEv").innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){$("selRkEv").innerHTML+="<option>"+e.name+"</option>"});
-  $("selAEv").innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){$("selAEv").innerHTML+="<option>"+e.name+"</option>"});
-  $("selMEv").innerHTML='<option value="">全ての大会</option>';al.forEach(function(e){$("selMEv").innerHTML+="<option>"+e.name+"</option>"});
+  $("selEv").innerHTML='<option value="">'+L.selectEvent+"</option>";ac.forEach(function(e){$("selEv").innerHTML+="<option>"+e.name+"</option>"});if(ac.length===1){$("selEv").value=ac[0].name;onEvSel()}
+  $("selMyEv").innerHTML='<option value="">'+L.allEvents+"</option>";al.forEach(function(e){$("selMyEv").innerHTML+="<option>"+e.name+"</option>"});
+  $("selRkEv").innerHTML='<option value="">'+L.allEvents+"</option>";al.forEach(function(e){$("selRkEv").innerHTML+="<option>"+e.name+"</option>"});
+  $("selAEv").innerHTML='<option value="">'+L.allEvents+"</option>";al.forEach(function(e){$("selAEv").innerHTML+="<option>"+e.name+"</option>"});
+  $("selMEv").innerHTML='<option value="">'+L.allEvents+"</option>";al.forEach(function(e){$("selMEv").innerHTML+="<option>"+e.name+"</option>"});
 }
-$("selEv").addEventListener("change",onEvSel);
-$("selMyEv").addEventListener("change",renderMy);
-$("selRkEv").addEventListener("change",renderRk);
-$("selAEv").addEventListener("change",renderAp);
-$("selMEv").addEventListener("change",renderMem);
-function onEvSel(){var v=$("selEv").value,ev=D.events.find(function(e){return e.name===v});$("pEvName").textContent=v||"大会を選択してください";if(ev&&ev.st==="closed"){$("formArea").classList.add("hide");$("clMsg").classList.remove("hide")}else{$("formArea").classList.remove("hide");$("clMsg").classList.add("hide")}}
+$("selEv").addEventListener("change",onEvSel);$("selMyEv").addEventListener("change",renderMy);$("selRkEv").addEventListener("change",renderRk);$("selAEv").addEventListener("change",renderAp);$("selMEv").addEventListener("change",renderMem);
+function onEvSel(){var v=$("selEv").value,ev=D.events.find(function(e){return e.name===v});$("pEvName").textContent=v||L.selectEvDefault;if(ev&&ev.st==="closed"){$("formArea").classList.add("hide");$("clMsg").classList.remove("hide")}else{$("formArea").classList.remove("hide");$("clMsg").classList.add("hide")}}
 
-$("iPhoto").addEventListener("change",function(){
-  var f=this.files&&this.files[0];if(!f)return;
-  compressPhoto(f,function(dataUrl){
-    pendingPhoto=dataUrl;
-    $("photoPreview").src=dataUrl;$("photoPreview").style.display="block";
-    document.querySelector(".photo-lbl").classList.add("has");
-    $("piI").style.display="none";$("piT").style.display="none";$("piS").style.display="none";
-  });
-  exif(f,function(dt){var b=$("exifBox");if(dt){$("iDT").value=dt;b.innerHTML="📅 撮影日時を検出: <b>"+dt.replace("T"," ")+"</b>";b.className="exif on"}else{b.innerHTML="⚠️ 検出できませんでした（手動入力してください）";b.className="exif on"}});
-});
+$("iPhoto").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;compressPhoto(f,function(dataUrl){pendingPhoto=dataUrl;$("photoPreview").src=dataUrl;$("photoPreview").style.display="block";document.querySelector(".photo-lbl").classList.add("has");$("piI").style.display="none";$("piT").style.display="none";$("piS").style.display="none"});exif(f,function(dt){var b=$("exifBox");if(dt){$("iDT").value=dt;b.innerHTML=L.exifDetected+"<b>"+dt.replace("T"," ")+"</b>";b.className="exif on"}else{b.innerHTML=L.exifFailed;b.className="exif on"}})});
 
 $("imgModal").addEventListener("click",function(){this.className="img-modal"});
 function showImg(src){$("imgModalImg").src=src;$("imgModal").className="img-modal on"}
 
-$("bSubmit").addEventListener("click",function(){
-  var ev=$("selEv").value;if(!ev){toast("⚠️ 大会を選択");return}
-  var evo=D.events.find(function(e){return e.name===ev});if(evo&&evo.st==="closed"){toast("⚠️ 締め切られています");return}
-  var fi=$("iFish").value,sz=parseFloat($("iSize").value),me=$("iMemo").value.trim(),dt=$("iDT").value;
-  if(!fi){toast("⚠️ 魚種を選択");return}if(!sz||sz<=0){toast("⚠️ サイズを入力");return}
-  var now=new Date(),tm=dt?dt.split("T")[1]:("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2);
-  D.catches.push({id:D.nid++,name:currentUser,fish:fi,size:sz,memo:me,status:"pending",time:tm,dt:dt||now.toISOString().slice(0,16),ev:ev,photo:pendingPhoto});save();
-  $("iFish").value="";$("iSize").value="";$("iMemo").value="";$("iDT").value="";
-  $("photoPreview").style.display="none";document.querySelector(".photo-lbl").classList.remove("has");$("piI").style.display="";$("piT").style.display="";$("piS").style.display="";$("iPhoto").value="";$("exifBox").className="exif";pendingPhoto="";
-  toast("✅ 申請しました！")
-});
+$("bSubmit").addEventListener("click",function(){var ev=$("selEv").value;if(!ev){toast(L.tSelectEv);return}var evo=D.events.find(function(e){return e.name===ev});if(evo&&evo.st==="closed"){toast(L.tClosed);return}var fi=$("iFish").value,sz=parseFloat($("iSize").value),me=$("iMemo").value.trim(),dt=$("iDT").value;if(!fi){toast(L.tSelectFish);return}if(!sz||sz<=0){toast(L.tEnterSize);return}var now=new Date(),tm=dt?dt.split("T")[1]:("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2);D.catches.push({id:D.nid++,name:currentUser,fish:fi,size:sz,memo:me,status:"pending",time:tm,dt:dt||now.toISOString().slice(0,16),ev:ev,photo:pendingPhoto});save();$("iFish").value="";$("iSize").value="";$("iMemo").value="";$("iDT").value="";$("photoPreview").style.display="none";document.querySelector(".photo-lbl").classList.remove("has");$("piI").style.display="";$("piT").style.display="";$("piS").style.display="";$("iPhoto").value="";$("exifBox").className="exif";pendingPhoto="";toast(L.tSubmitted)});
 
-function renderMy(){
-  var sel=$("selMyEv").value;
-  var recs=D.catches.filter(function(c){return c.name===currentUser&&(!sel||c.ev===sel)});
-  if(!recs.length){$("myList").innerHTML='<div style="text-align:center;padding:30px;color:#999;font-size:13px">まだ申請がありません</div>';return}
-  var h="";recs.forEach(function(r){
-    var sc=r.status==="approved"?"b-ok":r.status==="pending"?"b-pend":"b-ng",st=r.status==="approved"?"承認済":r.status==="pending"?"審査中":"却下",dt=r.dt?r.dt.replace("T"," "):r.time;
-    var thumb=r.photo?'<img src="'+r.photo+'">':"🐟";
-    h+='<div class="hi"><div class="th">'+thumb+'</div><div class="inf"><div class="t1">'+r.fish+" "+r.size+'cm</div><div class="t2">'+dt+" | "+r.ev+(r.memo?" | "+r.memo:"")+'</div></div><span class="badge '+sc+'">'+st+"</span></div>"});
-  $("myList").innerHTML=h}
+function renderMy(){var sel=$("selMyEv").value;var recs=D.catches.filter(function(c){return c.name===currentUser&&(!sel||c.ev===sel)});if(!recs.length){$("myList").innerHTML='<div style="text-align:center;padding:30px;color:#999;font-size:13px">'+L.noRecords+"</div>";return}var h="";recs.forEach(function(r){var sc=r.status==="approved"?"b-ok":r.status==="pending"?"b-pend":"b-ng",st=r.status==="approved"?L.approved:r.status==="pending"?L.pending:L.rejected,dt=r.dt?r.dt.replace("T"," "):r.time;var thumb=r.photo?'<img src="'+r.photo+'">':"🐟";h+='<div class="hi"><div class="th">'+thumb+'</div><div class="inf"><div class="t1">'+r.fish+" "+r.size+'cm</div><div class="t2">'+dt+" | "+r.ev+(r.memo?" | "+r.memo:"")+'</div></div><span class="badge '+sc+'">'+st+"</span></div>"});$("myList").innerHTML=h}
 
-function renderRk(){
-  var sel=$("selRkEv").value,ap=D.catches.filter(function(c){return c.status==="approved"&&(!sel||c.ev===sel)});
-  var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,cnt:0,fish:[]};pl[c.name].total+=c.size;pl[c.name].cnt++;pl[c.name].fish.push(c)});
-  var rk=Object.values(pl).sort(function(a,b){return b.total-a.total});
-  $("podArea").innerHTML="";
-  var lh="";rk.forEach(function(p,i){var rc=i===0?"rk-1":i===1?"rk-2":i===2?"rk-3":"";
-  lh+='<div class="rr" data-i="'+i+'"><div class="rk '+rc+'">'+(i+1)+'</div><div class="rn">'+p.name+'</div><div class="rt">'+p.total.toFixed(1)+'</div><div class="rc">'+p.cnt+'匹</div></div>';
-  lh+='<div class="rd" id="rd'+i+'">';p.fish.sort(function(a,b){return b.size-a.size}).forEach(function(f){lh+='<div class="rd-f"><span>'+f.fish+" "+f.size+'cm</span><span>'+f.time+"</span></div>"});lh+="</div>"});
-  $("rkList").innerHTML=lh||'<div style="text-align:center;padding:30px;color:#999;font-size:13px">データがありません</div>';
-  document.querySelectorAll(".rr").forEach(function(r){r.addEventListener("click",function(){$("rd"+this.getAttribute("data-i")).classList.toggle("on")})})
-}
+function renderRk(){var sel=$("selRkEv").value,ap=D.catches.filter(function(c){return c.status==="approved"&&(!sel||c.ev===sel)});var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,cnt:0,fish:[]};pl[c.name].total+=c.size;pl[c.name].cnt++;pl[c.name].fish.push(c)});var rk=Object.values(pl).sort(function(a,b){return b.total-a.total});$("podArea").innerHTML="";var lh="";rk.forEach(function(p,i){var rc=i===0?"rk-1":i===1?"rk-2":i===2?"rk-3":"";lh+='<div class="rr" data-i="'+i+'"><div class="rk '+rc+'">'+(i+1)+'</div><div class="rn">'+p.name+'</div><div class="rt">'+p.total.toFixed(1)+'</div><div class="rc">'+p.cnt+L.fish_count+'</div></div>';lh+='<div class="rd" id="rd'+i+'">';p.fish.sort(function(a,b){return b.size-a.size}).forEach(function(f){lh+='<div class="rd-f"><span>'+f.fish+" "+f.size+'cm</span><span>'+f.time+"</span></div>"});lh+="</div>"});$("rkList").innerHTML=lh||'<div style="text-align:center;padding:30px;color:#999;font-size:13px">'+L.noData+"</div>";document.querySelectorAll(".rr").forEach(function(r){r.addEventListener("click",function(){$("rd"+this.getAttribute("data-i")).classList.toggle("on")})})}
 
-$("bCSV").addEventListener("click",function(){
-  var sel=$("selRkEv").value,ap=D.catches.filter(function(c){return c.status==="approved"&&(!sel||c.ev===sel)});
-  var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,best:0,cnt:0};pl[c.name].total+=c.size;pl[c.name].cnt++;if(c.size>pl[c.name].best)pl[c.name].best=c.size});
-  var rk=Object.values(pl).sort(function(a,b){return b.total-a.total}),d=[["順位","名前","合計(cm)","最大(cm)","匹数"]];
-  rk.forEach(function(p,i){d.push([i+1,p.name,p.total.toFixed(1),p.best.toFixed(1),p.cnt])});
-  var csv="\uFEFF"+d.map(function(r){return r.join(",")}).join("\n"),bl=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="ranking.csv";a.click()});
+$("bCSV").addEventListener("click",function(){var sel=$("selRkEv").value,ap=D.catches.filter(function(c){return c.status==="approved"&&(!sel||c.ev===sel)});var pl={};ap.forEach(function(c){if(!pl[c.name])pl[c.name]={name:c.name,total:0,best:0,cnt:0};pl[c.name].total+=c.size;pl[c.name].cnt++;if(c.size>pl[c.name].best)pl[c.name].best=c.size});var rk=Object.values(pl).sort(function(a,b){return b.total-a.total}),d=[["Rank","Name","Total(cm)","Best(cm)","Count"]];rk.forEach(function(p,i){d.push([i+1,p.name,p.total.toFixed(1),p.best.toFixed(1),p.cnt])});var csv="\uFEFF"+d.map(function(r){return r.join(",")}).join("\n"),bl=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="ranking.csv";a.click()});
 
-function renderAp(){
-  var sel=$("selAEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel});
-  var pn=fil.filter(function(c){return c.status==="pending"}),ok=fil.filter(function(c){return c.status==="approved"});
-  $("sPn").textContent=pn.length;$("sOk").textContent=ok.length;$("sAl").textContent=fil.length;
-  $("pBdg").textContent=D.catches.filter(function(c){return c.status==="pending"}).length;
-  if(!pn.length){$("apList").innerHTML='<div style="text-align:center;padding:30px;color:#999;font-size:13px">未承認の申請はありません</div>';return}
-  var h="";pn.forEach(function(c){var dt=c.dt?c.dt.replace("T"," "):c.time;
-  h+='<div class="mc"><div class="mc-h"><strong style="font-size:13px">'+c.name+'</strong><span class="badge b-pend">未承認</span></div>';
-  if(c.photo)h+='<div class="mc-photo"><img src="'+c.photo+'" data-img="'+c.id+'"></div>';
-  h+='<div class="mc-i"><div class="mc-r"><span>大会</span><span>'+c.ev+'</span></div><div class="mc-r"><span>魚種</span><span>'+c.fish+'</span></div><div class="mc-r"><span>サイズ</span><span style="color:#2e7d32">'+c.size+' cm</span></div><div class="mc-r"><span>日時</span><span>'+dt+'</span></div>'+(c.memo?'<div class="mc-r"><span>メモ</span><span>'+c.memo+"</span></div>":"")+'</div><div class="mc-a"><div class="mc-b"><button class="btn btn-g btn-sm" data-ok="'+c.id+'">✅ 承認</button><button class="btn btn-sm" style="background:#ffebee;color:#d32f2f;border:1px solid #ef9a9a" data-ng="'+c.id+'">❌ 却下</button></div></div></div>'});
-  $("apList").innerHTML=h;
-  document.querySelectorAll("[data-ok]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-ok"),c=D.catches.find(function(x){return x.id===id});if(c){c.status="approved";save();renderAp();toast("✅ 承認")}})});
-  document.querySelectorAll("[data-ng]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-ng"),c=D.catches.find(function(x){return x.id===id});if(c){c.status="rejected";save();renderAp();toast("❌ 却下")}})});
-  document.querySelectorAll("[data-img]").forEach(function(img){img.addEventListener("click",function(){showImg(this.src)})})
-}
-
-function renderMem(){
-  var sel=$("selMEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel}),mem={};
-  fil.forEach(function(c){if(!mem[c.name])mem[c.name]=[];mem[c.name].push(c)});
-  var h="";Object.keys(mem).forEach(function(nm){
-  h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong style="font-size:13px">'+nm+'</strong><span style="font-size:11px;color:#999">'+mem[nm].length+'件</span></div>';
-  mem[nm].forEach(function(c){
-    var sc=c.status==="approved"?"b-ok":c.status==="pending"?"b-pend":"b-ng",st=c.status==="approved"?"承認済":c.status==="pending"?"審査中":"却下";
-    var photoBtn=c.photo?'<button class="btn btn-sm" style="background:#e3f2fd;color:#1565c0;border:none" data-vimg="'+c.id+'">📷</button>':"";
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px"><span>'+c.fish+" "+c.size+'cm</span><div style="display:flex;align-items:center;gap:4px"><span class="badge '+sc+'">'+st+"</span>"+photoBtn+'<button class="btn btn-s btn-sm" data-ed="'+c.id+'">✏️</button></div></div>'});h+="</div>"});
-  $("memList").innerHTML=h||'<div style="text-align:center;padding:30px;color:#999">登録なし</div>';
-  document.querySelectorAll("[data-ed]").forEach(function(b){b.addEventListener("click",function(){openEd(+this.getAttribute("data-ed"))})});
-  document.querySelectorAll("[data-vimg]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-vimg"),c=D.catches.find(function(x){return x.id===id});if(c&&c.photo)showImg(c.photo)})});
-  var ph="";D.users.forEach(function(u){ph+='<div class="mem-item"><span>'+u.name+'</span><button class="btn btn-w btn-sm" data-rspw="'+u.name+'">リセット</button></div>'});
-  $("pwResetList").innerHTML=ph||'<div style="text-align:center;padding:20px;color:#999;font-size:12px">登録ユーザーなし</div>';
-  document.querySelectorAll("[data-rspw]").forEach(function(b){b.addEventListener("click",function(){var nm=this.getAttribute("data-rspw");$("rsPwMsg").textContent="「"+nm+"」のパスワードをリセット";$("rsPwName").value=nm;$("rsPwNew").value="";$("moRsPw").className="mo on"})})
-}
-
-$("bRsPwNo").addEventListener("click",function(){$("moRsPw").className="mo"});
-$("bRsPwOk").addEventListener("click",function(){
-  var nm=$("rsPwName").value,np=$("rsPwNew").value;
-  if(np.length<4){toast("⚠️ 4文字以上");return}
-  var u=D.users.find(function(x){return x.name===nm});
-  if(u){u.pw=np;save();$("moRsPw").className="mo";toast("✅ リセット完了")}
-});
-
-function openEd(id){var c=D.catches.find(function(x){return x.id===id});if(!c)return;$("edNm").value=c.name;$("edFi").value=c.fish;$("edSz").value=c.size;$("edDT").value=c.dt||"";$("edMe").value=c.memo||"";$("edId").value=id;$("moEd").className="mo on"}
-$("bEdX").addEventListener("click",function(){$("moEd").className="mo"});
-$("bEdOk").addEventListener("click",function(){var id=+$("edId").value,c=D.catches.find(function(x){return x.id===id});if(!c)return;c.name=$("edNm").value.trim();c.fish=$("edFi").value;c.size=parseFloat($("edSz").value);c.dt=$("edDT").value;c.memo=$("edMe").value.trim();if(c.dt)c.time=c.dt.split("T")[1];save();$("moEd").className="mo";renderMem();toast("✅ 保存")});
-
-function renderEv(){var h="";D.events.forEach(function(ev){
-  var sb=ev.st==="active"?'<span class="badge b-act">受付中</span>':'<span class="badge b-cls">締切</span>';
-  h+='<div class="ev-i"><div class="et">'+ev.name+" "+sb+'</div><div class="ed">📍 '+(ev.place||"未設定")+" ｜ 📅 "+ev.date+'</div><div class="ea">';
-  if(ev.st==="active")h+='<button class="btn btn-w btn-sm" data-cls="'+ev.id+'">🔒 締切</button>';
-  else h+='<button class="btn btn-b btn-sm" data-opn="'+ev.id+'">🔓 再開</button><button class="btn btn-d btn-sm" data-del="'+ev.id+'" data-dn="'+ev.name+'">🗑</button>';
-  h+="</div></div>"});$("evList").innerHTML=h;
-  document.querySelectorAll("[data-cls]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-cls"),ev=D.events.find(function(e){return e.id===id});if(ev&&confirm("締め切りますか？")){ev.st="closed";save();renderEv();updSel();toast("🔒 締切")}})});
-  document.querySelectorAll("[data-opn]").forEach(function(b){b.addEventListener("click",function(){var id=+this.getAttribute("data-opn"),ev=D.events.find(function(e){return e.id===id});if(ev){ev.st="active";save();renderEv();updSel();toast("🔓 再開")}})});
-  document.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){if(confirm("「"+this.getAttribute("data-dn")+"」を削除しますか？")){var id=+this.getAttribute("data-del");D.events=D.events.filter(function(e){return e.id!==id});save();renderEv();updSel();toast("🗑 削除")}})})
-}
-$("bNewEv").addEventListener("click",function(){$("moNe").className="mo on"});
-$("bNeX").addEventListener("click",function(){$("moNe").className="mo"});
-$("bNeOk").addEventListener("click",function(){var nm=$("neNm").value.trim(),dt=$("neDt").value,pl=$("nePl").value.trim();if(!nm||!dt){toast("⚠️ 大会名と日付を入力");return}D.events.push({id:D.neid++,name:nm,date:dt,place:pl,st:"active"});save();$("moNe").className="mo";$("neNm").value="";$("neDt").value="";$("nePl").value="";renderEv();updSel();toast("✅ 作成")});
-
-$("bSvPw").addEventListener("click",function(){var p=$("iPwCh").value.trim();if(p){D.adminPw=p;save();$("iPwCh").value="";toast("✅ パスワード変更")}else{toast("⚠️ 入力してください")}});
-$("bReset").addEventListener("click",function(){if(confirm("全データを初期化しますか？")){localStorage.removeItem(KEY);localStorage.removeItem("fishUser4");D=defs();save();toast("🔄 リセット");setTimeout(function(){location.reload()},1000)}});
-
-if(currentUser&&D.users.find(function(u){return u.name===currentUser})){showMain()}else{currentUser="";localStorage.removeItem("fishUser4");showLogin()}
-})();
-</script>
-</body>
-</html>
-
+function renderAp(){var sel=$("selAEv").value,fil=D.catches.filter(function(c){return!sel||c.ev===sel});var pn=fil.filter(function(c){return c.status==="pending"}),ok=fil.filter(function(c){return c.status==="approved"});$("sPn").textContent=pn.length;$("sOk").textContent=ok.length;$("sAl").textContent=fil.length;$("pBdg").textContent=D.catches.filter(function(c){return c.status==="pending"}).length;if(!pn.length){$("apList").innerHTML='<div style="text-align:center;padding:30px;color:#999;font-size:13px">'+L.noApproval+"</div>";return}var h="";pn.forEach(function(c){var dt=c.dt?c.dt.replace("T"," "):c.time;h+='<div class="mc">
