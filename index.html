@@ -3,184 +3,194 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>🎣 Fishing Tournament</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;min-height:100vh}
 .hide{display:none!important}
-.header{color:#fff;padding:14px 18px;position:sticky;top:0;z-index:100}
-.hd-p{background:linear-gradient(135deg,#1a73e8,#0d47a1)}
-.hd-a{background:linear-gradient(135deg,#2e7d32,#1b5e20)}
-.hd-top{display:flex;justify-content:space-between;align-items:center}
-.header h1{font-size:17px}.hbadge{background:rgba(255,255,255,0.2);padding:3px 9px;border-radius:16px;font-size:10px}
-.header .sub{font-size:12px;opacity:0.9;margin-top:3px}
-.container{max-width:540px;margin:0 auto;padding:14px}
-.card{background:#fff;border-radius:13px;padding:16px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
-.badge{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;display:inline-block}
-.b-pend{background:#fff3e0;color:#f57c00}.b-ok{background:#e8f5e9;color:#388e3c}.b-ng{background:#ffebee;color:#d32f2f}.b-act{background:#e8f5e9;color:#388e3c}.b-cls{background:#f5f5f5;color:#999}
-.fg{margin-bottom:12px}.fg label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
-.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:9px;font-size:16px;background:#fff;-webkit-appearance:none}
-.fg input:focus,.fg select:focus{outline:none;border-color:#1a73e8}
-.fg textarea{resize:vertical;min-height:60px;font-family:inherit}
-.hint{font-size:10px;color:#999;margin-top:3px}
-.iu{position:relative}.iu span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#999;font-size:13px}.iu input{padding-right:36px}
-.btn{padding:11px 18px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.btn-g{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff}
-.btn-b{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff}
-.btn-s{background:#f5f5f5;color:#666;border:1px solid #ddd}
-.btn-d{background:#d32f2f;color:#fff}
-.btn-w{background:#f57c00;color:#fff}
-.btn-f{width:100%}.btn-sm{padding:6px 12px;font-size:11px}
-.btn-row{display:flex;gap:10px}.btn-row .btn{flex:1}
-.tabs{display:flex;background:#fff;border-bottom:1px solid #e0e0e0;position:sticky;top:52px;z-index:90}
-.tab{flex:1;padding:11px 6px;text-align:center;font-size:11px;font-weight:600;color:#666;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.tab.on{color:#1a73e8;border-bottom-color:#1a73e8}
-.tab.on-a{color:#2e7d32;border-bottom-color:#2e7d32}
-.tab-badge{background:#ff5722;color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px}
+.container{max-width:480px;margin:0 auto;padding:12px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid #e0e0e0;position:sticky;top:0;z-index:100}
+.header h1{font-size:16px;color:#333}
+.role-bar{display:flex;gap:4px;margin:12px 16px}
+.rb{flex:1;padding:8px;text-align:center;border-radius:8px;font-size:12px;font-weight:600;background:#e8e8e8;color:#666;border:none;cursor:pointer}
+.rb.on-p{background:#e8f5e9;color:#2e7d32}
+.rb.on-a{background:#e3f2fd;color:#1565c0}
+.card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tab-bar{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto}
+.tab{padding:8px 12px;border-radius:8px;font-size:11px;font-weight:600;background:#e8e8e8;color:#666;border:none;cursor:pointer;white-space:nowrap}
+.tab.on{background:#e8f5e9;color:#2e7d32}
+.tab.on-a{background:#e3f2fd;color:#1565c0}
 .tc{display:none}.tc.on{display:block}
-.es{margin-bottom:12px}.es select{width:100%;padding:9px 12px;border:1.5px solid #1a73e8;border-radius:9px;font-size:13px;font-weight:600;color:#1a73e8;background:#fff}
-.closed-msg{background:#fff3e0;border-radius:9px;padding:12px;text-align:center;font-size:13px;color:#f57c00;margin-bottom:12px}
-.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
-.sc{background:#fff;border-radius:9px;padding:10px 6px;text-align:center}.sn{font-size:18px;font-weight:700}.sn-g{color:#2e7d32}.sn-o{color:#f57c00}.sn-b{color:#1565c0}.sl{font-size:10px;color:#999}
-.photo-lbl{display:block;border:2px dashed #ccc;border-radius:11px;padding:26px 14px;text-align:center;margin-bottom:14px;cursor:pointer;background:#fafafa;-webkit-tap-highlight-color:transparent}
-.photo-lbl.has{border-color:#4caf50;background:#f0fff0;padding:8px}
-#photoPreview{max-width:100%;max-height:160px;border-radius:8px;display:none}
-.exif{background:#e3f2fd;border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:#1565c0;display:none}.exif.on{display:block}
-.hi{background:#fff;border-radius:10px;padding:11px 12px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,0.04);display:flex;align-items:center;gap:9px}
-.hi .th{width:38px;height:38px;background:#e3f2fd;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden}
-.hi .th img{width:100%;height:100%;object-fit:cover;border-radius:7px}
-.hi .inf{flex:1}.hi .t1{font-size:14px;font-weight:600}.hi .t2{font-size:10px;color:#999;margin-top:1px}
-.rl{background:#fff;border-radius:13px;overflow:hidden}
-.rr{display:grid;grid-template-columns:32px 1fr 60px 55px;padding:11px 12px;align-items:center;border-bottom:1px solid #f5f5f5;cursor:pointer}
-.rk{font-size:14px;font-weight:700}.rk-1{color:#ffa000}.rk-2{color:#9e9e9e}.rk-3{color:#a0522d}
-.rn{font-size:12px;font-weight:600}.rt{font-size:13px;font-weight:700;color:#2e7d32;text-align:right}.rc{font-size:11px;color:#666;text-align:right}
-.rd{display:none;padding:6px 12px 10px 44px;background:#fafffe;border-bottom:1px solid #f0f0f0}.rd.on{display:block}
-.rd-f{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;color:#666;border-bottom:1px dashed #e8e8e8}.rd-f:last-child{border-bottom:none}
-.mc{background:#fff;border-radius:13px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.06);overflow:hidden}
-.mc-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f0f0f0}
-.mc-i{padding:10px 12px}.mc-r{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #f8f8f8}.mc-r:last-child{border-bottom:none}
-.mc-r span:first-child{color:#666}.mc-r span:last-child{font-weight:600;color:#333}
-.mc-photo{padding:8px 12px}.mc-photo img{width:100%;max-height:200px;object-fit:contain;border-radius:8px;cursor:pointer}
-.mc-a{padding:8px 12px 12px}.mc-b{display:flex;gap:7px}.mc-b .btn{flex:1}
-.ev-i{background:#fff;border-radius:11px;padding:11px 13px;margin-bottom:7px}
-.ev-i .et{font-size:13px;font-weight:600}.ev-i .ed{font-size:10px;color:#999;margin-top:2px}.ev-i .ea{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
-.mo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;padding:20px}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+.fg textarea{height:60px;resize:none}
+.btn{padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer}
+.btn-g{background:#4caf50;color:#fff}
+.btn-b{background:#e3f2fd;color:#1565c0}
+.btn-w{background:#fff;color:#333;border:1px solid #ddd}
+.btn-d{background:#ffebee;color:#d32f2f}
+.btn-sm{padding:6px 10px;font-size:11px}
+.btn-ff{width:100%;margin-top:8px}
+.badge{padding:3px 8px;border-radius:12px;font-size:10px;font-weight:600}
+.b-ok{background:#e8f5e9;color:#2e7d32}
+.b-pend{background:#fff3e0;color:#e65100}
+.b-ng{background:#ffebee;color:#d32f2f}
+.b-act{background:#e8f5e9;color:#2e7d32}
+.b-cls{background:#e0e0e0;color:#666}
+.hi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.hi .th{width:40px;height:40px;border-radius:8px;overflow:hidden;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.hi .th img{width:100%;height:100%;object-fit:cover}
+.hi .inf{flex:1;min-width:0}
+.hi .t1{font-size:13px;font-weight:600;color:#333}
+.hi .t2{font-size:11px;color:#999;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.rk{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#e0e0e0;color:#666}
+.rk-1{background:#fff9c4;color:#f9a825}
+.rk-2{background:#f5f5f5;color:#757575}
+.rk-3{background:#fbe9e7;color:#bf360c}
+.rn{flex:1;font-size:13px;font-weight:600}
+.rt{font-size:14px;font-weight:700;color:#2e7d32}
+.rc{font-size:11px;color:#999;margin-left:4px}
+.rd{display:none;padding:4px 0 8px 36px}
+.rd.on{display:block}
+.rd-f{display:flex;justify-content:space-between;font-size:11px;color:#666;padding:3px 0}
+.mc{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.mc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mc-photo{margin:8px 0;border-radius:8px;overflow:hidden;max-height:200px}
+.mc-photo img{width:100%;object-fit:cover;cursor:pointer}
+.mc-i{margin-bottom:10px}
+.mc-r{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid #f5f5f5}
+.mc-a{display:flex;justify-content:flex-end}
+.mc-b{display:flex;gap:6px}
+.ev-i{background:#fff;border-radius:10px;padding:12px;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.et{font-size:13px;font-weight:600;margin-bottom:4px}
+.ed{font-size:11px;color:#888;margin-bottom:6px}
+.ea{display:flex;gap:6px}
+.mem-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.photo-lbl{display:block;border:2px dashed #ccc;border-radius:12px;padding:20px;text-align:center;cursor:pointer}
+.photo-lbl.has{border-color:#4caf50;background:#f1f8e9}
+.photo-lbl input{display:none}
+#photoPreview{max-width:100%;border-radius:8px;margin-top:8px;display:none}
+.exif{font-size:11px;margin-top:6px;padding:6px 8px;border-radius:6px;display:none}
+.exif.on{display:block;background:#f1f8e9;color:#2e7d32}
+.mo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
 .mo.on{display:flex}
-.mo-b{background:#fff;border-radius:14px;padding:20px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto}
-.mo-b h3{font-size:15px;margin-bottom:12px}
-.mo-x{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#999}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:all 0.3s;z-index:400;pointer-events:none}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-.st{font-size:13px;font-weight:600;color:#666;margin-bottom:10px}
-.csv-btn{padding:5px 11px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #2e7d32;background:#fff;color:#2e7d32;cursor:pointer}
-.login-box{max-width:360px;margin:60px auto;padding:20px;text-align:center}
-.login-box h2{font-size:18px;margin-bottom:8px}
-.login-box p{font-size:12px;color:#666;margin-bottom:16px}
-.role-sw{position:fixed;top:10px;right:12px;z-index:200;background:rgba(255,255,255,0.95);border-radius:20px;padding:3px;display:flex;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
-.role-sw .rb{padding:6px 12px;border:none;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#666;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.role-sw .rb.on-p{background:#1a73e8;color:#fff}
-.role-sw .rb.on-a{background:#2e7d32;color:#fff}
-.user-bar{background:#e3f2fd;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
-.user-bar strong{color:#1a73e8}
-.logout-btn{background:none;border:1px solid #1a73e8;color:#1a73e8;padding:3px 10px;border-radius:12px;font-size:10px;cursor:pointer}
-.mem-item{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
-.img-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;padding:20px;cursor:pointer}
+.mo-b{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:360px}
+.mo-x{position:absolute;top:12px;right:16px;font-size:20px;background:none;border:none;cursor:pointer}
+.img-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:300;align-items:center;justify-content:center;cursor:pointer}
 .img-modal.on{display:flex}
-.img-modal img{max-width:100%;max-height:90vh;border-radius:8px}
-.lang-page{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.lang-box{text-align:center}
-.lang-btn{display:block;width:200px;margin:10px auto;padding:16px;border:2px solid #ddd;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;background:#fff;transition:all 0.2s}
-.lang-btn:hover,.lang-btn:active{border-color:#1a73e8;background:#e3f2fd}
+.img-modal img{max-width:95%;max-height:90vh;border-radius:8px}
+.toast{position:fixed;bottom:-60px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;transition:bottom .3s;z-index:999}
+.toast.on{bottom:30px}
+.stat-bar{display:flex;gap:8px;margin-bottom:12px;font-size:11px}
+.stat-bar span{padding:4px 8px;background:#f5f5f5;border-radius:6px}
+.lang-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px}
+.lang-btn{padding:16px 40px;font-size:18px;border-radius:12px;border:2px solid #ddd;background:#fff;cursor:pointer;min-width:200px;text-align:center}
+.lang-btn:hover{background:#f5f5f5}
+#pBdg{background:#d32f2f;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:4px}
 </style>
 </head>
 <body>
 <div id="langPage" class="lang-page">
-<div class="lang-box"><h2>🎣</h2><p style="font-size:14px;color:#666;margin-bottom:20px">Select Language / 言語を選択</p>
+<h1>🎣 Fishing Tournament</h1>
 <button class="lang-btn" id="langJa">🇯🇵 日本語</button>
-<button class="lang-btn" id="langEn">🇺🇸 English</button></div></div>
-
+<button class="lang-btn" id="langEn">🇺🇸 English</button>
+</div>
 <div id="appWrap" class="hide">
-<div class="role-sw"><button class="rb on-p" id="rP"></button><button class="rb" id="rA"></button></div>
-
-<div id="loginPage" class="hide">
-<div class="header hd-p"><div class="hd-top"><h1 id="hLogin"></h1><span class="hbadge" id="bParticipant"></span></div></div>
-<div class="login-box"><div class="card">
-<h2 id="loginTitle"></h2><p id="loginDesc"></p>
+<div class="header"><h1 id="hLogin"></h1><div><button class="btn btn-sm btn-w" id="bParticipant" style="display:none"></button></div></div>
+<div class="role-bar"><button class="rb on-p" id="rP"></button><button class="rb" id="rA"></button></div>
+<!-- LOGIN -->
+<div id="loginPage" class="container hide">
+<div class="card" style="text-align:center;padding:30px 20px">
+<h2 id="loginTitle" style="font-size:18px;margin-bottom:6px"></h2>
+<p id="loginDesc" style="font-size:12px;color:#888;margin-bottom:20px"></p>
 <div class="fg"><label id="lbName"></label><input type="text" id="lName"></div>
 <div class="fg"><label id="lbPass"></label><input type="password" id="lPass"></div>
-<button class="btn btn-b btn-f" id="bLogin"></button>
-<div style="margin-top:12px;border-top:1px solid #eee;padding-top:12px">
-<p style="font-size:11px;color:#999;margin-bottom:8px" id="newUserMsg"></p>
-<button class="btn btn-s btn-f" id="bGoReg"></button></div></div></div></div>
-
-<div id="regPage" class="hide">
-<div class="header hd-p"><div class="hd-top"><h1 id="hReg"></h1><span class="hbadge" id="bNewReg"></span></div></div>
-<div class="login-box"><div class="card">
-<h2 id="regTitle"></h2><p id="regDesc"></p>
+<button class="btn btn-g btn-ff" id="bLogin"></button>
+<p style="margin-top:16px;font-size:12px;color:#888"><span id="newUserMsg"></span> <a href="#" id="bGoReg" style="color:#2e7d32;font-weight:600"></a></p>
+</div>
+</div>
+<!-- REGISTER -->
+<div id="regPage" class="container hide">
+<div class="header"><h1 id="hReg"></h1><button class="btn btn-sm btn-w" id="bNewReg" style="display:none"></button></div>
+<div class="card" style="padding:24px">
+<h2 id="regTitle" style="font-size:16px;margin-bottom:4px"></h2>
+<p id="regDesc" style="font-size:12px;color:#888;margin-bottom:16px"></p>
 <div class="fg"><label id="lbRegName"></label><input type="text" id="rName"></div>
 <div class="fg"><label id="lbRegPass"></label><input type="password" id="rPass"></div>
 <div class="fg"><label id="lbRegPass2"></label><input type="password" id="rPass2"></div>
-<button class="btn btn-b btn-f" id="bReg"></button>
-<button class="btn btn-s btn-f" style="margin-top:8px" id="bBackLogin"></button></div></div></div>
-
-<div id="pPage" class="hide">
-<div class="header hd-p"><div class="hd-top"><h1 id="hMain"></h1><span class="hbadge" id="bPart2"></span></div><div class="sub" id="pEvName"></div></div>
-<div class="user-bar"><span>👤 <strong id="uName"></strong></span><button class="logout-btn" id="bLogout"></button></div>
-<div class="tabs"><button class="tab on" id="tSub"></button><button class="tab" id="tMy"></button></div>
-<div class="tc on" id="tcSub"><div class="container">
-<div class="es"><select id="selEv"></select></div>
-<div class="closed-msg hide" id="clMsg"></div>
-<div id="formArea"><div class="card"><h3 style="font-size:14px;margin-bottom:12px" id="formTitle"></h3>
+<button class="btn btn-g btn-ff" id="bReg"></button>
+<p style="margin-top:12px;text-align:center"><a href="#" id="bBackLogin" style="font-size:12px;color:#888"></a></p>
+</div>
+</div>
+<!-- PARTICIPANT -->
+<div id="pPage" class="container hide">
+<div class="header"><h1 id="hMain"></h1><div style="display:flex;align-items:center;gap:8px"><span id="uName" style="font-size:12px;color:#2e7d32;font-weight:600"></span><button class="btn btn-sm btn-w" id="bLogout"></button></div></div>
+<div style="display:flex;align-items:center;gap:8px;margin:8px 0"><button class="btn btn-sm btn-w" id="bPart2" style="display:none"></button><select id="selEv" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ddd;font-size:12px"></select></div>
+<p id="pEvName" style="font-size:11px;color:#888;margin-bottom:8px"></p>
+<div class="tab-bar"><button class="tab on" id="tSub"></button><button class="tab" id="tMy"></button></div>
+<div class="tc on" id="tcSub">
+<p id="clMsg" class="hide" style="text-align:center;padding:20px;color:#e65100;font-size:13px;background:#fff3e0;border-radius:8px"></p>
+<div id="formArea">
+<div class="card">
+<h3 id="formTitle" style="font-size:14px;margin-bottom:12px"></h3>
 <div class="fg"><label id="lbFish"></label><select id="iFish"></select></div>
-<div class="fg"><label id="lbSize"></label><div class="iu"><input type="number" id="iSize" placeholder="0.0" step="0.1"><span>cm</span></div></div>
-<div class="fg"><label id="lbDT"></label><input type="datetime-local" id="iDT"><div class="hint" id="dtHint"></div></div>
-<label class="photo-lbl" for="iPhoto"><span id="piI">📷</span> <span id="piT"></span><br><small id="piS"></small><img id="photoPreview"></label>
-<input type="file" id="iPhoto" accept="image/*" style="display:none">
-<div class="exif" id="exifBox"></div>
+<div class="fg"><label id="lbSize"></label><input type="number" id="iSize" step="0.1" min="0" placeholder="cm"></div>
+<div class="fg"><label id="lbDT"></label><input type="datetime-local" id="iDT"><div id="exifBox" class="exif"></div><p id="dtHint" style="font-size:10px;color:#aaa;margin-top:4px"></p></div>
+<div class="fg">
+<label class="photo-lbl"><span id="piI">📷</span><span id="piT" style="display:block;font-size:12px;margin-top:4px"></span><span id="piS" style="display:block;font-size:10px;color:#aaa"></span><input type="file" accept="image/*" id="iPhoto"><img id="photoPreview"></label>
+</div>
 <div class="fg"><label id="lbMemo"></label><textarea id="iMemo"></textarea></div>
-<button class="btn btn-b btn-f" id="bSubmit"></button></div></div></div></div>
-<div class="tc" id="tcMy"><div class="container">
-<div class="es"><select id="selMyEv"></select></div>
-<p class="st" id="myTitle"></p><div id="myList"></div></div></div></div>
-
-<div id="aPage" class="hide">
-<div class="header hd-a"><div class="hd-top"><h1 id="hAdmin"></h1><span class="hbadge" id="bAdmin"></span></div></div>
-<div class="tabs"><button class="tab on-a" id="tAp"><span id="tApTx"></span><span class="tab-badge" id="pBdg">0</span></button><button class="tab" id="tRk"></button><button class="tab" id="tMm"></button><button class="tab" id="tEv"></button><button class="tab" id="tSt"></button></div>
-<div class="tc on" id="tcAp"><div class="container">
-<div class="es"><select id="selAEv"></select></div>
-<div class="sg"><div class="sc"><div class="sn sn-g" id="sOk">0</div><div class="sl" id="slOk"></div></div><div class="sc"><div class="sn sn-o" id="sPn">0</div><div class="sl" id="slPn"></div></div><div class="sc"><div class="sn sn-b" id="sAl">0</div><div class="sl" id="slAl"></div></div></div>
-<div id="apList"></div></div></div>
-<div class="tc" id="tcRk"><div class="container">
-<div class="es"><select id="selRkEv"></select></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p class="st" style="margin:0" id="rkTitle"></p><button class="csv-btn" id="bCSV">📥 CSV</button></div>
-<div class="rl" id="rkList"></div></div></div>
-<div class="tc" id="tcMm"><div class="container">
-<div class="es"><select id="selMEv"></select></div>
-<p class="st" id="memTitle"></p><div id="memList"></div>
-<p class="st" style="margin-top:16px" id="pwResetTitle"></p><div id="pwResetList"></div></div></div>
-<div class="tc" id="tcEv"><div class="container">
-<p class="st" id="evTitle"></p><div id="evList"></div>
-<button class="btn btn-g btn-f" style="margin-top:12px" id="bNewEv"></button></div></div>
-<div class="tc" id="tcSt"><div class="container"><div class="card">
-<h3 style="font-size:14px;margin-bottom:12px" id="stTitle"></h3>
-<div class="fg"><label id="lbPwCh"></label><input type="text" id="iPwCh"><div class="hint" id="pwHint"></div></div>
-<button class="btn btn-g btn-f" id="bSvPw"></button></div></div></div></div>
-
-<div class="mo" id="moPw"><div class="mo-b" style="text-align:center"><h3 id="moPwTitle"></h3><div class="fg"><input type="password" id="iPwIn" style="text-align:center"></div><div class="btn-row"><button class="btn btn-s" id="bPwNo"></button><button class="btn btn-g" id="bPwOk"></button></div></div></div>
-<div class="mo" id="moEd"><div class="mo-b"><button class="mo-x" id="bEdX">&times;</button><h3 id="moEdTitle"></h3>
-<div class="fg"><label id="lbEdNm"></label><input type="text" id="edNm"></div>
-<div class="fg"><label id="lbEdFi"></label><select id="edFi"></select></div>
-<div class="fg"><label id="lbEdSz"></label><input type="number" id="edSz" step="0.1"></div>
-<div class="fg"><label id="lbEdDT"></label><input type="datetime-local" id="edDT"></div>
-<div class="fg"><label id="lbEdMe"></label><textarea id="edMe"></textarea></div>
-<input type="hidden" id="edId"><button class="btn btn-g btn-f" id="bEdOk"></button></div></div>
-<div class="mo" id="moNe"><div class="mo-b"><button class="mo-x" id="bNeX">&times;</button><h3 id="moNeTitle"></h3>
-<div class="fg"><label id="lbNeNm"></label><input type="text" id="neNm"></div>
-<div class="fg"><label id="lbNeDt"></label><input type="date" id="neDt"></div>
-<div class="fg"><label id="lbNePl"></label><input type="text" id="nePl"></div>
-<button class="btn btn-g btn-f" id="bNeOk"></button></div></div>
-<div class="mo" id="moRsPw"><div class="mo-b" style="text-align:center"><h3 id="moRsPwTitle"></h3><p style="font-size:13px;color:#666;margin:12px 0" id="rsPwMsg"></p><div class="fg"><label id="lbRsPw"></label><input type="text" id="rsPwNew"></div><input type="hidden" id="rsPwName"><div class="btn-row"><button class="btn btn-s" id="bRsPwNo"></button><button class="btn btn-g" id="bRsPwOk"></button></div></div></div>
+<button class="btn btn-g btn-ff" id="bSubmit"></button>
+</div>
+</div>
+</div>
+<div class="tc" id="tcMy">
+<div class="card"><h3 id="myTitle" style="font-size:14px;margin-bottom:12px"></h3><select id="selMyEv" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;font-size:12px;margin-bottom:12px"></select><div id="myList"></div></div>
+</div>
+</div>
+<!-- ADMIN -->
+<div id="aPage" class="container hide">
+<div class="header"><h1 id="hAdmin"></h1><button class="btn btn-sm btn-b" id="bAdmin" style="display:none"></button></div>
+<div class="tab-bar"><button class="tab on-a" id="tAp"><span id="tApTx"></span><span id="pBdg">0</span></button><button class="tab" id="tRk"></button><button class="tab" id="tMm"></button><button class="tab" id="tEv"></button><button class="tab" id="tSt"></button></div>
+<!-- Approve -->
+<div class="tc on" id="tcAp">
+<select id="selAEv" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;font-size:12px;margin-bottom:8px"></select>
+<div class="stat-bar"><span id="slOk"></span>: <span id="sOk">0</span> ｜ <span id="slPn"></span>: <span id="sPn">0</span> ｜ <span id="slAl"></span>: <span id="sAl">0</span></div>
+<div id="apList"></div>
+</div>
+<!-- Ranking -->
+<div class="tc" id="tcRk">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3 id="rkTitle" style="font-size:14px"></h3><button class="btn btn-sm btn-w" id="bCSV">CSV</button></div>
+<select id="selRkEv" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;font-size:12px;margin-bottom:12px"></select>
+<div id="rkList"></div>
+</div>
+<!-- Members -->
+<div class="tc" id="tcMm">
+<h3 id="memTitle" style="font-size:14px;margin-bottom:8px"></h3>
+<select id="selMEv" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;font-size:12px;margin-bottom:12px"></select>
+<div id="memList"></div>
+<div class="card" style="margin-top:16px"><h4 id="pwResetTitle" style="font-size:13px;margin-bottom:8px"></h4><div id="pwResetList"></div></div>
+</div>
+<!-- Events -->
+<div class="tc" id="tcEv">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 id="evTitle" style="font-size:14px"></h3><button class="btn btn-sm btn-g" id="bNewEv"></button></div>
+<div id="evList"></div>
+</div>
+<!-- Settings -->
+<div class="tc" id="tcSt">
+<div class="card"><h3 id="stTitle" style="font-size:14px;margin-bottom:12px"></h3>
+<div class="fg"><label id="lbPwCh"></label><input type="password" id="iPwCh"><p id="pwHint" style="font-size:10px;color:#aaa;margin-top:4px"></p></div>
+<button class="btn btn-g btn-ff" id="bSvPw"></button></div>
+</div>
+</div>
+<!-- MODALS -->
+<div class="mo" id="moPw"><div class="mo-b"><h3 id="moPwTitle" style="margin-bottom:12px"></h3><div class="fg"><input type="password" id="iPwIn"></div><div style="display:flex;gap:8px"><button class="btn btn-w" id="bPwNo" style="flex:1"></button><button class="btn btn-g" id="bPwOk" style="flex:1"></button></div></div></div>
+<div class="mo" id="moEd"><div class="mo-b" style="position:relative"><button class="mo-x" id="bEdX">✕</button><h3 id="moEdTitle" style="margin-bottom:12px"></h3><div class="fg"><label id="lbEdNm"></label><input type="text" id="edNm"></div><div class="fg"><label id="lbEdFi"></label><select id="edFi"></select></div><div class="fg"><label id="lbEdSz"></label><input type="number" id="edSz" step="0.1"></div><div class="fg"><label id="lbEdDT"></label><input type="datetime-local" id="edDT"></div><div class="fg"><label id="lbEdMe"></label><input type="text" id="edMe"></div><input type="hidden" id="edId"><button class="btn btn-g btn-ff" id="bEdOk"></button></div></div>
+<div class="mo" id="moNe"><div class="mo-b" style="position:relative"><button class="mo-x" id="bNeX">✕</button><h3 id="moNeTitle" style="margin-bottom:12px"></h3><div class="fg"><label id="lbNeNm"></label><input type="text" id="neNm"></div><div class="fg"><label id="lbNeDt"></label><input type="date" id="neDt"></div><div class="fg"><label id="lbNePl"></label><input type="text" id="nePl"></div><button class="btn btn-g btn-ff" id="bNeOk"></button></div></div>
+<div class="mo" id="moRsPw"><div class="mo-b"><h3 id="moRsPwTitle" style="margin-bottom:12px"></h3><p id="rsPwMsg" style="font-size:13px;color:#666;margin:12px 0"></p><div class="fg"><label id="lbRsPw"></label><input type="password" id="rsPwNew"></div><input type="hidden" id="rsPwName"><div style="display:flex;gap:8px"><button class="btn btn-w" id="bRsPwNo" style="flex:1"></button><button class="btn btn-g" id="bRsPwOk" style="flex:1"></button></div></div></div>
 <div class="img-modal" id="imgModal"><img id="imgModalImg"></div>
 <div class="toast" id="toast"></div>
 </div>
